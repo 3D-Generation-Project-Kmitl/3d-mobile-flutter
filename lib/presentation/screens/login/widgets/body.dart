@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ar_ecommerce_flutter/constants/colors.dart';
-import 'package:ar_ecommerce_flutter/constants/styles.dart';
-import 'package:ar_ecommerce_flutter/configs/size_config.dart';
+import 'package:e_commerce/constants/colors.dart';
+import 'package:e_commerce/constants/styles.dart';
+import 'package:e_commerce/configs/size_config.dart';
 
 import './form.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ar_ecommerce_flutter/presentation/screens/login/login_screen.dart';
+import 'package:e_commerce/presentation/screens/login/login_screen.dart';
 
 void main() {
   runApp(const MyApp());

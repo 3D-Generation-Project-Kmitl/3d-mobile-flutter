@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ar_ecommerce_flutter">
+    package="com.example.e_commerce">
    <application
-        android:label="ar_ecommerce_flutter"
+        android:label="e_commerce"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
