@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
-import '../configs/size_config.dart';
-import './colors.dart';
 
-const animationDuration = Duration(milliseconds: 200);
+const h1Style =
+    TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black);
 
-final headingStyle = TextStyle(
-  fontSize: getProportionateScreenWidth(28),
-  fontWeight: FontWeight.bold,
-  color: Colors.black,
-  height: 1.5,
+const h2Style =
+    TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.black);
+
+const h3Style =
+    TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black);
+
+const h4StyleLight =
+    TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black);
+
+const h5StyleLight =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87);
+
+const bodyText1 =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54);
+
+const bodyText2 =
+    TextStyle(fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black45);
+
+const subtitleLight =
+    TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black45);
+
+final textFieldStyle = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(25),
+  borderSide: const BorderSide(color: Colors.transparent),
 );
-
-const defaultDuration = Duration(milliseconds: 250);
-
-final otpInputDecoration = InputDecoration(
-  contentPadding:
-      EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
-  border: outlineInputBorder(),
-  focusedBorder: outlineInputBorder(),
-  enabledBorder: outlineInputBorder(),
-);
-
-OutlineInputBorder outlineInputBorder() {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(getProportionateScreenWidth(15)),
-    borderSide: BorderSide(color: textColor),
-  );
-}
