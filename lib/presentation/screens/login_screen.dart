@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/size_config.dart';
 import 'package:e_commerce/constants/colors.dart';
 import 'package:e_commerce/presentation/helpers/helpers.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:e_commerce/cubits/cubits.dart';
 
 class LoginScreen extends StatefulWidget {
-  static String routeName = "/login";
   const LoginScreen({Key? key}) : super(key: key);
   @override
   _LoginScreenState createState() => _LoginScreenState();
+
+  static const String routeName = "/login";
+
+  static Route route() {
+    return MaterialPageRoute(
+      settings: const RouteSettings(name: routeName),
+      builder: (_) => const LoginScreen(),
+    );
+  }
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -68,84 +78,101 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Form(
-          key: _keyForm,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "ยินดีต้อนรับกลับ",
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                SizedBox(height: SizeConfig.screenHeight * 0.02),
-                Text(
-                  "กรุณาเข้าสู่ระบบด้วยอีเมลและรหัสผ่านของคุณ",
-                  style: Theme.of(context).textTheme.bodyText1,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: SizeConfig.screenHeight * 0.06),
-                buildEmailFormField(),
-                SizedBox(height: SizeConfig.screenHeight * 0.01),
-                buildPasswordFormField(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "ลืมรหัสผ่าน?",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(color: primaryColor),
+    final authCubit = BlocProvider.of<AuthCubit>(context);
+
+    return BlocListener<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is LoginLoadingState) {
+          //showLoadingDialog(context);
+        } else if (state is LoginSuccessState) {
+          Navigator.pushNamed(context, '/home');
+        } else if (state is LoginFailureState) {
+          //Navigator.pop(context);
+          //showSnackBar(context, state.message);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(),
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Form(
+            key: _keyForm,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "ยินดีต้อนรับกลับ",
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                  SizedBox(height: SizeConfig.screenHeight * 0.02),
+                  Text(
+                    "กรุณาเข้าสู่ระบบด้วยอีเมลและรหัสผ่านของคุณ",
+                    style: Theme.of(context).textTheme.bodyText1,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: SizeConfig.screenHeight * 0.06),
+                  buildEmailFormField(),
+                  SizedBox(height: SizeConfig.screenHeight * 0.01),
+                  buildPasswordFormField(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "ลืมรหัสผ่าน?",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(color: primaryColor),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: SizeConfig.screenHeight * 0.01),
-                SizedBox(
-                  width: double.infinity,
-                  height: getProportionateScreenHeight(50),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: primaryColor,
-                    ),
-                    onPressed: () {
-                      if (_keyForm.currentState!.validate()) {
-                        print(_emailController.text);
-                      }
-                    },
-                    child: const Text(
-                      "เข้าสู่ระบบ",
+                    ],
+                  ),
+                  SizedBox(height: SizeConfig.screenHeight * 0.01),
+                  SizedBox(
+                    width: double.infinity,
+                    height: getProportionateScreenHeight(50),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: primaryColor,
+                      ),
+                      onPressed: () {
+                        if (_keyForm.currentState!.validate()) {
+                          authCubit.login(
+                              _emailController.text, _passwordController.text);
+                          FocusScope.of(context).unfocus();
+                        }
+                      },
+                      child: const Text(
+                        "เข้าสู่ระบบ",
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: SizeConfig.screenHeight * 0.08),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "ยังไม่มีบัญชีผู้ใช้งาน?",
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "สมัครสมาชิก",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(color: primaryColor),
+                  SizedBox(height: SizeConfig.screenHeight * 0.08),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "ยังไม่มีบัญชีผู้ใช้งาน?",
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "สมัครสมาชิก",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(color: primaryColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
