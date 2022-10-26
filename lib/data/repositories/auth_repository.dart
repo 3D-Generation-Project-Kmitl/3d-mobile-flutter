@@ -1,16 +1,20 @@
-import 'package:e_commerce/utils/dio.dart';
+import 'package:dio/dio.dart';
+import 'package:e_commerce/utils/dio_client.dart';
 
 class AuthRepository {
   Future<String> login(String email, String password) async {
     try {
-      final response = await dio.post('/auth/login', data: {
+      final response = await DioClient().dio.post('/auth/login', data: {
         'email': email,
         'password': password,
       });
-      print(response.data);
       return response.data;
     } catch (e) {
-      throw e as Exception;
+      if (e is DioError) {
+        throw e.response!.data;
+      } else {
+        throw e as Exception;
+      }
     }
   }
 }

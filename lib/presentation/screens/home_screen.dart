@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import './login_screen.dart';
+import 'package:e_commerce/utils/dio_client.dart';
+import 'package:dio/dio.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,6 +12,22 @@ class HomeScreen extends StatelessWidget {
       settings: const RouteSettings(name: routeName),
       builder: (_) => const HomeScreen(),
     );
+  }
+
+  //get accesstoken
+  Future<String> getAccessToken() async {
+    try {
+      final response = await DioClient().dio.post('/auth/getAccessToken');
+      print(response.data);
+      return response.data;
+    } catch (e) {
+      if (e is DioError) {
+        print(e.response?.statusCode);
+      } else {
+        print(e);
+      }
+      return "";
+    }
   }
 
   @override
@@ -33,6 +50,14 @@ class HomeScreen extends StatelessWidget {
                   Navigator.pushNamed(context, '/login');
                 },
                 child: Text("Login Screen")),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  getAccessToken();
+                },
+                child: Text("Get Access Token")),
           ],
         ))));
   }

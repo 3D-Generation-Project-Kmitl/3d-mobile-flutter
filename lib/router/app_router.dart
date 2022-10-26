@@ -4,6 +4,8 @@ import 'package:e_commerce/presentation/screens/screens.dart';
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case '/':
+        return HomeScreen.route();
       case LoginScreen.routeName:
         return LoginScreen.route();
       case HomeScreen.routeName:

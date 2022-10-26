@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/theme.dart';
-import 'package:e_commerce/presentation/screens/screens.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce/cubits/cubits.dart';
+import 'package:e_commerce/utils/dio_client.dart';
 
 import 'router/app_router.dart';
 
 void main() {
   runApp(const MyApp());
+  DioClient().init();
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightAppTheme,
         onGenerateRoute: AppRouter.onGenerateRoute,
-        home: const HomeScreen(),
       ),
     );
   }

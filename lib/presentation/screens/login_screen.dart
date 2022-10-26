@@ -143,7 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (_keyForm.currentState!.validate()) {
                           authCubit.login(
                               _emailController.text, _passwordController.text);
-                          FocusScope.of(context).unfocus();
                         }
                       },
                       child: const Text(
