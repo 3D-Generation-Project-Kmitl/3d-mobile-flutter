@@ -3,6 +3,17 @@ import 'package:e_commerce/data/models/models.dart';
 import 'package:e_commerce/utils/dio_client.dart';
 
 class AuthRepository {
+  Future<User> validateToken() async {
+    try {
+      final response = await DioClient().dio.post('/auth/validateToken');
+      final data = BaseResponse.fromJson(response.data).data;
+      final user = User.fromMap(data);
+      return user;
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
+
   Future<User> login(String email, String password) async {
     try {
       final response = await DioClient().dio.post('/auth/login', data: {

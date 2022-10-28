@@ -39,4 +39,14 @@ class AuthCubit extends Cubit<AuthState> {
       emit(LogoutFailureState(e.toString()));
     }
   }
+
+  Future<void> validateToken() async {
+    try {
+      emit(ValidateTokenLoadingState());
+      final user = await authRepository.validateToken();
+      emit(ValidateTokenSuccessState(user));
+    } catch (e) {
+      emit(ValidateTokenFailureState(e.toString()));
+    }
+  }
 }

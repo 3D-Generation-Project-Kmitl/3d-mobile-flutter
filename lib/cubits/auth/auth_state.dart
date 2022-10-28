@@ -45,3 +45,17 @@ class LogoutFailureState extends AuthState {
 
   LogoutFailureState(this.errorMessage);
 }
+
+class ValidateTokenSuccessState extends AuthState {
+  final User user;
+
+  ValidateTokenSuccessState(this.user);
+}
+
+class ValidateTokenLoadingState extends AuthState {}
+
+class ValidateTokenFailureState extends AuthState {
+  final String errorMessage;
+
+  ValidateTokenFailureState(this.errorMessage);
+}
