@@ -47,44 +47,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    Widget buildEmailFormField() {
-      return TextFormField(
-        controller: _emailController,
-        validator: emailValidator,
-        keyboardType: TextInputType.emailAddress,
-        style: Theme.of(context).textTheme.headline5,
-        textAlignVertical: TextAlignVertical.bottom,
-        decoration: InputDecoration(
-          hintText: "อีเมล",
-          prefixIcon:
-              Icon(Icons.email_outlined, color: Theme.of(context).primaryColor),
-        ),
-      );
-    }
-
-    Widget buildPasswordFormField() {
-      return TextFormField(
-        controller: _passwordController,
-        validator: passwordValidator,
-        style: Theme.of(context).textTheme.headline5,
-        obscureText: true,
-        textAlignVertical: TextAlignVertical.bottom,
-        decoration: InputDecoration(
-          hintText: "รหัสผ่าน",
-          prefixIcon:
-              Icon(Icons.lock_outline, color: Theme.of(context).primaryColor),
-          //suffixIcon: const Icon(Icons.visibility_off),
-        ),
-      );
-    }
-
     final authCubit = BlocProvider.of<AuthCubit>(context);
+    final userCubit = BlocProvider.of<UserCubit>(context);
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is LoginLoadingState) {
           //showLoadingDialog(context);
         } else if (state is LoginSuccessState) {
+          userCubit.getUser(state.user);
           Navigator.pushNamed(context, '/home');
         } else if (state is LoginFailureState) {
           //Navigator.pop(context);
@@ -175,6 +146,37 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildEmailFormField() {
+    return TextFormField(
+      controller: _emailController,
+      validator: emailValidator,
+      keyboardType: TextInputType.emailAddress,
+      style: Theme.of(context).textTheme.headline5,
+      textAlignVertical: TextAlignVertical.bottom,
+      decoration: InputDecoration(
+        hintText: "อีเมล",
+        prefixIcon:
+            Icon(Icons.email_outlined, color: Theme.of(context).primaryColor),
+      ),
+    );
+  }
+
+  Widget buildPasswordFormField() {
+    return TextFormField(
+      controller: _passwordController,
+      validator: passwordValidator,
+      style: Theme.of(context).textTheme.headline5,
+      obscureText: true,
+      textAlignVertical: TextAlignVertical.bottom,
+      decoration: InputDecoration(
+        hintText: "รหัสผ่าน",
+        prefixIcon:
+            Icon(Icons.lock_outline, color: Theme.of(context).primaryColor),
+        //suffixIcon: const Icon(Icons.visibility_off),
       ),
     );
   }

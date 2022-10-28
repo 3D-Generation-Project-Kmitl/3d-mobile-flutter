@@ -1,1 +1,2 @@
-export 'package:e_commerce/cubits/auth/auth_cubit.dart';
+export './auth/auth_cubit.dart';
+export './user/user_cubit.dart';

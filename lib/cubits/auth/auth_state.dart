@@ -1,14 +1,13 @@
 part of 'auth_cubit.dart';
 
-@immutable
 abstract class AuthState {}
 
 class AuthInitial extends AuthState {}
 
 class LoginSuccessState extends AuthState {
-  final String token;
+  final User user;
 
-  LoginSuccessState(this.token);
+  LoginSuccessState(this.user);
 }
 
 class LoginLoadingState extends AuthState {}
@@ -19,7 +18,11 @@ class LoginFailureState extends AuthState {
   LoginFailureState(this.errorMessage);
 }
 
-class RegisterSuccessState extends AuthState {}
+class RegisterSuccessState extends AuthState {
+  final User user;
+
+  RegisterSuccessState(this.user);
+}
 
 class RegisterLoadingState extends AuthState {}
 
@@ -27,4 +30,18 @@ class RegisterFailureState extends AuthState {
   final String errorMessage;
 
   RegisterFailureState(this.errorMessage);
+}
+
+class LogoutSuccessState extends AuthState {
+  final String message;
+
+  LogoutSuccessState(this.message);
+}
+
+class LogoutLoadingState extends AuthState {}
+
+class LogoutFailureState extends AuthState {
+  final String errorMessage;
+
+  LogoutFailureState(this.errorMessage);
 }

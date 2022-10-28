@@ -21,6 +21,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AuthCubit>(
           create: (context) => AuthCubit(),
         ),
+        BlocProvider<UserCubit>(
+          create: (context) => UserCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
