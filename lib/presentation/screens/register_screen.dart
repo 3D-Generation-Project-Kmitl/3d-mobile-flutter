@@ -93,8 +93,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     buildEmailFormField(),
                     SizedBox(height: SizeConfig.screenHeight * 0.02),
                     buildPasswordFormField(),
-                    SizedBox(height: SizeConfig.screenHeight * 0.02),
-                    buildConfirmPasswordFormField(),
                     SizedBox(height: SizeConfig.screenHeight * 0.03),
                     SizedBox(
                       width: double.infinity,
@@ -130,8 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       style: Theme.of(context).textTheme.headline5,
       textAlignVertical: TextAlignVertical.bottom,
       decoration: const InputDecoration(
-        hintText: 'ชื่อ',
-        prefixIcon: Icon(Icons.person),
+        labelText: "ชื่อ",
       ),
     );
   }
@@ -144,8 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       style: Theme.of(context).textTheme.headline5,
       textAlignVertical: TextAlignVertical.bottom,
       decoration: const InputDecoration(
-        hintText: 'อีเมล',
-        prefixIcon: Icon(Icons.email),
+        labelText: "อีเมล",
       ),
     );
   }
@@ -158,8 +154,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       obscureText: true,
       textAlignVertical: TextAlignVertical.bottom,
       decoration: const InputDecoration(
-        hintText: 'รหัสผ่าน',
-        prefixIcon: Icon(Icons.lock),
+        labelText: "รหัสผ่าน",
+        suffixIcon: Icon(Icons.visibility_off),
       ),
     );
   }
@@ -180,8 +176,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       obscureText: true,
       textAlignVertical: TextAlignVertical.bottom,
       decoration: const InputDecoration(
-        hintText: 'ยืนยันรหัสผ่าน',
-        prefixIcon: Icon(Icons.lock),
+        labelText: "ยืนยันรหัสผ่าน",
+        suffixIcon: Icon(Icons.visibility_off),
       ),
     );
   }

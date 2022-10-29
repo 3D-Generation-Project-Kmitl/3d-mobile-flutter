@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/constants/colors.dart';
-import 'package:e_commerce/constants/styles.dart';
 
 class AppTheme {
   static ThemeData lightAppTheme = ThemeData(
@@ -27,7 +26,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: Colors.black87),
     ),
     inputDecorationTheme: InputDecorationTheme(
-        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+        contentPadding: const EdgeInsets.all(16),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
@@ -96,14 +95,22 @@ const ColorScheme _appColorScheme = ColorScheme(
 
 //text theme
 const TextTheme textTheme = TextTheme(
-  headline1: h1Style,
-  headline2: h2Style,
-  headline3: h3Style,
-  headline4: h4StyleLight,
-  headline5: h5StyleLight,
-  bodyText1: bodyText1,
-  bodyText2: bodyText2,
-  subtitle1: subtitleLight,
+  headline1:
+      TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
+  headline2:
+      TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.black),
+  headline3:
+      TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+  headline4:
+      TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black),
+  headline5: TextStyle(
+      fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
+  bodyText1: TextStyle(
+      fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
+  bodyText2: TextStyle(
+      fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black45),
+  subtitle1: TextStyle(
+      fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black45),
   button: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
   caption:
       TextStyle(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.4),

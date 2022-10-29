@@ -9,7 +9,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 
   static const String routeName = "/login";
 
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: SizeConfig.screenHeight * 0.06),
                   buildEmailFormField(),
-                  SizedBox(height: SizeConfig.screenHeight * 0.01),
+                  SizedBox(height: SizeConfig.screenHeight * 0.015),
                   buildPasswordFormField(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -158,8 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
       style: Theme.of(context).textTheme.headline5,
       textAlignVertical: TextAlignVertical.bottom,
       decoration: const InputDecoration(
-        hintText: "อีเมล",
-        prefixIcon: Icon(Icons.email_outlined),
+        labelText: "อีเมล",
       ),
     );
   }
@@ -172,9 +171,8 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: true,
       textAlignVertical: TextAlignVertical.bottom,
       decoration: const InputDecoration(
-        hintText: "รหัสผ่าน",
-        prefixIcon: Icon(Icons.lock_outline),
-        //suffixIcon: const Icon(Icons.visibility_off),
+        labelText: "รหัสผ่าน",
+        suffixIcon: Icon(Icons.visibility_off),
       ),
     );
   }
