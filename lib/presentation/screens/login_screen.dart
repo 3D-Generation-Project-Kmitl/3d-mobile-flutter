@@ -7,6 +7,7 @@ import 'package:e_commerce/cubits/cubits.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 
@@ -47,8 +48,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    final authCubit = BlocProvider.of<AuthCubit>(context);
-    final userCubit = BlocProvider.of<UserCubit>(context);
+    final authCubit = context.read<AuthCubit>();
+    final userCubit = context.read<UserCubit>();
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -69,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Form(
             key: _keyForm,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 60, 30, 30),
+              padding: const EdgeInsets.fromLTRB(25, 60, 25, 25),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -107,9 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: primaryColor,
-                      ),
                       onPressed: () {
                         if (_keyForm.currentState!.validate()) {
                           authCubit.login(
@@ -130,7 +128,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: Theme.of(context).textTheme.bodyText2,
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/register');
+                        },
                         child: Text(
                           "สมัครสมาชิก",
                           style: Theme.of(context)
@@ -157,10 +157,9 @@ class _LoginScreenState extends State<LoginScreen> {
       keyboardType: TextInputType.emailAddress,
       style: Theme.of(context).textTheme.headline5,
       textAlignVertical: TextAlignVertical.bottom,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: "อีเมล",
-        prefixIcon:
-            Icon(Icons.email_outlined, color: Theme.of(context).primaryColor),
+        prefixIcon: Icon(Icons.email_outlined),
       ),
     );
   }
@@ -172,10 +171,9 @@ class _LoginScreenState extends State<LoginScreen> {
       style: Theme.of(context).textTheme.headline5,
       obscureText: true,
       textAlignVertical: TextAlignVertical.bottom,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: "รหัสผ่าน",
-        prefixIcon:
-            Icon(Icons.lock_outline, color: Theme.of(context).primaryColor),
+        prefixIcon: Icon(Icons.lock_outline),
         //suffixIcon: const Icon(Icons.visibility_off),
       ),
     );

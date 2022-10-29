@@ -8,6 +8,8 @@ class AppRouter {
         return SplashScreen.route();
       case LoginScreen.routeName:
         return LoginScreen.route();
+      case RegisterScreen.routeName:
+        return RegisterScreen.route();
       case HomeScreen.routeName:
         return HomeScreen.route();
       default:

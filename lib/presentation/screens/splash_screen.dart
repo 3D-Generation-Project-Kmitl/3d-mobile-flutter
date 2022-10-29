@@ -19,11 +19,11 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userCubit = BlocProvider.of<UserCubit>(context);
-    final authCubit = BlocProvider.of<AuthCubit>(context);
+    final userCubit = context.read<UserCubit>();
+    final authCubit = context.read<AuthCubit>();
 
     //wait initial in main.dart
-    Timer(const Duration(milliseconds: 4000), () async {
+    Timer(const Duration(milliseconds: 2000), () async {
       authCubit.validateToken();
     });
 

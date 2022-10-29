@@ -18,8 +18,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userCubit = BlocProvider.of<UserCubit>(context);
-    final authCubit = BlocProvider.of<AuthCubit>(context);
+    final userCubit = context.read<UserCubit>();
+    final authCubit = context.read<AuthCubit>();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: SafeArea(

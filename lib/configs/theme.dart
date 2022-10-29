@@ -17,15 +17,14 @@ class AppTheme {
     cardColor: surfaceColor,
     errorColor: errorColor,
     indicatorColor: whiteColor,
-    iconTheme: const IconThemeData(color: Colors.black45),
+    iconTheme: const IconThemeData(color: Colors.black54),
     buttonTheme: const ButtonThemeData(
       colorScheme: _appColorScheme,
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      centerTitle: true,
-      iconTheme: IconThemeData(color: Colors.black45),
+      iconTheme: IconThemeData(color: Colors.black87),
     ),
     inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -62,6 +61,7 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        primary: primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10), // <-- Radius
         ),
