@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         if (state is RegisterLoadingState) {
           //showLoadingDialog(context);
         } else if (state is RegisterSuccessState) {
-          userCubit.getUser(state.user);
+          userCubit.setUser(state.user);
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
         } else if (state is RegisterFailureState) {
           //print(state.errorMessage);

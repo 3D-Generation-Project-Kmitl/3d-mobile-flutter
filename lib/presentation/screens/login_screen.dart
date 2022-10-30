@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (state is LoginLoadingState) {
           //showLoadingDialog(context);
         } else if (state is LoginSuccessState) {
-          userCubit.getUser(state.user);
+          userCubit.setUser(state.user);
           Navigator.pushNamed(context, '/home');
         } else if (state is LoginFailureState) {
           //Navigator.pop(context);

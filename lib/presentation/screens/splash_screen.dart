@@ -34,7 +34,7 @@ class SplashScreen extends StatelessWidget {
           child: BlocConsumer<AuthCubit, AuthState>(
             listener: (context, state) {
               if (state is ValidateTokenSuccessState) {
-                userCubit.getUser(state.user);
+                userCubit.setUser(state.user);
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/home', (route) => false);
               } else if (state is ValidateTokenFailureState) {

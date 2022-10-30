@@ -8,7 +8,7 @@ part 'user_state.dart';
 class UserCubit extends Cubit<UserState> {
   UserCubit() : super(const UserState());
 
-  void getUser(User user) {
+  void setUser(User user) {
     emit(state.copyWith(user: user));
   }
 
