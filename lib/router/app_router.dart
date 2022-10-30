@@ -6,6 +6,9 @@ class AppRouter {
     switch (settings.name) {
       case '/':
         return SplashScreen.route();
+      case BottomNavigation.routeName:
+        int? routeIndex = settings.arguments as int?;
+        return BottomNavigation.route(routeIndex: routeIndex);
       case LoginScreen.routeName:
         return LoginScreen.route();
       case RegisterScreen.routeName:

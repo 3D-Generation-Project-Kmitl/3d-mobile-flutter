@@ -36,10 +36,10 @@ class SplashScreen extends StatelessWidget {
               if (state is ValidateTokenSuccessState) {
                 userCubit.setUser(state.user);
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (route) => false);
+                    context, '/app_layout', (route) => false);
               } else if (state is ValidateTokenFailureState) {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (route) => false);
+                    context, '/app_layout', (route) => false);
               }
             },
             builder: (context, state) {
