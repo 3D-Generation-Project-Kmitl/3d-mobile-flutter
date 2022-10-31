@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:e_commerce/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,10 +28,10 @@ class SplashScreen extends StatelessWidget {
               if (state is ValidateTokenSuccessState) {
                 userCubit.setUser(state.user);
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/navigation', (route) => false);
+                    context, navigationRoute, (route) => false);
               } else if (state is ValidateTokenFailureState) {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/navigation', (route) => false);
+                    context, navigationRoute, (route) => false);
               }
             },
             builder: (context, state) {

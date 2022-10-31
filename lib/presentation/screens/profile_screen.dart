@@ -1,4 +1,5 @@
 import 'package:e_commerce/cubits/auth/auth_cubit.dart';
+import 'package:e_commerce/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -32,10 +33,19 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/login');
+                            Navigator.pushNamed(context, loginRoute);
                           },
                           child: const Text("Login"),
-                        )
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, registerRoute);
+                          },
+                          child: const Text("Register"),
+                        ),
                       ],
                     );
                   } else {

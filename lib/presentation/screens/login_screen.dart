@@ -4,6 +4,7 @@ import 'package:e_commerce/constants/colors.dart';
 import 'package:e_commerce/presentation/helpers/helpers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce/cubits/cubits.dart';
+import 'package:e_commerce/routes/screens_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         } else if (state is LoginSuccessState) {
           userCubit.setUser(state.user);
           Navigator.pushNamedAndRemoveUntil(
-              context, '/navigation', (route) => false);
+              context, navigationRoute, (route) => false);
         } else if (state is LoginFailureState) {
           //Navigator.pop(context);
           //showSnackBar(context, state.message);
@@ -129,7 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/register');
+                          Navigator.pushNamed(context, registerRoute);
                         },
                         child: Text(
                           "สมัครสมาชิก",

@@ -1,3 +1,4 @@
+import 'package:e_commerce/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/size_config.dart';
 import 'package:e_commerce/presentation/helpers/helpers.dart';
@@ -64,7 +65,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           //showLoadingDialog(context);
         } else if (state is RegisterSuccessState) {
           userCubit.setUser(state.user);
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, navigationRoute, (route) => false);
         } else if (state is RegisterFailureState) {
           //print(state.errorMessage);
           //hideLoadingDialog(context);
