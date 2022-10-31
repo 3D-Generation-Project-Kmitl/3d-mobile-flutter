@@ -10,15 +10,6 @@ class LoginScreen extends StatefulWidget {
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
-
-  static const String routeName = "/login";
-
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => const LoginScreen(),
-    );
-  }
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -26,6 +17,14 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _passwordController;
 
   final _keyForm = GlobalKey<FormState>();
+
+  bool isHiddenPassword = true;
+
+  void _togglePasswordView() {
+    setState(() {
+      isHiddenPassword = !isHiddenPassword;
+    });
+  }
 
   @override
   void initState() {
@@ -57,7 +56,8 @@ class _LoginScreenState extends State<LoginScreen> {
           //showLoadingDialog(context);
         } else if (state is LoginSuccessState) {
           userCubit.setUser(state.user);
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/navigation', (route) => false);
         } else if (state is LoginFailureState) {
           //Navigator.pop(context);
           //showSnackBar(context, state.message);
@@ -165,15 +165,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildPasswordFormField() {
     return TextFormField(
-      controller: _passwordController,
-      validator: passwordValidator,
-      style: Theme.of(context).textTheme.headline5,
-      obscureText: true,
-      textAlignVertical: TextAlignVertical.bottom,
-      decoration: const InputDecoration(
-        labelText: "รหัสผ่าน",
-        suffixIcon: Icon(Icons.visibility_off),
-      ),
-    );
+        controller: _passwordController,
+        validator: passwordValidator,
+        style: Theme.of(context).textTheme.headline5,
+        obscureText: isHiddenPassword,
+        textAlignVertical: TextAlignVertical.bottom,
+        decoration: InputDecoration(
+          labelText: "รหัสผ่าน",
+          suffixIcon: InkWell(
+            onTap: _togglePasswordView,
+            child: Icon(
+              isHiddenPassword ? Icons.visibility_off : Icons.visibility,
+            ),
+          ),
+        ));
   }
 }

@@ -8,15 +8,6 @@ import '../../cubits/cubits.dart';
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
-  static const String routeName = "/register";
-
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => const RegisterScreen(),
-    );
-  }
-
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -28,6 +19,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController _confirmPasswordController;
 
   final _keyForm = GlobalKey<FormState>();
+
+  bool isHiddenPassword = true;
+
+  void _togglePasswordView() {
+    setState(() {
+      isHiddenPassword = !isHiddenPassword;
+    });
+  }
 
   @override
   void initState() {
@@ -151,11 +150,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: _passwordController,
       validator: passwordValidator,
       style: Theme.of(context).textTheme.headline5,
-      obscureText: true,
+      obscureText: isHiddenPassword,
       textAlignVertical: TextAlignVertical.bottom,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: "รหัสผ่าน",
-        suffixIcon: Icon(Icons.visibility_off),
+        suffixIcon: InkWell(
+          onTap: _togglePasswordView,
+          child: Icon(
+            isHiddenPassword ? Icons.visibility_off : Icons.visibility,
+          ),
+        ),
       ),
     );
   }

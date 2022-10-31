@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce/cubits/cubits.dart';
 import 'package:e_commerce/utils/dio_client.dart';
 
-import 'router/app_router.dart';
+import './routes/app_router.dart';
 
 void main() {
   runApp(const MyApp());

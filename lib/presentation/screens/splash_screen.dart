@@ -8,15 +8,6 @@ import '../../cubits/cubits.dart';
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
-  static const String routeName = "/";
-
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => const SplashScreen(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final userCubit = context.read<UserCubit>();
@@ -36,10 +27,10 @@ class SplashScreen extends StatelessWidget {
               if (state is ValidateTokenSuccessState) {
                 userCubit.setUser(state.user);
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/app_layout', (route) => false);
+                    context, '/navigation', (route) => false);
               } else if (state is ValidateTokenFailureState) {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/app_layout', (route) => false);
+                    context, '/navigation', (route) => false);
               }
             },
             builder: (context, state) {

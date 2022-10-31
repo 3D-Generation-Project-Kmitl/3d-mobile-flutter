@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce/presentation/screens/screens.dart';
 
 class BottomNavigation extends StatefulWidget {
   final int? routeIndex;
   const BottomNavigation({Key? key, this.routeIndex}) : super(key: key);
-
-  static const String routeName = "/app_layout";
-
-  static Route route({int? routeIndex}) {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => BottomNavigation(routeIndex: routeIndex),
-    );
-  }
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
@@ -23,8 +13,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
   late int _selectedIndex;
   static const List<Widget> _navigationBarScreenList = <Widget>[
     HomeScreen(),
-    LoginScreen(),
-    RegisterScreen(),
+    FavoriteScreen(),
+    NotificationScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -44,16 +35,24 @@ class _BottomNavigationState extends State<BottomNavigation> {
         onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'หน้าแรก',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorite',
+            icon: Icon(Icons.favorite_outline),
+            activeIcon: Icon(Icons.favorite),
+            label: 'รายการโปรด',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.notifications_outlined),
+            activeIcon: Icon(Icons.notifications),
+            label: 'การแจ้งเตือน',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'โปรไฟล์',
           ),
         ],
       ),
