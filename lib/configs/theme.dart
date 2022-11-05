@@ -24,6 +24,7 @@ class AppTheme {
       backgroundColor: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.black87),
+      titleSpacing: 10,
     ),
     inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.all(16),
@@ -131,9 +132,11 @@ const TextTheme textTheme = TextTheme(
   bodyText1: TextStyle(
       fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
   bodyText2: TextStyle(
-      fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black45),
+      fontSize: 14, fontWeight: FontWeight.w300, color: Colors.black54),
   subtitle1: TextStyle(
-      fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black45),
+      fontSize: 13, fontWeight: FontWeight.normal, color: Colors.black),
+  subtitle2: TextStyle(
+      fontSize: 12, fontWeight: FontWeight.normal, color: Colors.black),
   button: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
   caption:
       TextStyle(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.4),

@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
     final authCubit = context.read<AuthCubit>();
 
     //wait initial in main.dart
-    Timer(const Duration(milliseconds: 2000), () async {
+    Timer(const Duration(milliseconds: 1000), () async {
       authCubit.validateToken();
     });
 
