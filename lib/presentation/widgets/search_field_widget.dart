@@ -7,8 +7,7 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
-        child: TextField(
+    return const TextField(
       autofocus: true,
       decoration: InputDecoration(
         hintText: 'ค้นหาสินค้า',
@@ -26,6 +25,6 @@ class SearchField extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
       ),
-    ));
+    );
   }
 }
