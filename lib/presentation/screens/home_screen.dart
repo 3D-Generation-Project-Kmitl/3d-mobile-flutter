@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:e_commerce/constants/colors.dart';
 import 'package:e_commerce/presentation/widgets/widgets.dart';
 
+import '../../routes/screens_routes.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -13,7 +15,7 @@ class HomeScreen extends StatelessWidget {
           title: SizedBox(
             height: 42,
             child: Row(children: <Widget>[
-              _searchTextField(),
+              _searchField(context),
               _cartButton(),
             ]),
           ),
@@ -39,11 +41,12 @@ class HomeScreen extends StatelessWidget {
       children: [
         Text("สินค้าแนะนำ", style: Theme.of(context).textTheme.headline4),
         Row(
-          children: [
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
             ProductCard(),
             ProductCard(),
           ],
-        )
+        ),
       ],
     );
   }
@@ -87,10 +90,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _searchTextField() {
-    return const Expanded(
+  Widget _searchField(context) {
+    return Expanded(
         child: TextField(
-      decoration: InputDecoration(
+      readOnly: true,
+      onTap: () {
+        Navigator.pushNamed(context, searchRoute);
+      },
+      decoration: const InputDecoration(
         hintText: 'ค้นหาสินค้า',
         hintStyle: TextStyle(color: Colors.grey),
         prefixIcon: Icon(Icons.search),

@@ -1,6 +1,3 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
 import 'package:flutter/material.dart';
 
 import '../../configs/size_config.dart';
@@ -12,15 +9,15 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      width: SizeConfig.screenWidth * 0.4,
-      height: 200,
-      margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
+      width: SizeConfig.screenWidth * 0.44,
+      height: 250,
+      margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: SizeConfig.screenWidth * 0.4,
-            height: 150,
+            width: SizeConfig.screenWidth * 0.44,
+            height: 180,
             decoration: BoxDecoration(
               color: Colors.grey,
               borderRadius: BorderRadius.circular(10),

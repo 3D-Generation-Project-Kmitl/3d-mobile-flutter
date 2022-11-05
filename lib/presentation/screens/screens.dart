@@ -6,3 +6,4 @@ export '../widgets/bottom_navigation.dart';
 export './favorite_screen.dart';
 export './notification_screen.dart';
 export './profile_screen.dart';
+export './search_screen.dart';

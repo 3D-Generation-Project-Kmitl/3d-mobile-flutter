@@ -17,6 +17,8 @@ class AppRouter {
         return _route(const RegisterScreen(), registerRoute);
       case homeRoute:
         return _route(const HomeScreen(), homeRoute);
+      case searchRoute:
+        return _route(const SearchScreen(), searchRoute);
       case favoriteRoute:
         return _route(const FavoriteScreen(), favoriteRoute);
       case notificationRoute:
