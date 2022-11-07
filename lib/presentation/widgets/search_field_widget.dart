@@ -8,6 +8,7 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const TextField(
+      textInputAction: TextInputAction.search,
       autofocus: true,
       decoration: InputDecoration(
         hintText: 'ค้นหาสินค้า',

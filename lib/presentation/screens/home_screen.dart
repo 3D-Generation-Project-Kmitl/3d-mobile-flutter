@@ -12,13 +12,16 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          titleSpacing: 5,
+          leading: const SizedBox.shrink(),
+          leadingWidth: 5,
           title: SizedBox(
             height: 42,
-            child: Row(children: <Widget>[
-              _searchField(context),
-              _cartButton(),
-            ]),
+            child: _searchField(context),
           ),
+          actions: const [
+            CartButton(),
+          ],
         ),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -47,6 +50,20 @@ class HomeScreen extends StatelessWidget {
             ProductCard(),
           ],
         ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            ProductCard(),
+            ProductCard(),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: const [
+            ProductCard(),
+            ProductCard(),
+          ],
+        ),
       ],
     );
   }
@@ -60,6 +77,7 @@ class HomeScreen extends StatelessWidget {
         SizedBox(
           height: side + 50,
           child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: 10,
             itemBuilder: (context, index) {
@@ -79,6 +97,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     Text("แฟชั่น",
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyText2),
                   ],
                 ),
@@ -91,8 +110,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _searchField(context) {
-    return Expanded(
-        child: TextField(
+    return TextField(
       readOnly: true,
       onTap: () {
         Navigator.pushNamed(context, searchRoute);
@@ -113,42 +131,6 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
       ),
-    ));
-  }
-
-  Widget _cartButton() {
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      children: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.shopping_cart_outlined,
-            color: primaryColor,
-            size: 30,
-          ),
-        ),
-        Positioned(
-          top: 3,
-          right: 6,
-          child: Container(
-            height: 18,
-            width: 18,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: primaryColor,
-            ),
-            child: const Center(
-                child: Text(
-              "5",
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            )),
-          ),
-        ),
-      ],
     );
   }
 }

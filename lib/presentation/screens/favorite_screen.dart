@@ -1,3 +1,4 @@
+import 'package:e_commerce/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -6,14 +7,16 @@ class FavoriteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 20,
+        title: Text("รายการโปรด", style: Theme.of(context).textTheme.headline2),
+        actions: const [
+          CartButton(),
+        ],
+      ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Center(
-          child: Text(
-            "Favorite Screen",
-            style: Theme.of(context).textTheme.headline1,
-          ),
-        ),
+        child: Container(),
       ),
     );
   }

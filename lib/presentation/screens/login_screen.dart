@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce/cubits/cubits.dart';
 import 'package:e_commerce/routes/screens_routes.dart';
 
+import '../widgets/widgets.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -65,7 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leadingWidth: 50,
+        ),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Form(

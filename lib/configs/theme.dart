@@ -122,9 +122,9 @@ const TextTheme textTheme = TextTheme(
   headline1:
       TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
   headline2:
-      TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.black),
+      TextStyle(fontSize: 19, fontWeight: FontWeight.w500, color: Colors.black),
   headline3:
-      TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+      TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
   headline4:
       TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black),
   headline5: TextStyle(

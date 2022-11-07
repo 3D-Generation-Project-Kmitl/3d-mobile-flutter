@@ -74,7 +74,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       },
       child: Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            leadingWidth: 50,
+          ),
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Form(

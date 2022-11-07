@@ -25,6 +25,8 @@ class AppRouter {
         return _route(const NotificationScreen(), notificationRoute);
       case profileRoute:
         return _route(const ProfileScreen(), profileRoute);
+      case cartRoute:
+        return _route(const CartScreen(), cartRoute);
       default:
         return _errorRoute();
     }

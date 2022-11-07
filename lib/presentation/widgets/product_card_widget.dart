@@ -10,7 +10,7 @@ class ProductCard extends StatelessWidget {
     SizeConfig().init(context);
     return Container(
       width: SizeConfig.screenWidth * 0.44,
-      height: 250,
+      height: 230,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
