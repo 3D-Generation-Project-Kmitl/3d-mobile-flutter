@@ -43,7 +43,7 @@ dependencies:
   path_provider: ^2.0.11
   camera:
   path:
-
+ 
 dev_dependencies:
   flutter_test:
     sdk: flutter
