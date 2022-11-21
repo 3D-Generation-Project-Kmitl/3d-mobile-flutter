@@ -1,9 +1,8 @@
-import 'package:e_commerce/cubits/auth/auth_cubit.dart';
 import 'package:e_commerce/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubits/user/user_cubit.dart';
+import 'package:e_commerce/cubits/cubits.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);

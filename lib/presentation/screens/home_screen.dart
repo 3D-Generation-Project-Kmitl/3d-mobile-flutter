@@ -1,70 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/constants/colors.dart';
 import 'package:e_commerce/presentation/widgets/widgets.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/models/models.dart';
 import '../../routes/screens_routes.dart';
+import 'package:e_commerce/cubits/cubits.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          titleSpacing: 5,
-          leading: const SizedBox.shrink(),
-          leadingWidth: 5,
-          title: SizedBox(
-            height: 42,
-            child: _searchField(context),
-          ),
-          actions: const [
-            CartButton(),
-          ],
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-              child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _categoryList(context),
-                _productList(context),
+    final productsCubit = context.read<ProductsCubit>();
+
+    productsCubit.getProducts();
+
+    return BlocConsumer<ProductsCubit, ProductsState>(
+      listener: (context, state) {
+        if (state is ProductsLoading) {
+          //showLoadingDialog(context);
+        } else if (state is ProductsFailure) {
+          //hideLoadingDialog(context);
+          //showErrorDialog(context, state.message);
+        } else if (state is ProductsLoaded) {
+          productsCubit.setProducts(state.products);
+        }
+      },
+      builder: (context, state) {
+        if (state.products == null) {
+          return Container(
+            color: Colors.white,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          List<Product> products = state.products!;
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              titleSpacing: 5,
+              leading: const SizedBox.shrink(),
+              leadingWidth: 5,
+              title: SizedBox(
+                height: 42,
+                child: _searchField(context),
+              ),
+              actions: const [
+                CartButton(),
               ],
             ),
-          )),
-        ));
-  }
-
-  Widget _productList(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("สินค้าแนะนำ", style: Theme.of(context).textTheme.headline4),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            ProductCard(),
-            ProductCard(),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            ProductCard(),
-            ProductCard(),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: const [
-            ProductCard(),
-            ProductCard(),
-          ],
-        ),
-      ],
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Text("หมวดหมู่",
+                              style: Theme.of(context).textTheme.headline4),
+                          _categoryList(context),
+                          Text("สินค้าแนะนำ",
+                              style: Theme.of(context).textTheme.headline4),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return ProductCard(
+                            product: products[index],
+                            press: () {},
+                          );
+                        },
+                        childCount: products.length,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -73,13 +99,12 @@ class HomeScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("หมวดหมู่", style: Theme.of(context).textTheme.headline4),
         SizedBox(
           height: side + 50,
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            itemCount: 10,
+            itemCount: 5,
             itemBuilder: (context, index) {
               return Container(
                 width: side + 5,

@@ -25,6 +25,7 @@ class AppTheme {
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.black87),
       titleSpacing: 10,
+      centerTitle: true,
     ),
     inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.all(16),
