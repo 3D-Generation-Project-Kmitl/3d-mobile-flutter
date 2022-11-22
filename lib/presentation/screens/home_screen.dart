@@ -56,9 +56,12 @@ class HomeScreen extends StatelessWidget {
             titleSpacing: 5,
             leading: const SizedBox.shrink(),
             leadingWidth: 5,
-            title: SizedBox(
-              height: 40,
-              child: _searchField(context),
+            title: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: SizedBox(
+                height: 40,
+                child: _searchField(context),
+              ),
             ),
             actions: const [
               CartButton(),
@@ -186,14 +189,14 @@ class HomeScreen extends StatelessWidget {
         prefixIcon: Icon(Icons.search),
         filled: true,
         fillColor: outlineColor,
-        contentPadding: EdgeInsets.all(8),
+        contentPadding: EdgeInsets.all(5),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
       ),
     );

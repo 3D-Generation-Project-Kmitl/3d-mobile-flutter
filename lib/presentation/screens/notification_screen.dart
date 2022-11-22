@@ -10,8 +10,11 @@ class NotificationScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 20,
-        title:
-            Text("การแจ้งเตือน", style: Theme.of(context).textTheme.headline2),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Text("การแจ้งเตือน",
+              style: Theme.of(context).textTheme.headline2),
+        ),
         actions: const [
           CartButton(),
         ],
