@@ -18,27 +18,19 @@ class CartButton extends StatelessWidget {
           icon: const Icon(
             Icons.shopping_cart_outlined,
             color: primaryColor,
-            size: 30,
+            size: 27,
           ),
         ),
         Positioned(
-          top: 3,
-          right: 6,
+          top: 10,
+          right: 10,
           child: Container(
-            height: 18,
-            width: 18,
+            height: 12,
+            width: 12,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: primaryColor,
             ),
-            child: const Center(
-                child: Text(
-              "5",
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              ),
-            )),
           ),
         ),
       ],

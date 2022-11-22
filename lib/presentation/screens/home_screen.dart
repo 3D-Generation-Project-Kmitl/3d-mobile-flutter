@@ -12,8 +12,11 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsCubit = context.read<ProductsCubit>();
+    final productsState = productsCubit.state;
 
-    productsCubit.getProducts();
+    if (productsState.products == null) {
+      productsCubit.getProducts();
+    }
 
     return BlocConsumer<ProductsCubit, ProductsState>(
       listener: (context, state) {
@@ -43,7 +46,7 @@ class HomeScreen extends StatelessWidget {
               leading: const SizedBox.shrink(),
               leadingWidth: 5,
               title: SizedBox(
-                height: 42,
+                height: 40,
                 child: _searchField(context),
               ),
               actions: const [
@@ -60,9 +63,38 @@ class HomeScreen extends StatelessWidget {
                         [
                           Text("หมวดหมู่",
                               style: Theme.of(context).textTheme.headline4),
-                          _categoryList(context),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                        ],
+                      ),
+                    ),
+                    SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return const CategoryCard();
+                        },
+                        childCount: 5,
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          const SizedBox(
+                            height: 10,
+                          ),
                           Text("สินค้าแนะนำ",
                               style: Theme.of(context).textTheme.headline4),
+                          const SizedBox(
+                            height: 5,
+                          ),
                         ],
                       ),
                     ),
@@ -70,8 +102,8 @@ class HomeScreen extends StatelessWidget {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.7,
-                        crossAxisSpacing: 10,
+                        childAspectRatio: 0.69,
+                        crossAxisSpacing: 14,
                         mainAxisSpacing: 10,
                       ),
                       delegate: SliverChildBuilderDelegate(
@@ -91,46 +123,6 @@ class HomeScreen extends StatelessWidget {
           );
         }
       },
-    );
-  }
-
-  Widget _categoryList(context) {
-    double side = 65;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: side + 50,
-          child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return Container(
-                width: side + 5,
-                height: side,
-                margin: const EdgeInsets.fromLTRB(0, 10, 10, 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: side,
-                      height: side,
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    Text("แฟชั่น",
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyText2),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-      ],
     );
   }
 
