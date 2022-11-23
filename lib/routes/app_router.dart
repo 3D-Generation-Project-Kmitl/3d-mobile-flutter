@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/presentation/screens/screens.dart';
 import './screens_routes.dart';
+import 'package:e_commerce/data/models/models.dart';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {
@@ -27,6 +28,14 @@ class AppRouter {
         return _route(const ProfileScreen(), profileRoute);
       case cartRoute:
         return _route(const CartScreen(), cartRoute);
+      case productDetailRoute:
+        Product? product = settings.arguments as Product?;
+        if (product != null) {
+          return _route(
+              ProductDetailScreen(product: product), productDetailRoute);
+        } else {
+          return _errorRoute();
+        }
       default:
         return _errorRoute();
     }

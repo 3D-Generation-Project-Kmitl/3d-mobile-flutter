@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:e_commerce/data/models/models.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key}) : super(key: key);
+class ProductDetailScreen extends StatelessWidget {
+  final Product product;
+  const ProductDetailScreen({
+    Key? key,
+    required this.product,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 35,
+        leadingWidth: 50,
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: Text(
-            "Cart Screen",
+            "Product Detail Screen",
             style: Theme.of(context).textTheme.headline1,
           ),
         ),

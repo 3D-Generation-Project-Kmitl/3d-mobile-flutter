@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/models.dart';
 import '../../routes/screens_routes.dart';
 import 'package:e_commerce/cubits/cubits.dart';
+import 'package:e_commerce/routes/screens_routes.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -55,7 +56,7 @@ class HomeScreen extends StatelessWidget {
           appBar: AppBar(
             titleSpacing: 5,
             leading: const SizedBox.shrink(),
-            leadingWidth: 5,
+            leadingWidth: 0,
             title: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: SizedBox(
@@ -162,7 +163,10 @@ class HomeScreen extends StatelessWidget {
                           (context, index) {
                             return ProductCard(
                               product: products[index],
-                              press: () {},
+                              press: () {
+                                Navigator.pushNamed(context, productDetailRoute,
+                                    arguments: products[index]);
+                              },
                             );
                           },
                           childCount: products.length,
