@@ -4,21 +4,13 @@ import 'package:e_commerce/constants/colors.dart';
 import 'package:e_commerce/presentation/helpers/helpers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce/cubits/cubits.dart';
+import 'package:e_commerce/routes/screens_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
-
-  static const String routeName = "/login";
-
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => const LoginScreen(),
-    );
-  }
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -26,6 +18,14 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _passwordController;
 
   final _keyForm = GlobalKey<FormState>();
+
+  bool isHiddenPassword = true;
+
+  void _togglePasswordView() {
+    setState(() {
+      isHiddenPassword = !isHiddenPassword;
+    });
+  }
 
   @override
   void initState() {
@@ -57,14 +57,17 @@ class _LoginScreenState extends State<LoginScreen> {
           //showLoadingDialog(context);
         } else if (state is LoginSuccessState) {
           userCubit.setUser(state.user);
-          Navigator.pushNamed(context, '/home');
+          Navigator.pushNamedAndRemoveUntil(
+              context, navigationRoute, (route) => false);
         } else if (state is LoginFailureState) {
           //Navigator.pop(context);
           //showSnackBar(context, state.message);
         }
       },
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leadingWidth: 50,
+        ),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Form(
@@ -129,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/register');
+                          Navigator.pushNamed(context, registerRoute);
                         },
                         child: Text(
                           "สมัครสมาชิก",
@@ -165,15 +168,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildPasswordFormField() {
     return TextFormField(
-      controller: _passwordController,
-      validator: passwordValidator,
-      style: Theme.of(context).textTheme.headline5,
-      obscureText: true,
-      textAlignVertical: TextAlignVertical.bottom,
-      decoration: const InputDecoration(
-        labelText: "รหัสผ่าน",
-        suffixIcon: Icon(Icons.visibility_off),
-      ),
-    );
+        controller: _passwordController,
+        validator: passwordValidator,
+        style: Theme.of(context).textTheme.headline5,
+        obscureText: isHiddenPassword,
+        textAlignVertical: TextAlignVertical.bottom,
+        decoration: InputDecoration(
+          labelText: "รหัสผ่าน",
+          suffixIcon: InkWell(
+            onTap: _togglePasswordView,
+            child: Icon(
+              isHiddenPassword ? Icons.visibility_off : Icons.visibility,
+            ),
+          ),
+        ));
   }
 }

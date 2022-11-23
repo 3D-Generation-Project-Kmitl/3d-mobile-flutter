@@ -24,6 +24,8 @@ class AppTheme {
       backgroundColor: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.black87),
+      titleSpacing: 10,
+      centerTitle: true,
     ),
     inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.all(16),
@@ -73,6 +75,29 @@ class AppTheme {
         ),
       ),
     ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.white,
+      selectedItemColor: primaryColor,
+      unselectedItemColor: Colors.black54,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      elevation: 0,
+      selectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
+      ),
+      selectedIconTheme: IconThemeData(
+        size: 24,
+      ),
+      unselectedIconTheme: IconThemeData(
+        size: 24,
+      ),
+    ),
   );
 }
 
@@ -96,24 +121,24 @@ const ColorScheme _appColorScheme = ColorScheme(
 //text theme
 const TextTheme textTheme = TextTheme(
   headline1:
-      TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black),
+      TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black),
   headline2:
-      TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.black),
+      TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
   headline3:
       TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
   headline4:
-      TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: Colors.black),
-  headline5: TextStyle(
-      fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
+      TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
+  headline5:
+      TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
   bodyText1: TextStyle(
-      fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
+      fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
   bodyText2: TextStyle(
-      fontSize: 15, fontWeight: FontWeight.w400, color: Colors.black45),
+      fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
   subtitle1: TextStyle(
-      fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black45),
+      fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black54),
+  subtitle2: TextStyle(
+      fontSize: 12, fontWeight: FontWeight.w400, color: Colors.black54),
   button: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-  caption:
-      TextStyle(fontSize: 13, fontWeight: FontWeight.w400, letterSpacing: 0.4),
-  overline:
-      TextStyle(fontSize: 11, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+  caption: TextStyle(fontSize: 14, fontWeight: FontWeight.w300),
+  overline: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
 );

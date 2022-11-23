@@ -1,5 +1,13 @@
+// To parse this JSON data, do
+//
+//     final user = userFromJson(jsonString);
+
+import 'package:meta/meta.dart';
 import 'dart:convert';
-import 'response_model.dart';
+
+User userFromJson(String str) => User.fromJson(json.decode(str));
+
+String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   final int userId;
@@ -28,10 +36,7 @@ class User {
     required this.updatedAt,
   });
 
-  factory User.fromJson(String str) => User.fromMap(json.decode(str));
-  String toJson() => json.encode(toMap());
-
-  factory User.fromMap(Map<String, dynamic> json) => User(
+  factory User.fromJson(Map<String, dynamic> json) => User(
         userId: json["userId"],
         email: json["email"],
         name: json["name"],
@@ -45,7 +50,7 @@ class User {
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "userId": userId,
         "email": email,
         "name": name,

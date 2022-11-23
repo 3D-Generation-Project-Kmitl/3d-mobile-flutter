@@ -7,7 +7,7 @@ class AuthRepository {
     try {
       final response = await DioClient().dio.post('/auth/validateToken');
       final data = BaseResponse.fromJson(response.data).data;
-      final user = User.fromMap(data);
+      final user = User.fromJson(data);
       return user;
     } on DioError catch (e) {
       throw e.message;
@@ -21,7 +21,7 @@ class AuthRepository {
         'password': password,
       });
       final data = BaseResponse.fromJson(response.data).data;
-      final user = User.fromMap(data);
+      final user = User.fromJson(data);
       return user;
     } catch (e) {
       if (e is DioError) {
@@ -40,7 +40,7 @@ class AuthRepository {
         'name': name,
       });
       final data = BaseResponse.fromJson(response.data).data;
-      final user = User.fromMap(data);
+      final user = User.fromJson(data);
       return user;
     } catch (e) {
       if (e is DioError) {
