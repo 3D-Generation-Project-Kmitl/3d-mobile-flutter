@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:e_commerce/configs/size_config.dart';
 
 import 'dart:async';
 import 'dart:io';
@@ -51,6 +52,7 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     if (_isLoading) {
       return Container(
         color: Colors.white,
@@ -59,20 +61,68 @@ class _CameraPageState extends State<CameraPage> {
         ),
       );
     } else {
-      return Center(
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            CameraPreview(_cameraController),
-            Padding(
-              padding: const EdgeInsets.all(25),
-              child: FloatingActionButton(
-                backgroundColor: Colors.white,
-                child: Icon(_isRecording ? Icons.stop : Icons.circle),
-                onPressed: () => _recordVideo(),
-              ),
+      // return Center(
+      //   child: Stack(
+      //     alignment: Alignment.bottomCenter,
+      //     children: [
+      //       CameraPreview(_cameraController),
+      //       Padding(
+      //         padding: const EdgeInsets.all(25),
+      //         child: FloatingActionButton(
+      //           backgroundColor: Colors.white,
+      //           child: Icon(_isRecording ? Icons.stop : Icons.circle),
+      //           onPressed: () => _recordVideo(),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // );
+      return Scaffold(
+        appBar: AppBar(backgroundColor: Colors.white),
+        body: SafeArea(
+          child: Stack(children: [
+            Center(child: CameraPreview(_cameraController)),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                        ),
+                        onPressed: () {},
+                        child: const Text('Auto'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(25),
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.black,
+                          child: Icon(_isRecording ? Icons.stop : Icons.circle),
+                          onPressed: () => _recordVideo(),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.check_circle,
+                        ),
+                        iconSize: 30,
+                        tooltip: 'Generate a 3D Model',
+                        onPressed: () {},
+                        color: Colors.greenAccent,
+                      )
+                    ]),
+                Container(
+                  height: 100.0,
+                  color: Colors.white,
+                ),
+              ],
             ),
-          ],
+          ]),
         ),
       );
     }
