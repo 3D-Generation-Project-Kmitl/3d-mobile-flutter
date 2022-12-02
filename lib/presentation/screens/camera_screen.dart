@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/size_config.dart';
+import 'package:e_commerce/data/repositories/gen3d_repository.dart';
 
 import 'dart:async';
 import 'dart:io';
@@ -15,7 +16,10 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   bool _isLoading = true;
   bool _isRecording = false;
+  bool _isDone = false;
+  late XFile file;
   late CameraController _cameraController;
+  final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
 
   @override
   void initState() {
@@ -33,21 +37,35 @@ class _CameraPageState extends State<CameraPage> {
     final cameras = await availableCameras();
     final camera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back);
-    _cameraController = CameraController(camera, ResolutionPreset.max);
+    _cameraController = CameraController(camera, ResolutionPreset.high);
     await _cameraController.initialize();
-    setState(() => _isLoading = false);
+    setState(() {
+      _isLoading = false;
+      _isDone = false;
+    });
   }
 
   _recordVideo() async {
     if (_isRecording) {
-      final file = await _cameraController.stopVideoRecording();
-      setState(() => _isRecording = false);
-      print(file.path);
+      file = await _cameraController.stopVideoRecording();
+      setState(() {
+        _isRecording = false;
+        _isDone = true;
+      });
     } else {
       await _cameraController.prepareForVideoRecording();
       await _cameraController.startVideoRecording();
-      setState(() => _isRecording = true);
+      setState(() {
+        _isRecording = true;
+        _isDone = false;
+      });
     }
+  }
+
+  _sendRequestToGenerate3DModel() {
+    gen3dModelRepository.gen3DModel(file.path, file.name);
+    print('File name: ${file.name}');
+    print('File path: ${file.path}');
   }
 
   @override
@@ -63,16 +81,53 @@ class _CameraPageState extends State<CameraPage> {
     } else {
       // return Center(
       //   child: Stack(
-      //     alignment: Alignment.bottomCenter,
       //     children: [
-      //       CameraPreview(_cameraController),
-      //       Padding(
-      //         padding: const EdgeInsets.all(25),
-      //         child: FloatingActionButton(
-      //           backgroundColor: Colors.white,
-      //           child: Icon(_isRecording ? Icons.stop : Icons.circle),
-      //           onPressed: () => _recordVideo(),
-      //         ),
+      //       Column(
+      //         children: [
+      //           AppBar(backgroundColor: Colors.white),
+      //           CameraPreview(_cameraController),
+      //         ],
+      //       ),
+      //       Column(
+      //         mainAxisAlignment: MainAxisAlignment.end,
+      //         children: [
+      //           Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //               children: [
+      //                 TextButton(
+      //                   style: TextButton.styleFrom(
+      //                     foregroundColor:
+      //                         Theme.of(context).colorScheme.onPrimary,
+      //                     backgroundColor:
+      //                         Theme.of(context).colorScheme.primary,
+      //                   ),
+      //                   onPressed: () {},
+      //                   child: const Text('Auto'),
+      //                 ),
+      //                 Padding(
+      //                   padding: const EdgeInsets.all(25),
+      //                   child: FloatingActionButton(
+      //                     backgroundColor: Colors.black,
+      //                     child: Icon(_isRecording ? Icons.stop : Icons.circle),
+      //                     onPressed: () => _recordVideo(),
+      //                   ),
+      //                 ),
+      //                 TextButton(
+      //                   style: TextButton.styleFrom(
+      //                     foregroundColor:
+      //                         Theme.of(context).colorScheme.onPrimary,
+      //                     backgroundColor:
+      //                         Theme.of(context).colorScheme.primary,
+      //                   ),
+      //                   onPressed: () {},
+      //                   child: const Text('Done'),
+      //                 )
+      //               ]),
+      //           Container(
+      //             height: 80.0,
+      //             color: Colors.white,
+      //           ),
+      //         ],
       //       ),
       //     ],
       //   ),
@@ -81,9 +136,10 @@ class _CameraPageState extends State<CameraPage> {
         appBar: AppBar(backgroundColor: Colors.white),
         body: SafeArea(
           child: Stack(children: [
-            Center(child: CameraPreview(_cameraController)),
+            CameraPreview(_cameraController),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -95,7 +151,9 @@ class _CameraPageState extends State<CameraPage> {
                           backgroundColor:
                               Theme.of(context).colorScheme.primary,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          
+                        },
                         child: const Text('Auto'),
                       ),
                       Padding(
@@ -106,18 +164,24 @@ class _CameraPageState extends State<CameraPage> {
                           onPressed: () => _recordVideo(),
                         ),
                       ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.check_circle,
+                      Visibility(
+                        maintainSize: true,
+                        maintainAnimation: true,
+                        maintainState: true,
+                        visible: _isDone,
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.check_circle,
+                          ),
+                          iconSize: 30,
+                          tooltip: 'Generate a 3D Model',
+                          onPressed: () {_sendRequestToGenerate3DModel();},
+                          color: Colors.greenAccent,
                         ),
-                        iconSize: 30,
-                        tooltip: 'Generate a 3D Model',
-                        onPressed: () {},
-                        color: Colors.greenAccent,
                       )
                     ]),
                 Container(
-                  height: 100.0,
+                  height: 80.0,
                   color: Colors.white,
                 ),
               ],
