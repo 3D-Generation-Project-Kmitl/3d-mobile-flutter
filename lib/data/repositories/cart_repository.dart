@@ -27,14 +27,11 @@ class CartRepository {
     }
   }
 
-  Future<Cart> removeFromCart({required int productId}) async {
+  Future<void> removeFromCart({required int productId}) async {
     try {
-      final response = await DioClient().dio.delete('/cart', data: {
+      await DioClient().dio.delete('/cart', data: {
         'productId': productId,
       });
-      final data = BaseResponse.fromJson(response.data).data;
-      final cart = Cart.fromJson(data);
-      return cart;
     } on DioError catch (e) {
       throw e.message;
     }

@@ -22,9 +22,9 @@ class CartInitial extends CartState {}
 class CartLoading extends CartState {}
 
 class CartLoaded extends CartState {
-  final List<Cart> carts;
+  final List<Cart> cartList;
 
-  const CartLoaded(this.carts);
+  const CartLoaded(this.cartList);
 }
 
 class CartFailure extends CartState {

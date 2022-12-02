@@ -15,7 +15,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     try {
       emit(CategoryLoading());
       final categories = await categoryRepository.getCategories();
-      emit(CategoryLoaded(categories: categories));
+      emit(CategoryLoaded(categoryList: categories));
     } catch (e) {
       emit(CategoryError(e.toString()));
     }

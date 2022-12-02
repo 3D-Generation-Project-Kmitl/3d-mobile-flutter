@@ -11,12 +11,16 @@ class CartCubit extends Cubit<CartState> {
 
   final CartRepository cartRepository = CartRepository();
 
-  void setCarts(List<Cart> carts) {
+  void setCart(List<Cart> carts) {
     emit(state.copyWith(carts: carts));
   }
 
-  void clearCarts() {
-    emit(const CartState());
+  double getTotalPrice() {
+    double totalPrice = 0.0;
+    state.carts?.forEach((cart) {
+      totalPrice += cart.product.price;
+    });
+    return totalPrice;
   }
 
   Future<void> getCart() async {
@@ -31,9 +35,9 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> addToCart({required int productId}) async {
     try {
-      emit(CartLoading());
       final cart = await cartRepository.addToCart(productId: productId);
-      final carts = state.carts!..add(cart);
+      final List<Cart> carts = state.carts ?? [];
+      carts.insert(0, cart);
       emit(CartLoaded(carts));
     } catch (e) {
       emit(CartFailure(e.toString()));
@@ -42,9 +46,10 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> removeFromCart({required int productId}) async {
     try {
-      emit(CartLoading());
-      final cart = await cartRepository.removeFromCart(productId: productId);
-      final carts = state.carts!..remove(cart);
+      await cartRepository.removeFromCart(productId: productId);
+      final List<Cart> carts = state.carts ?? [];
+      carts.removeWhere((element) => element.productId == productId);
+      //emit(CartState(carts: carts));
       emit(CartLoaded(carts));
     } catch (e) {
       emit(CartFailure(e.toString()));

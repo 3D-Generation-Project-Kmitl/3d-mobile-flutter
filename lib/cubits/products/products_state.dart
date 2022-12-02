@@ -22,9 +22,9 @@ class ProductsInitial extends ProductsState {}
 class ProductsLoading extends ProductsState {}
 
 class ProductsLoaded extends ProductsState {
-  final List<Product> products;
+  final List<Product> productList;
 
-  const ProductsLoaded(this.products);
+  const ProductsLoaded(this.productList);
 }
 
 class ProductsFailure extends ProductsState {
