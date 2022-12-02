@@ -57,12 +57,9 @@ class HomeScreen extends StatelessWidget {
             titleSpacing: 5,
             leading: const SizedBox.shrink(),
             leadingWidth: 0,
-            title: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                height: 40,
-                child: _searchField(context),
-              ),
+            title: SizedBox(
+              height: 40,
+              child: _searchField(context),
             ),
             actions: const [
               CartButton(),

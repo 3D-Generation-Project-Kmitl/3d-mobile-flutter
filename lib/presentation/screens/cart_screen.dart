@@ -6,9 +6,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leadingWidth: 35,
-      ),
+      appBar: AppBar(),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(

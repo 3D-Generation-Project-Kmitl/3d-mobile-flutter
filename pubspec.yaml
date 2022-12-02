@@ -41,6 +41,7 @@ dependencies:
   dio_cookie_manager: ^2.0.0
   cookie_jar: ^3.0.1
   path_provider: ^2.0.11
+  babylonjs_viewer: ^1.1.4
 
 dev_dependencies:
   flutter_test:

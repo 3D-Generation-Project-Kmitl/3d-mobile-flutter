@@ -23,7 +23,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      iconTheme: IconThemeData(color: Colors.black87),
+      iconTheme: IconThemeData(color: primaryColor),
       titleSpacing: 10,
       centerTitle: true,
     ),
