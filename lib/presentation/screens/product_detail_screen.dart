@@ -16,7 +16,11 @@ class ProductDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     String modelURL = baseUrlStatic + product.model.model.replaceAll('\\', '/');
-    modelURL = 'https://models.babylonjs.com/boombox.glb';
+    modelURL = 'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
+    if (product.name == "Boom Box") {
+      modelURL = 'https://models.babylonjs.com/boombox.glb';
+    }
+
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 50,

@@ -22,7 +22,7 @@ class CartButton extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 10,
+          top: 12,
           right: 10,
           child: Container(
             height: 11,

@@ -68,110 +68,116 @@ class HomeScreen extends StatelessWidget {
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        Text("หมวดหมู่",
-                            style: Theme.of(context).textTheme.headline4),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                      ],
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  productsCubit.getProducts();
+                },
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Text("หมวดหมู่",
+                              style: Theme.of(context).textTheme.headline4),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  BlocBuilder<CategoryCubit, CategoryState>(
-                    builder: (context, state) {
-                      List<Category> categories = state.categories ?? [];
-                      if (categories.isEmpty) {
-                        return SliverList(
-                          delegate: SliverChildListDelegate(
-                            [
-                              const SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
+                    BlocBuilder<CategoryCubit, CategoryState>(
+                      builder: (context, state) {
+                        List<Category> categories = state.categories ?? [];
+                        if (categories.isEmpty) {
+                          return SliverList(
+                            delegate: SliverChildListDelegate(
+                              [
+                                const SizedBox(
+                                  height: 100,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          );
+                        }
+                        return SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 0,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return CategoryCard(
+                                category: categories[index],
+                                press: () {},
+                              );
+                            },
+                            childCount: 5,
                           ),
                         );
-                      }
-                      return SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 0,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            return CategoryCard(
-                              category: categories[index],
-                              press: () {},
-                            );
-                          },
-                          childCount: 5,
-                        ),
-                      );
-                    },
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text("สินค้าแนะนำ",
-                            style: Theme.of(context).textTheme.headline4),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                      ],
+                      },
                     ),
-                  ),
-                  BlocBuilder<ProductsCubit, ProductsState>(
-                    builder: (context, state) {
-                      List<Product> products = state.products ?? [];
-                      if (products.isEmpty) {
-                        return SliverList(
-                          delegate: SliverChildListDelegate(
-                            [
-                              const SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text("สินค้าแนะนำ",
+                              style: Theme.of(context).textTheme.headline4),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                        ],
+                      ),
+                    ),
+                    BlocBuilder<ProductsCubit, ProductsState>(
+                      builder: (context, state) {
+                        List<Product> products = state.products ?? [];
+                        if (products.isEmpty) {
+                          return SliverList(
+                            delegate: SliverChildListDelegate(
+                              [
+                                const SizedBox(
+                                  height: 100,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          );
+                        }
+                        return SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.69,
+                            crossAxisSpacing: 14,
+                            mainAxisSpacing: 10,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              return ProductCard(
+                                product: products[index],
+                                press: () {
+                                  Navigator.pushNamed(
+                                      context, productDetailRoute,
+                                      arguments: products[index]);
+                                },
+                              );
+                            },
+                            childCount: products.length,
                           ),
                         );
-                      }
-                      return SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.69,
-                          crossAxisSpacing: 14,
-                          mainAxisSpacing: 10,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            return ProductCard(
-                              product: products[index],
-                              press: () {
-                                Navigator.pushNamed(context, productDetailRoute,
-                                    arguments: products[index]);
-                              },
-                            );
-                          },
-                          childCount: products.length,
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
