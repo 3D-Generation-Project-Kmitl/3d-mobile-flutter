@@ -8,3 +8,4 @@ const String notificationRoute = "/notification";
 const String profileRoute = "/profile";
 const String searchRoute = "/search";
 const String cartRoute = "/cart";
+const String productDetailRoute = "/product_detail";

@@ -9,11 +9,7 @@ class FavoriteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 20,
-        title: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child:
-              Text("รายการโปรด", style: Theme.of(context).textTheme.headline2),
-        ),
+        title: Text("รายการโปรด", style: Theme.of(context).textTheme.headline2),
         actions: const [
           CartButton(),
         ],

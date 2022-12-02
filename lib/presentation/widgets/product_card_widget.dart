@@ -22,7 +22,8 @@ class ProductCard extends StatelessWidget {
     String imageURL =
         baseUrlStatic + product.model.picture.replaceAll('\\', '/');
 
-    return SizedBox(
+    return GestureDetector(
+      onTap: press as void Function()?,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
