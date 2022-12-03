@@ -47,7 +47,7 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: Text(
-              '฿ ${product.price}',
+              '฿${product.price}',
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
