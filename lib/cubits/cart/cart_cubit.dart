@@ -33,14 +33,16 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
-  Future<void> addToCart({required int productId}) async {
+  Future<bool> addToCart({required int productId}) async {
     try {
       final cart = await cartRepository.addToCart(productId: productId);
       final List<Cart> carts = state.carts ?? [];
       carts.insert(0, cart);
       emit(CartLoaded(carts));
+      return true;
     } catch (e) {
       emit(CartFailure(e.toString()));
+      return false;
     }
   }
 

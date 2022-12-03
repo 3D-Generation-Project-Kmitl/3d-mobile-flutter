@@ -110,33 +110,49 @@ class CartScreen extends StatelessWidget {
           bottomNavigationBar: carts.isEmpty
               ? null
               : Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 15,
+                    bottom: 10,
+                    top: 10,
                   ),
                   decoration: BoxDecoration(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 4,
+                        blurRadius: 5,
                         offset: const Offset(0, 3),
                       ),
                     ],
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'รวม',
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      Text(
-                        '฿${cartCubit.getTotalPrice()}',
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                    ],
+                  child: SafeArea(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'รวมทั้งหมด ',
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        Text(
+                          '฿${cartCubit.getTotalPrice()}',
+                          style:
+                              Theme.of(context).textTheme.headline2?.copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                        ),
+                        const Spacer(),
+                        SizedBox(
+                          width: 120,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('ชำระเงิน'),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
         );

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../configs/size_config.dart';
 import '../../constants/api.dart';
 import '../../cubits/cubits.dart';
+import '../helpers/helpers.dart';
 import '../widgets/widgets.dart';
 import 'package:babylonjs_viewer/babylonjs_viewer.dart';
 
@@ -244,8 +245,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               height: getProportionateScreenHeight(50),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  cartCubit.addToCart(
-                                      productId: product.productId);
+                                  cartCubit
+                                      .addToCart(productId: product.productId)
+                                      .then((value) => showInfoDialog(
+                                            context,
+                                            title: value
+                                                ? "เพิ่มสินค้าลงตะกร้าแล้ว"
+                                                : "สินค้านี้อยู่ในตะกร้าแล้ว",
+                                          ));
                                 },
                                 child: const Text(
                                   "เพิ่มลงตะกร้า",
