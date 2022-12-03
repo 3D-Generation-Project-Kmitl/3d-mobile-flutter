@@ -18,7 +18,12 @@ class NotificationScreen extends StatelessWidget {
       ),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Container(),
+        child: Center(
+          child: Text(
+            "ไม่มีการแจ้งเตือน",
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
       ),
     );
   }

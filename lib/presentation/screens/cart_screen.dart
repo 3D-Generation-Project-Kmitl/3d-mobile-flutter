@@ -5,6 +5,7 @@ import '../../configs/size_config.dart';
 import '../../constants/api.dart';
 import '../../cubits/cubits.dart';
 import '../../data/models/models.dart';
+import '../../routes/screens_routes.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -68,6 +69,10 @@ class CartScreen extends StatelessWidget {
                                 cart.product.model.picture
                                     .replaceAll('\\', '/');
                             return ListTile(
+                              onTap: () {
+                                Navigator.pushNamed(context, productDetailRoute,
+                                    arguments: cart.product);
+                              },
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
                                 vertical: 5,

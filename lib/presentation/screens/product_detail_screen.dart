@@ -31,7 +31,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final cartCubit = context.read<CartCubit>();
+    final favoriteCubit = context.read<FavoriteCubit>();
     SizeConfig().init(context);
+
+    bool isFavorite = favoriteCubit.state.favorites
+            ?.any((element) => element.productId == widget.product.productId) ??
+        false;
 
     return BlocProvider(
       create: (context) => ProductDetailCubit(),
@@ -228,17 +233,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: SafeArea(
                       child: Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            height: getProportionateScreenHeight(50),
-                            width: getProportionateScreenWidth(50),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: Colors.black12),
-                            ),
-                            child: const Icon(Icons.favorite_border),
-                          ),
+                          BlocConsumer<FavoriteCubit, FavoriteState>(
+                              listener: (context, state) {
+                            if (state is FavoriteLoaded) {
+                              favoriteCubit.setFavorite(state.favoriteList);
+                            }
+                          }, builder: (context, state) {
+                            isFavorite = state.favorites?.any((element) =>
+                                    element.product.productId ==
+                                    product.productId) ??
+                                isFavorite;
+                            return Container(
+                              height: getProportionateScreenHeight(50),
+                              width: getProportionateScreenWidth(50),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.black12),
+                              ),
+                              child: IconButton(
+                                onPressed: () {
+                                  !isFavorite
+                                      ? favoriteCubit.addToFavorite(
+                                          productId: product.productId)
+                                      : favoriteCubit.removeFromFavorite(
+                                          productId: product.productId);
+                                },
+                                icon: isFavorite
+                                    ? Icon(Icons.favorite,
+                                        color: Theme.of(context).primaryColor)
+                                    : const Icon(Icons.favorite_border),
+                              ),
+                            );
+                          }),
                           const SizedBox(width: 20),
                           Expanded(
                             child: SizedBox(
