@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/constants/colors.dart';
+import 'package:flutter/services.dart';
 
 class AppTheme {
   static ThemeData lightAppTheme = ThemeData(
@@ -21,7 +22,12 @@ class AppTheme {
       colorScheme: _appColorScheme,
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+        statusBarBrightness: Brightness.light, // For iOS (dark icons)
+      ),
       elevation: 0,
       iconTheme: IconThemeData(color: primaryColor),
       titleSpacing: 10,

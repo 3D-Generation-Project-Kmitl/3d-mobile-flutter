@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                 //hideLoadingDialog(context);
                 //showErrorDialog(context, state.message);
               } else if (state is ProductsLoaded) {
-                productsCubit.setProducts(state.products);
+                productsCubit.setProducts(state.productList);
               }
             },
           ),
@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
               //hideLoadingDialog(context);
               //showErrorDialog(context, state.message);
             } else if (state is CategoryLoaded) {
-              categoriesCubit.setCategories(state.categories);
+              categoriesCubit.setCategories(state.categoryList);
             }
           })
         ],
