@@ -164,21 +164,18 @@ class _CameraPageState extends State<CameraPage> {
                           onPressed: () => _recordVideo(),
                         ),
                       ),
-                      Visibility(
-                        maintainSize: true,
-                        maintainAnimation: true,
-                        maintainState: true,
-                        visible: _isDone,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.check_circle,
-                          ),
-                          iconSize: 30,
-                          tooltip: 'Generate a 3D Model',
-                          onPressed: () {_sendRequestToGenerate3DModel();},
-                          color: Colors.greenAccent,
+                        TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                         ),
-                      )
+                        onPressed: () {
+                          _sendRequestToGenerate3DModel();
+                        },
+                        child: const Text('Done'),
+                      ),
                     ]),
                 Container(
                   height: 80.0,
