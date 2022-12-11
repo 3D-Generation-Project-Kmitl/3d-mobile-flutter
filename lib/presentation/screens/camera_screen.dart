@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/size_config.dart';
 import 'package:e_commerce/data/repositories/gen3d_repository.dart';
+import 'package:e_commerce/presentation/screens/model_viewer.dart';
 
 import 'dart:async';
 import 'dart:io';
@@ -18,6 +19,7 @@ class _CameraPageState extends State<CameraPage> {
   bool _isRecording = false;
   bool _isDone = false;
   late XFile file;
+  String modelPath = "";
   late CameraController _cameraController;
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
 
@@ -51,7 +53,13 @@ class _CameraPageState extends State<CameraPage> {
       setState(() {
         _isRecording = false;
         _isDone = true;
+        _isLoading = true;
       });
+      await _sendRequestToGenerate3DModel();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ModelViewer(modelPath: modelPath)));
     } else {
       await _cameraController.prepareForVideoRecording();
       await _cameraController.startVideoRecording();
@@ -62,8 +70,8 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
-  _sendRequestToGenerate3DModel() {
-    gen3dModelRepository.gen3DModel(file.path, file.name);
+  _sendRequestToGenerate3DModel() async {
+    modelPath = await gen3dModelRepository.gen3DModel(file.path, file.name);
     print('File name: ${file.name}');
     print('File path: ${file.path}');
   }
@@ -133,7 +141,12 @@ class _CameraPageState extends State<CameraPage> {
       //   ),
       // );
       return Scaffold(
-        appBar: AppBar(backgroundColor: Colors.white),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+        ),
         body: SafeArea(
           child: Stack(children: [
             CameraPreview(_cameraController),
@@ -144,18 +157,16 @@ class _CameraPageState extends State<CameraPage> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor:
-                              Theme.of(context).colorScheme.onPrimary,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                        ),
-                        onPressed: () {
-                          
-                        },
-                        child: const Text('Auto'),
-                      ),
+                      // TextButton(
+                      //   style: TextButton.styleFrom(
+                      //     foregroundColor:
+                      //         Theme.of(context).colorScheme.onPrimary,
+                      //     backgroundColor:
+                      //         Theme.of(context).colorScheme.primary,
+                      //   ),
+                      //   onPressed: () {},
+                      //   child: const Text('Auto'),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.all(25),
                         child: FloatingActionButton(
@@ -164,18 +175,18 @@ class _CameraPageState extends State<CameraPage> {
                           onPressed: () => _recordVideo(),
                         ),
                       ),
-                        TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor:
-                              Theme.of(context).colorScheme.onPrimary,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                        ),
-                        onPressed: () {
-                          _sendRequestToGenerate3DModel();
-                        },
-                        child: const Text('Done'),
-                      ),
+                //       TextButton(
+                //         style: TextButton.styleFrom(
+                //           foregroundColor:
+                //               Theme.of(context).colorScheme.onPrimary,
+                //           backgroundColor:
+                //               Theme.of(context).colorScheme.primary,
+                //         ),
+                //         onPressed: () async {
+                //           if (_isDone) {}
+                //         },
+                //         child: const Text('Done'),
+                //       ),
                     ]),
                 Container(
                   height: 80.0,
