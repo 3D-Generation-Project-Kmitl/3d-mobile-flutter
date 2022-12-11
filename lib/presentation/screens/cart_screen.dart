@@ -65,9 +65,6 @@ class CartScreen extends StatelessWidget {
                           },
                           itemBuilder: (context, index) {
                             final cart = carts[index];
-                            String imageURL = baseUrlStatic +
-                                cart.product.model.picture
-                                    .replaceAll('\\', '/');
                             return ListTile(
                               onTap: () {
                                 Navigator.pushNamed(context, productDetailRoute,
@@ -89,7 +86,8 @@ class CartScreen extends StatelessWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image(
-                                    image: NetworkImage(imageURL),
+                                    image: NetworkImage(
+                                        cart.product.model.picture),
                                     fit: BoxFit.cover,
                                   ),
                                 ),

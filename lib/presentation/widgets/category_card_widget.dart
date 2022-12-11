@@ -15,7 +15,6 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String imageURL = baseUrlStatic + category.picture.replaceAll('\\', '/');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -27,7 +26,7 @@ class CategoryCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(7.0),
             child: Image(
-              image: NetworkImage(imageURL),
+              image: NetworkImage(category.picture),
               height: 32,
               width: 32,
             ),

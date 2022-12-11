@@ -26,11 +26,11 @@ class FavoriteScreen extends StatelessWidget {
         if (state is FavoriteLoading) {
           //showLoadingDialog(context);
         } else if (state is FavoriteFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage),
-            ),
-          );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //     content: Text(state.errorMessage),
+          //   ),
+          // );
         } else if (state is FavoriteLoaded) {
           favoriteCubit.setFavorite(state.favoriteList);
         }
@@ -68,9 +68,7 @@ class FavoriteScreen extends StatelessWidget {
                           },
                           itemBuilder: (context, index) {
                             final favorite = favorites[index];
-                            String imageURL = baseUrlStatic +
-                                favorite.product.model.picture
-                                    .replaceAll('\\', '/');
+
                             return ListTile(
                               onTap: () {
                                 Navigator.pushNamed(context, productDetailRoute,
@@ -92,7 +90,8 @@ class FavoriteScreen extends StatelessWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image(
-                                    image: NetworkImage(imageURL),
+                                    image: NetworkImage(
+                                        favorite.product.model.picture),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -103,41 +102,33 @@ class FavoriteScreen extends StatelessWidget {
                                   style: Theme.of(context).textTheme.headline4),
                               trailing: Column(
                                 children: [
-                                  SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: InkWell(
-                                      onTap: () {
-                                        favoriteCubit.removeFromFavorite(
-                                            productId: favorite.productId);
-                                      },
-                                      child: const Icon(
-                                        Icons.remove_circle_outline,
-                                        size: 22,
-                                      ),
+                                  InkWell(
+                                    onTap: () {
+                                      favoriteCubit.removeFromFavorite(
+                                          productId: favorite.productId);
+                                    },
+                                    child: const Icon(
+                                      Icons.remove_circle_outline,
+                                      size: 27,
                                     ),
                                   ),
                                   const Spacer(),
-                                  SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: InkWell(
-                                      onTap: () {
-                                        cartCubit
-                                            .addToCart(
-                                                productId: favorite.productId)
-                                            .then((value) => showInfoDialog(
-                                                  context,
-                                                  title: value
-                                                      ? "เพิ่มสินค้าลงตะกร้าแล้ว"
-                                                      : "สินค้านี้อยู่ในตะกร้าแล้ว",
-                                                ));
-                                      },
-                                      child: Icon(
-                                        Icons.add_shopping_cart,
-                                        size: 22,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                                  InkWell(
+                                    onTap: () {
+                                      cartCubit
+                                          .addToCart(
+                                              productId: favorite.productId)
+                                          .then((value) => showInfoDialog(
+                                                context,
+                                                title: value
+                                                    ? "เพิ่มสินค้าลงตะกร้าแล้ว"
+                                                    : "สินค้านี้อยู่ในตะกร้าแล้ว",
+                                              ));
+                                    },
+                                    child: Icon(
+                                      Icons.add_shopping_cart,
+                                      size: 27,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                 ],

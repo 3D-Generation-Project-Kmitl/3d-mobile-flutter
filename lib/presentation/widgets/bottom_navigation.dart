@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/presentation/screens/screens.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:e_commerce/cubits/cubits.dart';
+
+import '../../routes/screens_routes.dart';
 
 class BottomNavigation extends StatefulWidget {
   final int? routeIndex;
@@ -26,6 +31,22 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    void navigateToNoAuth(int index) {
+      if (index == 1 || index == 2) {
+        Navigator.pushNamed(context, loginRoute);
+      } else {
+        setState(() {
+          _selectedIndex = index;
+        });
+      }
+    }
+
+    void _onItemTapped(int index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
@@ -41,39 +62,37 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
           ],
         ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'หน้าแรก',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_outline),
-              activeIcon: Icon(Icons.favorite),
-              label: 'รายการโปรด',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_outlined),
-              activeIcon: Icon(Icons.notifications),
-              label: 'การแจ้งเตือน',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: 'โปรไฟล์',
-            ),
-          ],
+        child: BlocBuilder<UserCubit, UserState>(
+          builder: (context, state) {
+            return BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: state.user != null ? _onItemTapped : navigateToNoAuth,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  activeIcon: Icon(Icons.home),
+                  label: 'หน้าแรก',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite_outline),
+                  activeIcon: Icon(Icons.favorite),
+                  label: 'รายการโปรด',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications_outlined),
+                  activeIcon: Icon(Icons.notifications),
+                  label: 'การแจ้งเตือน',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outline),
+                  activeIcon: Icon(Icons.person),
+                  label: 'โปรไฟล์',
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 }

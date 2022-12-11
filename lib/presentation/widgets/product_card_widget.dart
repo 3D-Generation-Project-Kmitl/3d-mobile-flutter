@@ -19,9 +19,6 @@ class ProductCard extends StatelessWidget {
     SizeConfig().init(context);
     double width = SizeConfig.screenWidth;
 
-    String imageURL =
-        baseUrlStatic + product.model.picture.replaceAll('\\', '/');
-
     return GestureDetector(
       onTap: press as void Function()?,
       child: Column(
@@ -30,7 +27,7 @@ class ProductCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(
-              image: NetworkImage(imageURL),
+              image: NetworkImage(product.model.picture),
               fit: BoxFit.cover,
               height: width * 0.54,
               width: double.infinity,
