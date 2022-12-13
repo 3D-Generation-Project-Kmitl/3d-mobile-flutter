@@ -1,3 +1,4 @@
+import 'package:e_commerce/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/size_config.dart';
 import 'package:e_commerce/presentation/helpers/helpers.dart';
@@ -7,15 +8,6 @@ import '../../cubits/cubits.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
-
-  static const String routeName = "/register";
-
-  static Route route() {
-    return MaterialPageRoute(
-      settings: const RouteSettings(name: routeName),
-      builder: (_) => const RegisterScreen(),
-    );
-  }
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -28,6 +20,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController _confirmPasswordController;
 
   final _keyForm = GlobalKey<FormState>();
+
+  bool isHiddenPassword = true;
+
+  void _togglePasswordView() {
+    setState(() {
+      isHiddenPassword = !isHiddenPassword;
+    });
+  }
 
   @override
   void initState() {
@@ -65,7 +65,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           //showLoadingDialog(context);
         } else if (state is RegisterSuccessState) {
           userCubit.setUser(state.user);
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, navigationRoute, (route) => false);
         } else if (state is RegisterFailureState) {
           //print(state.errorMessage);
           //hideLoadingDialog(context);
@@ -73,7 +74,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         }
       },
       child: Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            leadingWidth: 50,
+          ),
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Form(
@@ -151,11 +154,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: _passwordController,
       validator: passwordValidator,
       style: Theme.of(context).textTheme.headline5,
-      obscureText: true,
+      obscureText: isHiddenPassword,
       textAlignVertical: TextAlignVertical.bottom,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: "รหัสผ่าน",
-        suffixIcon: Icon(Icons.visibility_off),
+        suffixIcon: InkWell(
+          onTap: _togglePasswordView,
+          child: Icon(
+            isHiddenPassword ? Icons.visibility_off : Icons.visibility,
+          ),
+        ),
       ),
     );
   }
