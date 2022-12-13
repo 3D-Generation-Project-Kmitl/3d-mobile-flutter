@@ -52,15 +52,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 appBar: AppBar(),
                 body: const Center(child: CircularProgressIndicator()));
           }
-          String modelURL =
-              baseUrlStatic + product.model.model.replaceAll('\\', '/');
-          modelURL =
-              'https://modelviewer.dev/shared-assets/models/Astronaut.glb';
-          if (product.name == "Boom Box") {
-            modelURL = 'https://models.babylonjs.com/boombox.glb';
-          }
-          String profileURL = baseUrlStatic +
-              (product.user.picture?.replaceAll('\\', '/') ?? '');
           return Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: !isFullScreen
@@ -88,7 +79,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               : SizeConfig.screenHeight,
                           width: double.infinity,
                           child: BabylonJSViewer(
-                            src: modelURL,
+                            src: product.model.model,
                           ),
                         ),
                         Positioned(
@@ -147,22 +138,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                   Row(
                                     children: [
-                                      ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                          minWidth: 46,
-                                          minHeight: 46,
-                                          maxWidth: 46,
-                                          maxHeight: 46,
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: Image(
-                                            image: NetworkImage(profileURL),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
+                                      ImageCard(
+                                          radius: 25,
+                                          imageURL: product.user.picture ?? ""),
                                       SizedBox(
                                           width:
                                               SizeConfig.screenWidth * 0.023),
