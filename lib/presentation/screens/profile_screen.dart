@@ -85,6 +85,58 @@ class ProfileScreen extends StatelessWidget {
                               )
                             ],
                           ),
+                          SizedBox(
+                            height: SizeConfig.screenHeight * 0.01,
+                          ),
+                          Divider(
+                            color: Colors.grey.withOpacity(0.2),
+                            thickness: 0.5,
+                            height: 20,
+                          ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 8,
+                            child: ListTile(
+                              dense: true,
+                              visualDensity: const VisualDensity(vertical: 4),
+                              onTap: () {
+                                //Navigator.pushNamed(context, orderRoute);
+                              },
+                              title: Text(
+                                "รายการสั่งซื้อของฉัน",
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              trailing: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 8,
+                            child: ListTile(
+                              dense: true,
+                              visualDensity: const VisualDensity(vertical: 4),
+                              onTap: () {
+                                //Navigator.pushNamed(context, orderRoute);
+                              },
+                              title: Text(
+                                "โมเดล 3 มิติของฉัน",
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              trailing: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            ),
+                          ),
                         ],
                       );
                     } else {
