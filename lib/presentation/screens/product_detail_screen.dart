@@ -34,10 +34,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final favoriteCubit = context.read<FavoriteCubit>();
     SizeConfig().init(context);
 
-    bool isFavorite = favoriteCubit.state.favorites
-            ?.any((element) => element.productId == widget.product.productId) ??
-        false;
-
     return BlocProvider(
       create: (context) => ProductDetailCubit(),
       child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
@@ -215,16 +211,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: SafeArea(
                         child: Row(
                           children: [
-                            BlocConsumer<FavoriteCubit, FavoriteState>(
-                                listener: (context, state) {
-                              if (state is FavoriteLoaded) {
-                                favoriteCubit.setFavorite(state.favoriteList);
-                              }
-                            }, builder: (context, state) {
-                              isFavorite = state.favorites?.any((element) =>
-                                      element.product.productId ==
-                                      product.productId) ??
-                                  isFavorite;
+                            BlocBuilder<FavoriteCubit, FavoriteState>(
+                                builder: (context, state) {
+                              bool isFavorite = favoriteCubit.isFavorite(
+                                  productId: product.productId);
                               return Container(
                                 height: getProportionateScreenHeight(50),
                                 width: getProportionateScreenWidth(50),
@@ -235,11 +225,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    !isFavorite
-                                        ? favoriteCubit.addToFavorite(
-                                            productId: product.productId)
-                                        : favoriteCubit.removeFromFavorite(
-                                            productId: product.productId);
+                                    favoriteCubit.toggleFavorite(
+                                        productId: product.productId);
                                   },
                                   icon: isFavorite
                                       ? Icon(Icons.favorite,

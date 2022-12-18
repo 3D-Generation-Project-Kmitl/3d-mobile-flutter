@@ -40,13 +40,6 @@ class SplashScreen extends StatelessWidget {
                   }
                 },
               ),
-              BlocListener<FavoriteCubit, FavoriteState>(
-                listener: (context, state) {
-                  if (state is FavoriteLoaded) {
-                    favoriteCubit.setFavorite(state.favoriteList);
-                  }
-                },
-              ),
             ], child: const CircularProgressIndicator()),
           ),
         ));
