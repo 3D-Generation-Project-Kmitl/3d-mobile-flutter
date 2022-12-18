@@ -36,6 +36,10 @@ class AppRouter {
         } else {
           return _errorRoute();
         }
+      case gen3DRoute:
+        return _route(const CameraPage(), gen3DRoute);
+      case customerModelRoute:
+        return _route(const CustomerModelScreen(), customerModelRoute);
       default:
         return _errorRoute();
     }
