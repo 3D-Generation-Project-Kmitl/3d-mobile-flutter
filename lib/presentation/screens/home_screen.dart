@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
     final categoriesCubit = context.read<CategoryCubit>();
     final categoriesState = categoriesCubit.state;
 
-    if (categoriesState.categories == null) {
+    if (categoriesState is CategoryInitial) {
       categoriesCubit.getCategories();
     }
 
@@ -39,17 +39,6 @@ class HomeScreen extends StatelessWidget {
               }
             },
           ),
-          BlocListener<CategoryCubit, CategoryState>(
-              listener: (context, state) {
-            if (state is CategoryLoading) {
-              //showLoadingDialog(context);
-            } else if (state is CategoryError) {
-              //hideLoadingDialog(context);
-              //showErrorDialog(context, state.message);
-            } else if (state is CategoryLoaded) {
-              categoriesCubit.setCategories(state.categoryList);
-            }
-          })
         ],
         child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -85,42 +74,7 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    BlocBuilder<CategoryCubit, CategoryState>(
-                      builder: (context, state) {
-                        List<Category> categories = state.categories ?? [];
-                        if (categories.isEmpty) {
-                          return SliverList(
-                            delegate: SliverChildListDelegate(
-                              [
-                                const SizedBox(
-                                  height: 100,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return SliverGrid(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 5,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 0,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return CategoryCard(
-                                category: categories[index],
-                                press: () {},
-                              );
-                            },
-                            childCount: 5,
-                          ),
-                        );
-                      },
-                    ),
+                    _buildCategoryList(),
                     SliverList(
                       delegate: SliverChildListDelegate(
                         [
@@ -206,6 +160,44 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
         ),
       ),
+    );
+  }
+
+  Widget _buildCategoryList() {
+    return BlocBuilder<CategoryCubit, CategoryState>(
+      builder: (context, state) {
+        if (state is CategoryLoaded) {
+          return SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 5,
+              childAspectRatio: 1,
+              crossAxisSpacing: 0,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return CategoryCard(
+                  category: state.categoryList[index],
+                  press: () {},
+                );
+              },
+              childCount: 5,
+            ),
+          );
+        } else {
+          return SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                const SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }

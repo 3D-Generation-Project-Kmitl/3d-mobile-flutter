@@ -15,12 +15,4 @@ class UserCubit extends Cubit<UserState> {
   void clearUser() {
     emit(UserInitial());
   }
-
-  // void setUser(User user) {
-  //   emit(state.copyWith(user: user));
-  // }
-
-  // void clearUser() {
-  //   emit(const UserState());
-  // }
 }

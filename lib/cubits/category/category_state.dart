@@ -1,21 +1,23 @@
 part of 'category_cubit.dart';
 
-class CategoryState extends Equatable {
-  final List<Category>? categories;
+// class CategoryState extends Equatable {
+//   final List<Category>? categories;
 
-  const CategoryState({
-    this.categories,
-  });
+//   const CategoryState({
+//     this.categories,
+//   });
 
-  CategoryState copyWith({List<Category>? categories}) {
-    return CategoryState(
-      categories: categories ?? this.categories,
-    );
-  }
+//   CategoryState copyWith({List<Category>? categories}) {
+//     return CategoryState(
+//       categories: categories ?? this.categories,
+//     );
+//   }
 
-  @override
-  List<Object?> get props => [categories];
-}
+//   @override
+//   List<Object?> get props => [categories];
+// }
+
+abstract class CategoryState {}
 
 class CategoryInitial extends CategoryState {}
 
@@ -24,11 +26,11 @@ class CategoryLoading extends CategoryState {}
 class CategoryLoaded extends CategoryState {
   final List<Category> categoryList;
 
-  const CategoryLoaded({required this.categoryList});
+  CategoryLoaded({required this.categoryList});
 }
 
-class CategoryError extends CategoryState {
+class CategoryFailure extends CategoryState {
   final String message;
 
-  const CategoryError(this.message);
+  CategoryFailure(this.message);
 }
