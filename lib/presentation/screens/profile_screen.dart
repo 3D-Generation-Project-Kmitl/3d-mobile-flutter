@@ -124,7 +124,8 @@ class ProfileScreen extends StatelessWidget {
                               dense: true,
                               visualDensity: const VisualDensity(vertical: 4),
                               onTap: () {
-                                //Navigator.pushNamed(context, orderRoute);
+                                Navigator.pushNamed(
+                                    context, customerModelRoute);
                               },
                               title: Text(
                                 "โมเดล 3 มิติของฉัน",

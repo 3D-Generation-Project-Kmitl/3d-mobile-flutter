@@ -9,3 +9,5 @@ const String profileRoute = "/profile";
 const String searchRoute = "/search";
 const String cartRoute = "/cart";
 const String productDetailRoute = "/product_detail";
+const String gen3DRoute = "/gen3D";
+const String customerModelRoute = "/customer_model";

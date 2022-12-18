@@ -10,4 +10,4 @@ export './profile_screen.dart';
 export './search_screen.dart';
 export './cart_screen.dart';
 export './product_detail_screen.dart';
-
+export './customer_model_screen.dart';
