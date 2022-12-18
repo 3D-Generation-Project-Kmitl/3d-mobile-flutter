@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../configs/size_config.dart';
 import '../../cubits/cubits.dart';
+import '../../data/models/models.dart';
 import '../../routes/screens_routes.dart';
 
 class CartScreen extends StatelessWidget {
@@ -34,77 +35,7 @@ class CartScreen extends StatelessWidget {
               ),
               resizeToAvoidBottomInset: false,
               body: SafeArea(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: state.carts.isEmpty
-                          ? Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 100),
-                                child: Text(
-                                  'ไม่มีสินค้าในตะกร้า',
-                                  style: Theme.of(context).textTheme.headline1,
-                                ),
-                              ),
-                            )
-                          : ListView.separated(
-                              itemCount: state.carts.length,
-                              separatorBuilder: (context, index) {
-                                return const Divider();
-                              },
-                              itemBuilder: (context, index) {
-                                final cart = state.carts[index];
-                                return ListTile(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, productDetailRoute,
-                                        arguments: cart.product);
-                                  },
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 20,
-                                    vertical: 5,
-                                  ),
-                                  dense: true,
-                                  visualDensity:
-                                      const VisualDensity(vertical: 4),
-                                  leading: ConstrainedBox(
-                                    constraints: const BoxConstraints(
-                                      minWidth: 64,
-                                      minHeight: 64,
-                                      maxWidth: 64,
-                                      maxHeight: 64,
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Image(
-                                        image: NetworkImage(
-                                            cart.product.model.picture),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  title: Text(cart.product.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2),
-                                  subtitle: Text("฿${cart.product.price}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline4),
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      cartCubit.removeFromCart(
-                                          productId: cart.productId);
-                                    },
-                                    icon:
-                                        const Icon(Icons.remove_circle_outline),
-                                  ),
-                                );
-                              },
-                            ),
-                    ),
-                  ],
-                ),
+                child: _cartList(context, state.carts),
               ),
               bottomNavigationBar: state.carts.isEmpty
                   ? null
@@ -116,6 +47,69 @@ class CartScreen extends StatelessWidget {
         }
       },
     );
+  }
+
+  Widget _cartList(context, List<Cart> carts) {
+    if (carts.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 100),
+          child: Text(
+            'ไม่มีสินค้าในตะกร้า',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
+      );
+    } else {
+      return ListView.separated(
+        itemCount: carts.length,
+        separatorBuilder: (context, index) {
+          return const Divider();
+        },
+        itemBuilder: (context, index) {
+          final cart = carts[index];
+          return ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, productDetailRoute,
+                  arguments: cart.product);
+            },
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+            dense: true,
+            visualDensity: const VisualDensity(vertical: 4),
+            leading: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 64,
+                minHeight: 64,
+                maxWidth: 64,
+                maxHeight: 64,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image(
+                  image: NetworkImage(cart.product.model.picture),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            title: Text(cart.product.name,
+                style: Theme.of(context).textTheme.bodyText2),
+            subtitle: Text("฿${cart.product.price}",
+                style: Theme.of(context).textTheme.headline4),
+            trailing: IconButton(
+              onPressed: () {
+                context
+                    .read<CartCubit>()
+                    .removeFromCart(productId: cart.productId);
+              },
+              icon: const Icon(Icons.remove_circle_outline),
+            ),
+          );
+        },
+      );
+    }
   }
 
   Widget _cartBottomBar(context, double totalPrice) {
