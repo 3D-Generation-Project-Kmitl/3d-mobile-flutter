@@ -16,7 +16,7 @@ class CartButton extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                if (state.user != null) {
+                if (state is UserLoaded) {
                   Navigator.pushNamed(context, cartRoute);
                 } else {
                   Navigator.pushNamed(context, loginRoute);

@@ -10,7 +10,6 @@ import 'package:e_commerce/utils/dio_client.dart';
 import './routes/app_router.dart';
 
 void main() {
-
   runApp(const MyApp());
   DioClient().init();
 }

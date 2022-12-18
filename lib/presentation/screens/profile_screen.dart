@@ -40,8 +40,9 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 BlocBuilder<UserCubit, UserState>(
                   builder: (context, state) {
-                    final user = state.user;
-                    if (user != null) {
+                    //final user = state.user;
+                    if (state is UserLoaded) {
+                      final user = state.user;
                       return Column(
                         children: [
                           Row(
