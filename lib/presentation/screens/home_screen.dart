@@ -162,7 +162,10 @@ class HomeScreen extends StatelessWidget {
               (context, index) {
                 return ProductCard(
                   product: state.products[index],
-                  press: () {},
+                  press: () {
+                    Navigator.pushNamed(context, productDetailRoute,
+                        arguments: state.products[index]);
+                  },
                 );
               },
               childCount: state.products.length,

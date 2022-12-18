@@ -19,8 +19,6 @@ class SplashScreen extends StatelessWidget {
     //wait initial in main.dart
     Timer(const Duration(milliseconds: 1000), () async {
       authCubit.validateToken();
-      cartCubit.getCart();
-      favoriteCubit.getFavorite();
     });
 
     return Scaffold(
@@ -32,18 +30,13 @@ class SplashScreen extends StatelessWidget {
                 listener: (context, state) {
                   if (state is ValidateTokenSuccessState) {
                     userCubit.setUser(state.user);
+                    cartCubit.getCart();
+                    favoriteCubit.getFavorite();
                     Navigator.pushNamedAndRemoveUntil(
                         context, navigationRoute, (route) => false);
                   } else if (state is ValidateTokenFailureState) {
                     Navigator.pushNamedAndRemoveUntil(
                         context, navigationRoute, (route) => false);
-                  }
-                },
-              ),
-              BlocListener<CartCubit, CartState>(
-                listener: (context, state) {
-                  if (state is CartLoaded) {
-                    cartCubit.setCart(state.cartList);
                   }
                 },
               ),

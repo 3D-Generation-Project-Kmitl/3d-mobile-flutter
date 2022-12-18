@@ -7,21 +7,9 @@ import '../../data/repositories/repository.dart';
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
-  CartCubit() : super(const CartState());
+  CartCubit() : super(CartInitial());
 
   final CartRepository cartRepository = CartRepository();
-
-  void setCart(List<Cart> carts) {
-    emit(state.copyWith(carts: carts));
-  }
-
-  double getTotalPrice() {
-    double totalPrice = 0.0;
-    state.carts?.forEach((cart) {
-      totalPrice += cart.product.price;
-    });
-    return totalPrice;
-  }
 
   Future<void> getCart() async {
     try {
@@ -35,10 +23,12 @@ class CartCubit extends Cubit<CartState> {
 
   Future<bool> addToCart({required int productId}) async {
     try {
-      final cart = await cartRepository.addToCart(productId: productId);
-      final List<Cart> carts = state.carts ?? [];
-      carts.insert(0, cart);
-      emit(CartLoaded(carts));
+      if (state is CartLoaded) {
+        final cart = await cartRepository.addToCart(productId: productId);
+        final List<Cart> carts = (state as CartLoaded).carts;
+        carts.insert(0, cart);
+        emit(CartLoaded(carts));
+      }
       return true;
     } catch (e) {
       emit(CartFailure(e.toString()));
@@ -46,15 +36,29 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
-  Future<void> removeFromCart({required int productId}) async {
+  Future<bool> removeFromCart({required int productId}) async {
     try {
-      await cartRepository.removeFromCart(productId: productId);
-      final List<Cart> carts = state.carts ?? [];
-      carts.removeWhere((element) => element.productId == productId);
-      //emit(CartState(carts: carts));
-      emit(CartLoaded(carts));
+      if (state is CartLoaded) {
+        await cartRepository.removeFromCart(productId: productId);
+        final List<Cart> carts = (state as CartLoaded).carts;
+        carts.removeWhere((cart) => cart.productId == productId);
+        emit(CartLoaded(carts));
+      }
+      return true;
     } catch (e) {
       emit(CartFailure(e.toString()));
+      return false;
     }
+  }
+
+  double getTotalPrice() {
+    double totalPrice = 0.0;
+    if (state is CartLoaded) {
+      final List<Cart> carts = (state as CartLoaded).carts;
+      for (final cart in carts) {
+        totalPrice += cart.product.price;
+      }
+    }
+    return totalPrice;
   }
 }
