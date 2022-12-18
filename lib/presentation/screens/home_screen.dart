@@ -22,120 +22,66 @@ class HomeScreen extends StatelessWidget {
       categoriesCubit.getCategories();
     }
 
-    if (productsState.products == null) {
+    if (productsState is ProductsInitial) {
       productsCubit.getProducts();
     }
 
-    return MultiBlocListener(
-        listeners: [
-          BlocListener<ProductsCubit, ProductsState>(
-            listener: (context, state) {
-              if (state is ProductsLoading) {
-              } else if (state is ProductsFailure) {
-                //hideLoadingDialog(context);
-                //showErrorDialog(context, state.message);
-              } else if (state is ProductsLoaded) {
-                productsCubit.setProducts(state.productList);
-              }
-            },
-          ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        titleSpacing: 5,
+        leading: const SizedBox.shrink(),
+        leadingWidth: 0,
+        title: SizedBox(
+          height: 40,
+          child: _searchField(context),
+        ),
+        actions: const [
+          CartButton(),
         ],
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            titleSpacing: 5,
-            leading: const SizedBox.shrink(),
-            leadingWidth: 0,
-            title: SizedBox(
-              height: 40,
-              child: _searchField(context),
-            ),
-            actions: const [
-              CartButton(),
-            ],
-          ),
-          body: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  productsCubit.getProducts();
-                },
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Text("หมวดหมู่",
-                              style: Theme.of(context).textTheme.headline4),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                        ],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              productsCubit.getProducts();
+            },
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Text("หมวดหมู่",
+                          style: Theme.of(context).textTheme.headline4),
+                      const SizedBox(
+                        height: 8,
                       ),
-                    ),
-                    _buildCategoryList(),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text("สินค้าแนะนำ",
-                              style: Theme.of(context).textTheme.headline4),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                        ],
-                      ),
-                    ),
-                    BlocBuilder<ProductsCubit, ProductsState>(
-                      builder: (context, state) {
-                        List<Product> products = state.products ?? [];
-                        if (products.isEmpty) {
-                          return SliverList(
-                            delegate: SliverChildListDelegate(
-                              [
-                                const SizedBox(
-                                  height: 100,
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return SliverGrid(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.69,
-                            crossAxisSpacing: 14,
-                            mainAxisSpacing: 10,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              return ProductCard(
-                                product: products[index],
-                                press: () {
-                                  Navigator.pushNamed(
-                                      context, productDetailRoute,
-                                      arguments: products[index]);
-                                },
-                              );
-                            },
-                            childCount: products.length,
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                _buildCategoryList(),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text("สินค้าแนะนำ",
+                          style: Theme.of(context).textTheme.headline4),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                    ],
+                  ),
+                ),
+                _buildProductList(),
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _searchField(context) {
@@ -176,11 +122,50 @@ class HomeScreen extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return CategoryCard(
-                  category: state.categoryList[index],
+                  category: state.categories[index],
                   press: () {},
                 );
               },
               childCount: 5,
+            ),
+          );
+        } else {
+          return SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                const SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildProductList() {
+    return BlocBuilder<ProductsCubit, ProductsState>(
+      builder: (context, state) {
+        if (state is ProductsLoaded) {
+          return SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.69,
+              crossAxisSpacing: 14,
+              mainAxisSpacing: 10,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return ProductCard(
+                  product: state.products[index],
+                  press: () {},
+                );
+              },
+              childCount: state.products.length,
             ),
           );
         } else {
