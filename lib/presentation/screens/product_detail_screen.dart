@@ -232,6 +232,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       ? Icon(Icons.favorite,
                                           color: Theme.of(context).primaryColor)
                                       : const Icon(Icons.favorite_border),
+                                  splashColor: Colors.transparent,
+                                  splashRadius: 1,
                                 ),
                               );
                             }),

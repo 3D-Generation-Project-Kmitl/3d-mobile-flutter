@@ -32,7 +32,7 @@ class CartButton extends StatelessWidget {
               builder: (context, state) {
                 if (state is CartLoaded) {
                   if (state.carts.isEmpty) {
-                    return const SizedBox();
+                    return const SizedBox.shrink();
                   }
                   return Positioned(
                     top: 8,
@@ -58,7 +58,7 @@ class CartButton extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return const SizedBox();
+                  return const SizedBox.shrink();
                 }
               },
             ),

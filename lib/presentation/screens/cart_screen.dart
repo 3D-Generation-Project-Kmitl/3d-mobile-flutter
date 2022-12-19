@@ -104,7 +104,10 @@ class CartScreen extends StatelessWidget {
                     .read<CartCubit>()
                     .removeFromCart(productId: cart.productId);
               },
-              icon: const Icon(Icons.remove_circle_outline),
+              icon: const Icon(Icons.delete),
+              color: Colors.red,
+              splashColor: Colors.transparent,
+              splashRadius: 1,
             ),
           );
         },
