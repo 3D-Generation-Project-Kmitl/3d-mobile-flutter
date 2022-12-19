@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:e_commerce/data/models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../configs/size_config.dart';
-import '../../cubits/cubits.dart';
-import '../helpers/helpers.dart';
-import '../widgets/widgets.dart';
+import '../../../configs/size_config.dart';
+import '../../../cubits/cubits.dart';
+import '../../helpers/helpers.dart';
+import '../../widgets/widgets.dart';
 import 'package:babylonjs_viewer/babylonjs_viewer.dart';
 
 class ProductDetailScreen extends StatefulWidget {

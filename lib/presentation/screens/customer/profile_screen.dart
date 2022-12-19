@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:e_commerce/cubits/cubits.dart';
 
-import '../../configs/size_config.dart';
-import '../../constants/api.dart';
-import '../widgets/widgets.dart';
+import '../../../configs/size_config.dart';
+import '../../../constants/api.dart';
+import '../../widgets/widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);

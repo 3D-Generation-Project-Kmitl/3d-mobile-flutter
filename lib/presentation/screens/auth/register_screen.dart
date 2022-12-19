@@ -4,7 +4,7 @@ import 'package:e_commerce/configs/size_config.dart';
 import 'package:e_commerce/presentation/helpers/helpers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubits/cubits.dart';
+import '../../../cubits/cubits.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);

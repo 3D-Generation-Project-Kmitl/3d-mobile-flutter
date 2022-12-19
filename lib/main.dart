@@ -1,6 +1,6 @@
-import 'package:e_commerce/presentation/screens/splash_screen.dart';
-import 'package:e_commerce/presentation/screens/camera_screen.dart';
-import 'package:e_commerce/presentation/screens/model_viewer.dart';
+import 'package:e_commerce/presentation/screens/customer/splash_screen.dart';
+import 'package:e_commerce/presentation/screens/reconstruction/camera_screen.dart';
+import 'package:e_commerce/presentation/screens/reconstruction/model_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

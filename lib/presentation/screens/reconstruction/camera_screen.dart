@@ -2,7 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce/configs/size_config.dart';
 import 'package:e_commerce/data/repositories/gen3d_repository.dart';
-import 'package:e_commerce/presentation/screens/model_viewer.dart';
+import 'package:e_commerce/presentation/screens/reconstruction/model_viewer.dart';
 
 import 'dart:async';
 import 'dart:io';
@@ -175,18 +175,18 @@ class _CameraPageState extends State<CameraPage> {
                           onPressed: () => _recordVideo(),
                         ),
                       ),
-                //       TextButton(
-                //         style: TextButton.styleFrom(
-                //           foregroundColor:
-                //               Theme.of(context).colorScheme.onPrimary,
-                //           backgroundColor:
-                //               Theme.of(context).colorScheme.primary,
-                //         ),
-                //         onPressed: () async {
-                //           if (_isDone) {}
-                //         },
-                //         child: const Text('Done'),
-                //       ),
+                      //       TextButton(
+                      //         style: TextButton.styleFrom(
+                      //           foregroundColor:
+                      //               Theme.of(context).colorScheme.onPrimary,
+                      //           backgroundColor:
+                      //               Theme.of(context).colorScheme.primary,
+                      //         ),
+                      //         onPressed: () async {
+                      //           if (_isDone) {}
+                      //         },
+                      //         child: const Text('Done'),
+                      //       ),
                     ]),
                 Container(
                   height: 80.0,

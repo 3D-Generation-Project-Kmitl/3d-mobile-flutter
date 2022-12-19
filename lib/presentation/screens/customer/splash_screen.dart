@@ -4,7 +4,7 @@ import 'package:e_commerce/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../cubits/cubits.dart';
+import '../../../cubits/cubits.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);

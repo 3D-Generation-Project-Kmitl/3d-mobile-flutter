@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:e_commerce/constants/colors.dart';
 import 'package:e_commerce/presentation/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/models/models.dart';
-import '../../routes/screens_routes.dart';
+import '../../../data/models/models.dart';
+import '../../../routes/screens_routes.dart';
 import 'package:e_commerce/cubits/cubits.dart';
 import 'package:e_commerce/routes/screens_routes.dart';
 

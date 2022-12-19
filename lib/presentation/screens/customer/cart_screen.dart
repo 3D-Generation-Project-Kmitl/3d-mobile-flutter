@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../configs/size_config.dart';
-import '../../cubits/cubits.dart';
-import '../../data/models/models.dart';
-import '../../routes/screens_routes.dart';
+import '../../../configs/size_config.dart';
+import '../../../cubits/cubits.dart';
+import '../../../data/models/models.dart';
+import '../../../routes/screens_routes.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
