@@ -25,8 +25,7 @@ class SplashScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: Center(
-            child: MultiBlocListener(listeners: [
-              BlocListener<AuthCubit, AuthState>(
+            child: BlocListener<AuthCubit, AuthState>(
                 listener: (context, state) {
                   if (state is ValidateTokenSuccessState) {
                     userCubit.setUser(state.user);
@@ -39,8 +38,7 @@ class SplashScreen extends StatelessWidget {
                         context, navigationRoute, (route) => false);
                   }
                 },
-              ),
-            ], child: const CircularProgressIndicator()),
+                child: const CircularProgressIndicator()),
           ),
         ));
   }

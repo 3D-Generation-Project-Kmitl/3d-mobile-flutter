@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:e_commerce/cubits/cubits.dart';
 
 import '../../../configs/size_config.dart';
-import '../../../constants/api.dart';
 import '../../widgets/widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -16,6 +15,9 @@ class ProfileScreen extends StatelessWidget {
     SizeConfig().init(context);
     final userCubit = context.read<UserCubit>();
     final authCubit = context.read<AuthCubit>();
+    final cartCubit = context.read<CartCubit>();
+    final favoriteCubit = context.read<FavoriteCubit>();
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -75,6 +77,8 @@ class ProfileScreen extends StatelessWidget {
                                 onPressed: () {
                                   authCubit.logout();
                                   userCubit.clearUser();
+                                  cartCubit.clearCart();
+                                  favoriteCubit.clearFavorite();
                                 },
                                 child: Text(
                                   "ออกจากระบบ",

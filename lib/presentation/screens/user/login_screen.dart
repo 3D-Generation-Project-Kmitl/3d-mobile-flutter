@@ -50,6 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final authCubit = context.read<AuthCubit>();
     final userCubit = context.read<UserCubit>();
+    final cartCubit = context.read<CartCubit>();
+    final favoriteCubit = context.read<FavoriteCubit>();
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -57,6 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
           //showLoadingDialog(context);
         } else if (state is LoginSuccessState) {
           userCubit.setUser(state.user);
+          cartCubit.getCart();
+          favoriteCubit.getFavorite();
           Navigator.pushNamedAndRemoveUntil(
               context, navigationRoute, (route) => false);
         } else if (state is LoginFailureState) {

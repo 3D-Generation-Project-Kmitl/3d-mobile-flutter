@@ -20,6 +20,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     }
   }
 
+  void clearFavorite() {
+    emit(FavoriteInitial());
+  }
+
   Future addToFavorite({required int productId}) async {
     try {
       if (state is FavoriteLoaded) {

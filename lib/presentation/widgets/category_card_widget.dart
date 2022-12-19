@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:e_commerce/data/models/models.dart';
 
-import '../../constants/api.dart';
-
 class CategoryCard extends StatelessWidget {
   final Category category;
   final Function press;

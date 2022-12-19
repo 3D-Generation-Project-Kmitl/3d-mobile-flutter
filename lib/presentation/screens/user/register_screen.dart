@@ -58,6 +58,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final authCubit = context.read<AuthCubit>();
     final userCubit = context.read<UserCubit>();
+    final cartCubit = context.read<CartCubit>();
+    final favoriteCubit = context.read<FavoriteCubit>();
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -65,6 +67,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           //showLoadingDialog(context);
         } else if (state is RegisterSuccessState) {
           userCubit.setUser(state.user);
+          cartCubit.getCart();
+          favoriteCubit.getFavorite();
           Navigator.pushNamedAndRemoveUntil(
               context, navigationRoute, (route) => false);
         } else if (state is RegisterFailureState) {
@@ -97,6 +101,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(height: SizeConfig.screenHeight * 0.02),
                     buildPasswordFormField(),
                     SizedBox(height: SizeConfig.screenHeight * 0.03),
+                    buildConfirmPasswordFormField(),
+                    SizedBox(height: SizeConfig.screenHeight * 0.03),
                     SizedBox(
                       width: double.infinity,
                       height: getProportionateScreenHeight(50),
@@ -110,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             );
                           }
                         },
-                        child: Text(
+                        child: const Text(
                           'สมัครสมาชิก',
                         ),
                       ),
@@ -181,11 +187,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         return null;
       },
       style: Theme.of(context).textTheme.headline5,
-      obscureText: true,
+      obscureText: isHiddenPassword,
       textAlignVertical: TextAlignVertical.bottom,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: "ยืนยันรหัสผ่าน",
-        suffixIcon: Icon(Icons.visibility_off),
+        suffixIcon: InkWell(
+          onTap: _togglePasswordView,
+          child: Icon(
+            isHiddenPassword ? Icons.visibility_off : Icons.visibility,
+          ),
+        ),
       ),
     );
   }

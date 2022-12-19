@@ -19,6 +19,10 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+  void clearCart() {
+    emit(CartInitial());
+  }
+
   Future<bool> addToCart({required int productId}) async {
     try {
       if (state is CartLoaded) {
