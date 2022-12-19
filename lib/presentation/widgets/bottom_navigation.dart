@@ -66,7 +66,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
           builder: (context, state) {
             return BottomNavigationBar(
               currentIndex: _selectedIndex,
-              onTap: state.user != null ? _onItemTapped : navigateToNoAuth,
+              onTap: state is UserLoaded ? _onItemTapped : navigateToNoAuth,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home_outlined),

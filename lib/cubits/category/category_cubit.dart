@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 
 import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
@@ -7,7 +6,7 @@ import '../../data/repositories/repository.dart';
 part 'category_state.dart';
 
 class CategoryCubit extends Cubit<CategoryState> {
-  CategoryCubit() : super(const CategoryState());
+  CategoryCubit() : super(CategoryInitial());
 
   final CategoryRepository categoryRepository = CategoryRepository();
 
@@ -15,17 +14,9 @@ class CategoryCubit extends Cubit<CategoryState> {
     try {
       emit(CategoryLoading());
       final categories = await categoryRepository.getCategories();
-      emit(CategoryLoaded(categoryList: categories));
+      emit(CategoryLoaded(categories));
     } catch (e) {
-      emit(CategoryError(e.toString()));
+      emit(CategoryFailure(e.toString()));
     }
-  }
-
-  void setCategories(List<Category> categories) {
-    emit(state.copyWith(categories: categories));
-  }
-
-  void clearCategories() {
-    emit(const CategoryState());
   }
 }

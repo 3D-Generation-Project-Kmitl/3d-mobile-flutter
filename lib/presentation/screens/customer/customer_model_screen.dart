@@ -1,7 +1,7 @@
 import 'package:e_commerce/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 
-import '../../configs/size_config.dart';
+import '../../../configs/size_config.dart';
 
 class CustomerModelScreen extends StatelessWidget {
   const CustomerModelScreen({Key? key}) : super(key: key);

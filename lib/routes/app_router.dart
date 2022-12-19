@@ -64,6 +64,9 @@ class AppRouter {
       settings: const RouteSettings(name: '/error'),
       builder: (_) => Scaffold(
         appBar: AppBar(title: const Text('Error')),
+        body: const Center(
+          child: Text('Error'),
+        ),
       ),
     );
   }
