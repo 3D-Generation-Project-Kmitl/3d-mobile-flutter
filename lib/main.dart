@@ -1,9 +1,9 @@
-import 'package:e_commerce/presentation/screens/user/splash_screen.dart';
+import 'package:marketplace/presentation/screens/user/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:e_commerce/configs/theme.dart';
+import 'package:marketplace/configs/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:e_commerce/cubits/cubits.dart';
-import 'package:e_commerce/utils/dio_client.dart';
+import 'package:marketplace/cubits/cubits.dart';
+import 'package:marketplace/utils/dio_client.dart';
 
 import './routes/app_router.dart';
 

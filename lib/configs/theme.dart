@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:e_commerce/constants/colors.dart';
+import 'package:marketplace/constants/colors.dart';
 import 'package:flutter/services.dart';
 
 class AppTheme {

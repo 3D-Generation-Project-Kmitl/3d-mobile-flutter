@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:e_commerce/data/models/models.dart';
-import 'package:e_commerce/utils/dio_client.dart';
+import 'package:marketplace/data/models/models.dart';
+import 'package:marketplace/utils/dio_client.dart';
 
 class FavoriteRepository {
   Future<List<Favorite>> getFavorite() async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:e_commerce/presentation/screens/screens.dart';
+import 'package:marketplace/presentation/screens/screens.dart';
 import './screens_routes.dart';
-import 'package:e_commerce/data/models/models.dart';
+import 'package:marketplace/data/models/models.dart';
 
 class AppRouter {
   static Route onGenerateRoute(RouteSettings settings) {

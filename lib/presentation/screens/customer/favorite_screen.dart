@@ -1,4 +1,4 @@
-import 'package:e_commerce/presentation/widgets/widgets.dart';
+import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

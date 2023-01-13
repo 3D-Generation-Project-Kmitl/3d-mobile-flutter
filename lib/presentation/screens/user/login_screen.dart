@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:e_commerce/configs/size_config.dart';
-import 'package:e_commerce/constants/colors.dart';
-import 'package:e_commerce/presentation/helpers/helpers.dart';
+import 'package:marketplace/configs/size_config.dart';
+import 'package:marketplace/constants/colors.dart';
+import 'package:marketplace/presentation/helpers/helpers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:e_commerce/cubits/cubits.dart';
-import 'package:e_commerce/routes/screens_routes.dart';
+import 'package:marketplace/cubits/cubits.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

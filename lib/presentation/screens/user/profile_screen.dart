@@ -1,8 +1,8 @@
-import 'package:e_commerce/routes/screens_routes.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:e_commerce/cubits/cubits.dart';
+import 'package:marketplace/cubits/cubits.dart';
 
 import '../../../configs/size_config.dart';
 import '../../widgets/widgets.dart';

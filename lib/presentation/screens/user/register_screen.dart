@@ -1,7 +1,7 @@
-import 'package:e_commerce/routes/screens_routes.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:e_commerce/configs/size_config.dart';
-import 'package:e_commerce/presentation/helpers/helpers.dart';
+import 'package:marketplace/configs/size_config.dart';
+import 'package:marketplace/presentation/helpers/helpers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../cubits/cubits.dart';

@@ -1,4 +1,4 @@
-import 'package:e_commerce/routes/screens_routes.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 
 import '../../../configs/size_config.dart';

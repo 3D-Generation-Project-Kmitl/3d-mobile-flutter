@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:e_commerce/utils/dio_client.dart';
+import 'package:marketplace/utils/dio_client.dart';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(String filePath, String fileName) async {

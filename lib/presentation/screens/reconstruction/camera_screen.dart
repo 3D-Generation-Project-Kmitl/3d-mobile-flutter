@@ -1,8 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:e_commerce/configs/size_config.dart';
-import 'package:e_commerce/data/repositories/gen3d_repository.dart';
-import 'package:e_commerce/presentation/screens/reconstruction/model_viewer.dart';
+import 'package:marketplace/configs/size_config.dart';
+import 'package:marketplace/data/repositories/gen3d_repository.dart';
+import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
 
 import 'dart:async';
 import 'dart:io';

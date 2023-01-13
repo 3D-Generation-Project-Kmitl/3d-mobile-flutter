@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:e_commerce/data/models/models.dart';
+import 'package:marketplace/data/models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../configs/size_config.dart';

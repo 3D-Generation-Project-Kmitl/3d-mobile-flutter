@@ -1,4 +1,4 @@
-import 'package:e_commerce/data/repositories/auth_repository.dart';
+import 'package:marketplace/data/repositories/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/models/user_model.dart';

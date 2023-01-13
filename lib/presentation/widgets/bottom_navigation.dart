@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:e_commerce/presentation/screens/screens.dart';
+import 'package:marketplace/presentation/screens/screens.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:e_commerce/cubits/cubits.dart';
+import 'package:marketplace/cubits/cubits.dart';
 
 import '../../routes/screens_routes.dart';
 
