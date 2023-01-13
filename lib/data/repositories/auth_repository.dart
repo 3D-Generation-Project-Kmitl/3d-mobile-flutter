@@ -65,14 +65,14 @@ class AuthRepository {
     }
   }
 
-  Future<bool> forgotPassword(String email) async {
+  Future<String> forgotPassword(String email) async {
     try {
       final response =
           await DioClient().dio.post('/auth/forgotPassword', data: {
         'email': email,
       });
-      bool isSuccess = BaseResponse.fromJson(response.data).success;
-      return isSuccess;
+      final String message = BaseResponse.fromJson(response.data).message;
+      return message;
     } catch (e) {
       if (e is DioError) {
         throw e.response!.data;
@@ -100,15 +100,15 @@ class AuthRepository {
     }
   }
 
-  Future<bool> forceUpdatePassword(String newPassword, String token) async {
+  Future<String> forceUpdatePassword(String newPassword, String token) async {
     try {
       final response =
-          await DioClient().dio.post('/auth/forceUpdatePassword', data: {
+          await DioClient().dio.put('/auth/forceUpdatePassword', data: {
         'newPassword': newPassword,
         'token': token,
       });
-      bool isSuccess = BaseResponse.fromJson(response.data).success;
-      return isSuccess;
+      final message = BaseResponse.fromJson(response.data).message;
+      return message;
     } catch (e) {
       if (e is DioError) {
         throw e.response!.data;

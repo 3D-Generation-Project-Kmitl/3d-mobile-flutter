@@ -13,3 +13,4 @@ const Color backgroundColor = Color(0xFFFFFFFF);
 const Color whiteColor = Colors.white;
 const Color outlineColor = Color(0xffE5E5E5);
 const Color focusedOutlineColor = Color(0xffDADADA);
+const Color borderColor = Color(0xFF7E7C9F);

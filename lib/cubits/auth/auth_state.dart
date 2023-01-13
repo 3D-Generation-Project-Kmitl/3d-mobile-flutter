@@ -59,3 +59,45 @@ class ValidateTokenFailureState extends AuthState {
 
   ValidateTokenFailureState(this.errorMessage);
 }
+
+class ForgotPasswordLoadingState extends AuthState {}
+
+class ForgotPasswordSuccessState extends AuthState {
+  final String message;
+
+  ForgotPasswordSuccessState(this.message);
+}
+
+class ForgotPasswordFailureState extends AuthState {
+  final String errorMessage;
+
+  ForgotPasswordFailureState(this.errorMessage);
+}
+
+class CheckOTPLoadingState extends AuthState {}
+
+class CheckOTPSuccessState extends AuthState {
+  final String token;
+
+  CheckOTPSuccessState(this.token);
+}
+
+class CheckOTPFailureState extends AuthState {
+  final String errorMessage;
+
+  CheckOTPFailureState(this.errorMessage);
+}
+
+class ResetPasswordLoadingState extends AuthState {}
+
+class ResetPasswordSuccessState extends AuthState {
+  final String message;
+
+  ResetPasswordSuccessState(this.message);
+}
+
+class ResetPasswordFailureState extends AuthState {
+  final String errorMessage;
+
+  ResetPasswordFailureState(this.errorMessage);
+}
