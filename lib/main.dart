@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightAppTheme,
         onGenerateRoute: AppRouter.onGenerateRoute,
-        home: const CameraPage(),
+        home: const CameraScreen(),
       ),
     );
   }

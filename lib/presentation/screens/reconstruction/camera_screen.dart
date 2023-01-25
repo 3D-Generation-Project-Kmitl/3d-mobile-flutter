@@ -4,19 +4,19 @@ import 'package:marketplace/configs/size_config.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
 import 'package:marketplace/presentation/screens/reconstruction/file_image_preview_button.dart';
-import 'package:marketplace/presentation/screens/reconstruction/picture_screen.dart';
+import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
 import 'package:marketplace/presentation/widgets/image_card_widget.dart';
 import 'dart:async';
 import 'dart:io';
 
-class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+class CameraScreen extends StatefulWidget {
+  const CameraScreen({Key? key}) : super(key: key);
 
   @override
-  _CameraPageState createState() => _CameraPageState();
+  _CameraScreenState createState() => _CameraScreenState();
 }
 
-class _CameraPageState extends State<CameraPage> {
+class _CameraScreenState extends State<CameraScreen> {
   bool _isLoading = true;
   bool _isTaking = false;
   int numberOfPicture = 0;
@@ -93,23 +93,28 @@ class _CameraPageState extends State<CameraPage> {
                   Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        GestureDetector(
-                          onTap: () => {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => PictureScreen(
-                                  // Pass the automatically generated path to
-                                  // the DisplayPictureScreen widget.
-                                  imagePath: imageFiles.last.path,
+                        Visibility(
+                          maintainSize: true,
+                          visible: imageFiles.isNotEmpty,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          child: GestureDetector(
+                            onTap: () => {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ImageViewerScreen(
+                                    previewImage: imageFiles.last,
+                                    imageFiles:imageFiles
+                                  ),
                                 ),
-                              ),
-                            )
-                          },
-                          child: FileImagePreviewButton(
-                              imagePath: imageFiles.isNotEmpty
-                                  ? imageFiles.last.path
-                                  : '',
-                              numberOfPicture: numberOfPicture),
+                              )
+                            },
+                            child: FileImagePreviewButton(
+                                imagePath: imageFiles.isNotEmpty
+                                    ? imageFiles.last.path
+                                    : '',
+                                numberOfPicture: numberOfPicture),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(25),
