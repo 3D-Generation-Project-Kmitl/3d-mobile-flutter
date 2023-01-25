@@ -16,9 +16,10 @@ class FileImagePreviewButton extends StatelessWidget {
                   width: 50,
                   color: Colors.grey,
                   child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: Image.file(File(imagePath)),
-                  )),
+                          fit:BoxFit.cover,
+                          clipBehavior: Clip.hardEdge,
+                          child:Image.file(File(imagePath)) ,
+                        )),
               Container(
                   height: 50,
                   width: 50,

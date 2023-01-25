@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marketplace/configs/size_config.dart';
+import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
 import 'package:marketplace/presentation/screens/reconstruction/file_image_preview_button.dart';
@@ -10,7 +12,8 @@ import 'dart:async';
 import 'dart:io';
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  final List<XFile>? imageFiles;
+  const CameraScreen({Key? key, this.imageFiles}) : super(key: key);
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -20,7 +23,7 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _isLoading = true;
   bool _isTaking = false;
   int numberOfPicture = 0;
-  List<XFile> imageFiles = [];
+  List<XFile>? imageFiles;
   String modelPath = "";
   late CameraController _cameraController;
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
@@ -29,6 +32,12 @@ class _CameraScreenState extends State<CameraScreen> {
   void initState() {
     _initCamera();
     super.initState();
+    if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
+      imageFiles = widget.imageFiles;
+      numberOfPicture = imageFiles!.length;
+    } else {
+      imageFiles = [];
+    }
   }
 
   @override
@@ -50,7 +59,7 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   _manualTakePicture() async {
-    imageFiles.add(await _cameraController.takePicture());
+    imageFiles!.add(await _cameraController.takePicture());
     setState(() {
       imageFiles = imageFiles;
       numberOfPicture += 1;
@@ -67,6 +76,10 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     SizeConfig().init(context);
 
     if (_isLoading) {
@@ -81,12 +94,7 @@ class _CameraScreenState extends State<CameraScreen> {
         child: Center(
           child: Stack(
             children: [
-              Column(
-                children: [
-                  AppBar(backgroundColor: Colors.white),
-                  CameraPreview(_cameraController),
-                ],
-              ),
+              CameraPreview(_cameraController),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -95,7 +103,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       children: [
                         Visibility(
                           maintainSize: true,
-                          visible: imageFiles.isNotEmpty,
+                          visible: imageFiles!.isNotEmpty,
                           maintainAnimation: true,
                           maintainState: true,
                           child: GestureDetector(
@@ -103,37 +111,29 @@ class _CameraScreenState extends State<CameraScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ImageViewerScreen(
-                                    previewImage: imageFiles.last,
-                                    imageFiles:imageFiles
-                                  ),
+                                      previewImage: imageFiles!.last,
+                                      imageFiles: imageFiles!),
                                 ),
                               )
                             },
                             child: FileImagePreviewButton(
-                                imagePath: imageFiles.isNotEmpty
-                                    ? imageFiles.last.path
+                                imagePath: imageFiles!.isNotEmpty
+                                    ? imageFiles!.last.path
                                     : '',
                                 numberOfPicture: numberOfPicture),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(25),
-                          child: FloatingActionButton(
-                            backgroundColor: Colors.white,
-                            onPressed: () => _manualTakePicture(),
-                          ),
+                        FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: () => _manualTakePicture(),
                         ),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onPrimary,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                          ),
-                          onPressed: () {},
-                          child: const Text('Next'),
-                        )
+                        FloatingActionButton(
+                          child: const Icon(Icons.arrow_forward_ios),
+                          backgroundColor: secondaryLight,
+                          onPressed: () => {},
+                        ),
                       ]),
+                  const SizedBox(height: 20),
                   Container(
                     height: 80.0,
                     color: Colors.white,

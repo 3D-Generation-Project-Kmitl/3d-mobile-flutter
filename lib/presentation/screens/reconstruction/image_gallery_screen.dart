@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:marketplace/presentation/screens/reconstruction/camera_screen.dart';
 import 'dart:io';
 
 import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
@@ -15,14 +16,23 @@ class ImageGalleryScreen extends StatelessWidget {
         appBar: AppBar(
             title: DefaultTextStyle(
                 style: const TextStyle(color: Colors.black, fontSize: 16),
-                child: Text('${imageFiles.length.toString()} รูป'))),
+                child: Text('${imageFiles.length.toString()} รูป')),
+            leading: BackButton(
+              onPressed: () => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CameraScreen(imageFiles: imageFiles),
+                  ),
+                )
+              },
+            )),
         body: SafeArea(
           child: CustomScrollView(
             slivers: [
               SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
-                  childAspectRatio: 0.69,
+                  childAspectRatio: 1,
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 5,
                 ),
@@ -38,10 +48,13 @@ class ImageGalleryScreen extends StatelessWidget {
                           ),
                         )
                       },
-                      child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: Image.file(File(imageFiles[index].path)),
-                  ),
+
+                        child: FittedBox(
+                          fit:BoxFit.cover,
+                          clipBehavior: Clip.hardEdge,
+                          child:Image.file(File(imageFiles[index].path)) ,
+                        ),
+  
                     );
                   },
                   childCount: imageFiles.length,
