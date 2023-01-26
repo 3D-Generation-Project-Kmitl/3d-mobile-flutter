@@ -16,12 +16,12 @@ class ImageViewerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: DefaultTextStyle(
-            style: const TextStyle(color: Colors.black, fontSize: 16),
+            style: const TextStyle(color: Colors.black, fontSize: 14),
             child: Text(previewImage.name)),
         actions: [
           TextButton(
             style: TextButton.styleFrom(
-              textStyle: const TextStyle(color: Colors.red,fontSize: 14),
+              textStyle: const TextStyle(color: Colors.red,fontSize: 12),
             ),
             onPressed: () {
               Navigator.of(context).push(

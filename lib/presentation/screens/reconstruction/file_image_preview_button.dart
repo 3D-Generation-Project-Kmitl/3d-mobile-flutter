@@ -1,24 +1,24 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 
 class FileImagePreviewButton extends StatelessWidget {
-  final String imagePath;
-  final int numberOfPicture;
+  final List<XFile> imageFiles;
   const FileImagePreviewButton(
-      {super.key, required this.imagePath, required this.numberOfPicture});
+      {super.key, required this.imageFiles});
   @override
   Widget build(BuildContext context) {
-    return imagePath != ''
+    return imageFiles.isNotEmpty
         ? Stack(
             children: [
               Container(
-                  height: 50,
-                  width: 50,
+                  height: 30,
+                  width: 30,
                   color: Colors.grey,
                   child: FittedBox(
                           fit:BoxFit.cover,
                           clipBehavior: Clip.hardEdge,
-                          child:Image.file(File(imagePath)) ,
+                          child:Image.file(File(imageFiles.last.path)) ,
                         )),
               Container(
                   height: 50,
@@ -28,7 +28,7 @@ class FileImagePreviewButton extends StatelessWidget {
                       child: DefaultTextStyle(
                           style: const TextStyle(
                               color: Colors.white, fontSize: 16),
-                          child: Text(numberOfPicture.toString())))),
+                          child: Text(imageFiles.length.toString())))),
             ],
           )
         : Container(

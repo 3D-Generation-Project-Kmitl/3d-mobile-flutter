@@ -22,7 +22,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   bool _isLoading = true;
   bool _isTaking = false;
-  int numberOfPicture = 0;
+
   List<XFile>? imageFiles;
   String modelPath = "";
   late CameraController _cameraController;
@@ -34,7 +34,6 @@ class _CameraScreenState extends State<CameraScreen> {
     super.initState();
     if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
       imageFiles = widget.imageFiles;
-      numberOfPicture = imageFiles!.length;
     } else {
       imageFiles = [];
     }
@@ -60,9 +59,12 @@ class _CameraScreenState extends State<CameraScreen> {
 
   _manualTakePicture() async {
     imageFiles!.add(await _cameraController.takePicture());
+    if (await CameraDataFromARCore.isARCoreSupported()) {
+      Map<String, dynamic>? cameraData = await CameraDataFromARCore.getCameraData();
+      print(cameraData);
+    }
     setState(() {
       imageFiles = imageFiles;
-      numberOfPicture += 1;
     });
   }
 
@@ -116,21 +118,22 @@ class _CameraScreenState extends State<CameraScreen> {
                                 ),
                               )
                             },
-                            child: FileImagePreviewButton(
-                                imagePath: imageFiles!.isNotEmpty
-                                    ? imageFiles!.last.path
-                                    : '',
-                                numberOfPicture: numberOfPicture),
+                            child:
+                                FileImagePreviewButton(imageFiles: imageFiles!),
                           ),
                         ),
                         FloatingActionButton(
                           backgroundColor: Colors.white,
                           onPressed: () => _manualTakePicture(),
                         ),
-                        FloatingActionButton(
-                          child: const Icon(Icons.arrow_forward_ios),
-                          backgroundColor: secondaryLight,
-                          onPressed: () => {},
+                        Container(
+                          height: 30.0,
+                          width: 30.0,
+                          child: FloatingActionButton(
+                            backgroundColor: secondaryLight,
+                            onPressed: () => {},
+                            child: const Icon(Icons.arrow_forward_ios),
+                          ),
                         ),
                       ]),
                   const SizedBox(height: 20),
@@ -144,6 +147,31 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
         ),
       );
+    }
+  }
+}
+
+class CameraDataFromARCore {
+  static const MethodChannel _channel = const MethodChannel('arcore');
+
+  static Future<bool> isARCoreSupported() async {
+    try {
+      final bool result = await _channel.invokeMethod('isARCoreSupported');
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> getCameraData() async {
+    try {
+      final Map<String, dynamic> result =
+          await _channel.invokeMethod('getCameraData');
+      return result;
+    } on PlatformException catch (e) {
+      print(e);
+      return null;
     }
   }
 }
