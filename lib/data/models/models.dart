@@ -6,3 +6,4 @@ export './product_detail_model.dart';
 export './category_model.dart';
 export './cart_model.dart';
 export './favorite_model.dart';
+export './token_model.dart';

@@ -16,6 +16,14 @@ class AppRouter {
         return _route(const LoginScreen(), loginRoute);
       case registerRoute:
         return _route(const RegisterScreen(), registerRoute);
+      case forgotPasswordRoute:
+        return _route(const ForgotPasswordScreen(), forgotPasswordRoute);
+      case otpRoute:
+        String email = settings.arguments as String;
+        return _route(OtpScreen(email: email), otpRoute);
+      case resetPasswordRoute:
+        String token = settings.arguments as String;
+        return _route(ResetPasswordScreen(token: token), resetPasswordRoute);
       case homeRoute:
         return _route(const HomeScreen(), homeRoute);
       case searchRoute:

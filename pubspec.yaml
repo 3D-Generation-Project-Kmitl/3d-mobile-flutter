@@ -45,6 +45,7 @@ dependencies:
   path:
   video_player:
   babylonjs_viewer: ^1.1.4
+  flutter_otp_text_field: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

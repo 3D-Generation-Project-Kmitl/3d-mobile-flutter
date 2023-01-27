@@ -1,5 +1,8 @@
 const String loginRoute = "/login";
 const String registerRoute = "/register";
+const String forgotPasswordRoute = "/forgot_password";
+const String resetPasswordRoute = "/reset_password";
+const String otpRoute = "/otp";
 const String homeRoute = "/home";
 const String splashRoute = "/";
 const String navigationRoute = "/navigation";
