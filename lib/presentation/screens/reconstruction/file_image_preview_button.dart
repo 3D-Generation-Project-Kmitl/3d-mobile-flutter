@@ -12,8 +12,8 @@ class FileImagePreviewButton extends StatelessWidget {
         ? Stack(
             children: [
               Container(
-                  height: 30,
-                  width: 30,
+                  height: 40,
+                  width: 40,
                   color: Colors.grey,
                   child: FittedBox(
                           fit:BoxFit.cover,
@@ -21,8 +21,8 @@ class FileImagePreviewButton extends StatelessWidget {
                           child:Image.file(File(imageFiles.last.path)) ,
                         )),
               Container(
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   color: Colors.grey.withOpacity(0.3),
                   child: Center(
                       child: DefaultTextStyle(

@@ -13,6 +13,7 @@ import 'dart:io';
 
 class CameraScreen extends StatefulWidget {
   final List<XFile>? imageFiles;
+  
   const CameraScreen({Key? key, this.imageFiles}) : super(key: key);
 
   @override
@@ -22,8 +23,10 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   bool _isLoading = true;
   bool _isTaking = false;
+  bool isARCoreSupported=false;
 
   List<XFile>? imageFiles;
+
   String modelPath = "";
   late CameraController _cameraController;
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
@@ -37,6 +40,7 @@ class _CameraScreenState extends State<CameraScreen> {
     } else {
       imageFiles = [];
     }
+    
   }
 
   @override
@@ -55,14 +59,19 @@ class _CameraScreenState extends State<CameraScreen> {
     setState(() {
       _isLoading = false;
     });
+    isARCoreSupported=await CameraDataFromARCore.isARCoreSupported();
   }
 
   _manualTakePicture() async {
     imageFiles!.add(await _cameraController.takePicture());
-    if (await CameraDataFromARCore.isARCoreSupported()) {
+    if (isARCoreSupported) {
+      
       Map<String, dynamic>? cameraData = await CameraDataFromARCore.getCameraData();
+      print('hello pure');
       print(cameraData);
     }
+
+
     setState(() {
       imageFiles = imageFiles;
     });
@@ -123,13 +132,15 @@ class _CameraScreenState extends State<CameraScreen> {
                           ),
                         ),
                         FloatingActionButton(
+                          heroTag: "takePictureButton",
                           backgroundColor: Colors.white,
                           onPressed: () => _manualTakePicture(),
                         ),
                         Container(
-                          height: 30.0,
-                          width: 30.0,
+                          height: 40.0,
+                          width: 40.0,
                           child: FloatingActionButton(
+                            heroTag: "nextButton",
                             backgroundColor: secondaryLight,
                             onPressed: () => {},
                             child: const Icon(Icons.arrow_forward_ios),
