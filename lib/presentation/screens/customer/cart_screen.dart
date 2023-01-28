@@ -116,48 +116,78 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _cartBottomBar(context, double totalPrice) {
-    return Container(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 15,
-        bottom: 10,
-        top: 10,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 4,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'รวมทั้งหมด ',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-            Text(
-              '฿$totalPrice',
-              style: Theme.of(context).textTheme.headline2?.copyWith(
-                    color: Theme.of(context).primaryColor,
-                  ),
-            ),
-            const Spacer(),
-            SizedBox(
-              width: 120,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('ชำระเงิน'),
+    return BlocProvider(
+      create: (context) => PaymentCubit(),
+      child: BlocListener<PaymentCubit, PaymentState>(
+        listener: (context, state) {
+          if (state is PaymentLoaded) {
+            Navigator.pushNamed(context, homeRoute);
+          } else if (state is PaymentFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
               ),
-            ),
-          ],
+            );
+          }
+        },
+        child: BlocBuilder<PaymentCubit, PaymentState>(
+          builder: (context, state) {
+            return Container(
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 15,
+                bottom: 10,
+                top: 10,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 4,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'รวมทั้งหมด ',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    Text(
+                      '฿$totalPrice',
+                      style: Theme.of(context).textTheme.headline2?.copyWith(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      width: 120,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          await context.read<PaymentCubit>().getPaymentIntent();
+                        },
+                        child: (state is PaymentLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text('ชำระเงิน')),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

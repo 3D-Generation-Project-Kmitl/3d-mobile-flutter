@@ -5,3 +5,4 @@ export './product_detail/product_detail_cubit.dart';
 export './category/category_cubit.dart';
 export './cart/cart_cubit.dart';
 export './favorite/favorite_cubit.dart';
+export './payment/payment_cubit.dart';
