@@ -170,7 +170,11 @@ class CartScreen extends StatelessWidget {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () async {
-                          await context.read<PaymentCubit>().getPaymentIntent();
+                          if (state is! PaymentLoading) {
+                            await context
+                                .read<PaymentCubit>()
+                                .getPaymentIntent();
+                          }
                         },
                         child: (state is PaymentLoading
                             ? const SizedBox(

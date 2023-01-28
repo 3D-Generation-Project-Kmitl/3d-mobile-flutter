@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
 
 part 'payment_state.dart';
