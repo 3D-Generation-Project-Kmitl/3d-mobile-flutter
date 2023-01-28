@@ -107,7 +107,7 @@ class ProfileScreen extends StatelessWidget {
                               dense: true,
                               visualDensity: const VisualDensity(vertical: 4),
                               onTap: () {
-                                //Navigator.pushNamed(context, orderRoute);
+                                Navigator.pushNamed(context, myOrdersRoute);
                               },
                               title: Text(
                                 "รายการสั่งซื้อของฉัน",

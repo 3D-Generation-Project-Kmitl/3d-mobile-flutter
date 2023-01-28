@@ -15,5 +15,7 @@ export 'customer/search_screen.dart';
 export 'customer/cart_screen.dart';
 export 'customer/product_detail_screen.dart';
 export 'customer/customer_model_screen.dart';
+export 'customer/order_completed_screen.dart';
+export 'customer/my_orders_screen.dart';
 
 export 'reconstruction/camera_screen.dart';
