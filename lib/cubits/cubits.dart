@@ -8,3 +8,4 @@ export './favorite/favorite_cubit.dart';
 export './payment/payment_cubit.dart';
 export './orders/orders_cubit.dart';
 export './order_detail/order_detail_cubit.dart';
+export './models/models_cubit.dart';
