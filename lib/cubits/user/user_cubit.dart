@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../data/models/models.dart';
 
 part 'user_state.dart';

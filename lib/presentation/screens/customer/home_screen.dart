@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../data/models/models.dart';
 import '../../../routes/screens_routes.dart';
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:marketplace/routes/screens_routes.dart';
@@ -46,6 +45,7 @@ class HomeScreen extends StatelessWidget {
           child: RefreshIndicator(
             onRefresh: () async {
               productsCubit.getProducts();
+              categoriesCubit.getCategories();
             },
             child: CustomScrollView(
               slivers: <Widget>[

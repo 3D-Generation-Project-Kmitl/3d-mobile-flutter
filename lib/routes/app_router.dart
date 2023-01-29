@@ -36,6 +36,13 @@ class AppRouter {
         return _route(const ProfileScreen(), profileRoute);
       case cartRoute:
         return _route(const CartScreen(), cartRoute);
+      case orderCompletedRoute:
+        return _route(const OrderCompletedScreen(), orderCompletedRoute);
+      case myOrdersRoute:
+        return _route(const MyOrdersScreen(), myOrdersRoute);
+      case orderDetailRoute:
+        int id = settings.arguments as int;
+        return _route(OrderDetailScreen(orderId: id), orderDetailRoute);
       case productDetailRoute:
         Product? product = settings.arguments as Product?;
         if (product != null) {
