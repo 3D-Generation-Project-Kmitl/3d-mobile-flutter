@@ -16,3 +16,4 @@ const String gen3DRoute = "/gen3D";
 const String customerModelRoute = "/customer_model";
 const String orderCompletedRoute = "/order_completed";
 const String myOrdersRoute = "/my_orders";
+const String orderDetailRoute = "/order_detail";

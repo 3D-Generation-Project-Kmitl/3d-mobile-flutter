@@ -13,7 +13,7 @@ class OrdersLoaded extends OrdersState {
 }
 
 class OrdersFailure extends OrdersState {
-  final String message;
+  final String errorMessage;
 
-  OrdersFailure(this.message);
+  OrdersFailure(this.errorMessage);
 }
