@@ -6,3 +6,5 @@ export './category/category_cubit.dart';
 export './cart/cart_cubit.dart';
 export './favorite/favorite_cubit.dart';
 export './payment/payment_cubit.dart';
+export './orders/orders_cubit.dart';
+export './order_detail/order_detail_cubit.dart';
