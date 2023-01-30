@@ -18,3 +18,4 @@ const String orderCompletedRoute = "/order_completed";
 const String myOrdersRoute = "/my_orders";
 const String orderDetailRoute = "/order_detail";
 const String viewModelRoute = "/view_model";
+const String settingRoute = "/setting";

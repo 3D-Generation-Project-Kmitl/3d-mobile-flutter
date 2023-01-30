@@ -5,6 +5,7 @@ export 'user/profile_screen.dart';
 export 'user/otp_screen.dart';
 export 'user/forgot_password_screen.dart';
 export 'user/reset_password_screen.dart';
+export 'user/setting_screen.dart';
 
 export '../widgets/bottom_navigation.dart';
 
