@@ -64,6 +64,9 @@ class AppRouter {
         return _route(const CustomerModelScreen(), customerModelRoute);
       case settingRoute:
         return _route(const SettingScreen(), settingRoute);
+      case searchResultRoute:
+        String keyword = settings.arguments as String;
+        return _route(SearchResultScreen(keyword: keyword), searchResultRoute);
       default:
         return _errorRoute();
     }

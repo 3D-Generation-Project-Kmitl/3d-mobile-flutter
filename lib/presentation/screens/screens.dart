@@ -20,5 +20,6 @@ export 'customer/order_completed_screen.dart';
 export 'customer/orders_screen.dart';
 export 'customer/order_detail_screen.dart';
 export 'customer/view_model_screen.dart';
+export 'customer/search_result_screen.dart';
 
 export 'reconstruction/camera_screen.dart';
