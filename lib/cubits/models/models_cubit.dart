@@ -9,10 +9,10 @@ class ModelsCubit extends Cubit<ModelsState> {
 
   final ModelRepository modelRepository = ModelRepository();
 
-  Future<void> getModels() async {
+  Future<void> getModelsCustomer() async {
     try {
       emit(ModelsLoading());
-      final models = await modelRepository.getModels();
+      final models = await modelRepository.getModelsCustomer();
       emit(ModelsLoaded(models));
     } on String catch (e) {
       emit(ModelsFailure(e));

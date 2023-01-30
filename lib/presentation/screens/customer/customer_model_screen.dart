@@ -26,7 +26,7 @@ class CustomerModelScreen extends StatelessWidget {
           child: BlocBuilder<ModelsCubit, ModelsState>(
             builder: (context, state) {
               if (state is ModelsInitial) {
-                context.read<ModelsCubit>().getModels();
+                context.read<ModelsCubit>().getModelsCustomer();
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
