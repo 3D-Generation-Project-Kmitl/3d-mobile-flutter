@@ -43,6 +43,13 @@ class AppRouter {
       case orderDetailRoute:
         int id = settings.arguments as int;
         return _route(OrderDetailScreen(orderId: id), orderDetailRoute);
+      case viewModelRoute:
+        Model? model = settings.arguments as Model?;
+        if (model != null) {
+          return _route(ViewModelScreen(model: model), viewModelRoute);
+        } else {
+          return _errorRoute();
+        }
       case productDetailRoute:
         Product? product = settings.arguments as Product?;
         if (product != null) {
