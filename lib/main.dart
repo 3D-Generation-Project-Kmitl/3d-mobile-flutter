@@ -5,7 +5,7 @@ import 'package:marketplace/configs/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:marketplace/utils/dio_client.dart';
-
+  
 import './routes/app_router.dart';
 
 void main() {
