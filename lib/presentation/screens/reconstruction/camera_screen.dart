@@ -5,6 +5,7 @@ import 'package:marketplace/configs/size_config.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
+import 'package:marketplace/presentation/screens/reconstruction/reconstruction_config_screen.dart';
 import 'package:marketplace/presentation/screens/reconstruction/file_image_preview_button.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
 import 'package:marketplace/presentation/widgets/image_card_widget.dart';
@@ -23,7 +24,7 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   bool _isLoading = true;
   bool _isTaking = false;
-  bool isARCoreSupported=false;
+  // bool isARCoreSupported=false;
 
   List<XFile>? imageFiles;
 
@@ -59,17 +60,17 @@ class _CameraScreenState extends State<CameraScreen> {
     setState(() {
       _isLoading = false;
     });
-    isARCoreSupported=await CameraDataFromARCore.isARCoreSupported();
+    // isARCoreSupported=await CameraDataFromARCore.isARCoreSupported();
   }
 
   _manualTakePicture() async {
     imageFiles!.add(await _cameraController.takePicture());
-    if (isARCoreSupported) {
+    // if (isARCoreSupported) {
       
-      Map<String, dynamic>? cameraData = await CameraDataFromARCore.getCameraData();
-      print('hello pure');
-      print(cameraData);
-    }
+    //   Map<String, dynamic>? cameraData = await CameraDataFromARCore.getCameraData();
+    //   print('hello pure');
+    //   print(cameraData);
+    // }
 
 
     setState(() {
@@ -141,9 +142,14 @@ class _CameraScreenState extends State<CameraScreen> {
                           width: 40.0,
                           child: FloatingActionButton(
                             heroTag: "nextButton",
-                            backgroundColor: secondaryLight,
-                            onPressed: () => {},
-                            child: const Icon(Icons.arrow_forward_ios),
+                            backgroundColor: Colors.white,
+                            onPressed: () => {                              
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ReconstructionConfigScreen(imageFiles:imageFiles!),
+                                ),
+                              )},
+                            child: const Icon(Icons.arrow_forward_ios,color:Colors.black ,),
                           ),
                         ),
                       ]),
@@ -162,27 +168,27 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 }
 
-class CameraDataFromARCore {
-  static const MethodChannel _channel = const MethodChannel('arcore');
+// class CameraDataFromARCore {
+//   static const MethodChannel _channel = const MethodChannel('arcore');
 
-  static Future<bool> isARCoreSupported() async {
-    try {
-      final bool result = await _channel.invokeMethod('isARCoreSupported');
-      return result;
-    } on PlatformException catch (e) {
-      print(e);
-      return false;
-    }
-  }
+//   static Future<bool> isARCoreSupported() async {
+//     try {
+//       final bool result = await _channel.invokeMethod('isARCoreSupported');
+//       return result;
+//     } on PlatformException catch (e) {
+//       print(e);
+//       return false;
+//     }
+//   }
 
-  static Future<Map<String, dynamic>?> getCameraData() async {
-    try {
-      final Map<String, dynamic> result =
-          await _channel.invokeMethod('getCameraData');
-      return result;
-    } on PlatformException catch (e) {
-      print(e);
-      return null;
-    }
-  }
-}
+//   static Future<Map<String, dynamic>?> getCameraData() async {
+//     try {
+//       final Map<String, dynamic> result =
+//           await _channel.invokeMethod('getCameraData');
+//       return result;
+//     } on PlatformException catch (e) {
+//       print(e);
+//       return null;
+//     }
+//   }
+// }
