@@ -75,9 +75,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           // Navigator.pushNamedAndRemoveUntil(
           //     context, navigationRoute, (route) => false);
         } else if (state is RegisterFailureState) {
-          //print(state.errorMessage);
-          //hideLoadingDialog(context);
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+            ),
+          );
         }
       },
       child: Scaffold(

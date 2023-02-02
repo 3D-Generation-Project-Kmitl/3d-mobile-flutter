@@ -84,7 +84,13 @@ class _OtpScreenState extends State<OtpScreen> {
               arguments: state.token,
             );
           }
-        } else if (state is CheckOTPFailureState) {}
+        } else if (state is CheckOTPFailureState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("รหัส OTP ไม่ถูกต้อง"),
+            ),
+          );
+        }
       },
       child: Scaffold(
         appBar: AppBar(

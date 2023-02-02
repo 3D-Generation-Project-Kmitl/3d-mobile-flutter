@@ -63,9 +63,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             (route) => false,
           );
         } else if (state is ResetPasswordFailureState) {
-          print(state.errorMessage);
-          //Navigator.of(context).pop();
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+            ),
+          );
         }
       },
       child: Scaffold(

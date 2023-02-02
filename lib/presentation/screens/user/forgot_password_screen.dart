@@ -48,8 +48,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             arguments: [_emailController.text, "forgot"],
           );
         } else if (state is ForgotPasswordFailureState) {
-          //  print(state.errorMessage);
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("ไม่มีอีเมลนี้อยู่ในระบบ"),
+            ),
+          );
         }
       },
       child: Scaffold(
