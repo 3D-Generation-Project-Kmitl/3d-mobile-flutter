@@ -69,8 +69,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           userCubit.setUser(state.user);
           cartCubit.getCart();
           favoriteCubit.getFavorite();
-          Navigator.pushNamedAndRemoveUntil(
-              context, navigationRoute, (route) => false);
+          authCubit.resendOTP(state.user.email);
+          Navigator.pushNamed(context, otpRoute,
+              arguments: [state.user.email, "verify"]);
+          // Navigator.pushNamedAndRemoveUntil(
+          //     context, navigationRoute, (route) => false);
         } else if (state is RegisterFailureState) {
           //print(state.errorMessage);
           //hideLoadingDialog(context);

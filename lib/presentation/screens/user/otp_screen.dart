@@ -10,8 +10,10 @@ import '../../../configs/size_config.dart';
 
 class OtpScreen extends StatefulWidget {
   final String email;
+  final String type;
   const OtpScreen({
     required this.email,
+    required this.type,
     Key? key,
   }) : super(key: key);
 
@@ -32,11 +34,20 @@ class _OtpScreenState extends State<OtpScreen> {
           //showLoadingDialog(context);
         } else if (state is CheckOTPSuccessState) {
           Navigator.pop(context);
-          Navigator.pushNamed(
-            context,
-            resetPasswordRoute,
-            arguments: state.token,
-          );
+          if (widget.type == "verify") {
+            authCubit.verifyUser(state.token);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              navigationRoute,
+              (route) => false,
+            );
+          } else if (widget.type == "forgot") {
+            Navigator.pushNamed(
+              context,
+              resetPasswordRoute,
+              arguments: state.token,
+            );
+          }
         } else if (state is CheckOTPFailureState) {}
       },
       child: Scaffold(

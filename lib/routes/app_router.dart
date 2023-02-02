@@ -19,8 +19,13 @@ class AppRouter {
       case forgotPasswordRoute:
         return _route(const ForgotPasswordScreen(), forgotPasswordRoute);
       case otpRoute:
-        String email = settings.arguments as String;
-        return _route(OtpScreen(email: email), otpRoute);
+        List<dynamic> args = settings.arguments as List<dynamic>;
+        return _route(
+            OtpScreen(
+              email: args[0] as String,
+              type: args[1] as String,
+            ),
+            otpRoute);
       case resetPasswordRoute:
         String token = settings.arguments as String;
         return _route(ResetPasswordScreen(token: token), resetPasswordRoute);

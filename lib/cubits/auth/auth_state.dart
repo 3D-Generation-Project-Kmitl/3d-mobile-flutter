@@ -101,3 +101,31 @@ class ResetPasswordFailureState extends AuthState {
 
   ResetPasswordFailureState(this.errorMessage);
 }
+
+class ResendOTPLoadingState extends AuthState {}
+
+class ResendOTPSuccessState extends AuthState {
+  final String message;
+
+  ResendOTPSuccessState(this.message);
+}
+
+class ResendOTPFailureState extends AuthState {
+  final String errorMessage;
+
+  ResendOTPFailureState(this.errorMessage);
+}
+
+class VerifyUserLoadingState extends AuthState {}
+
+class VerifyUserSuccessState extends AuthState {
+  final String message;
+
+  VerifyUserSuccessState(this.message);
+}
+
+class VerifyUserFailureState extends AuthState {
+  final String errorMessage;
+
+  VerifyUserFailureState(this.errorMessage);
+}

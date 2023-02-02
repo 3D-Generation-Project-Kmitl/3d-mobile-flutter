@@ -45,7 +45,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           Navigator.pushNamed(
             context,
             otpRoute,
-            arguments: _emailController.text,
+            arguments: [_emailController.text, "forgot"],
           );
         } else if (state is ForgotPasswordFailureState) {
           //  print(state.errorMessage);
