@@ -1,24 +1,33 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marketplace/configs/size_config.dart';
+import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
-
+import 'package:marketplace/presentation/screens/reconstruction/reconstruction_config_screen.dart';
+import 'package:marketplace/presentation/screens/reconstruction/file_image_preview_button.dart';
+import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
+import 'package:marketplace/presentation/widgets/image_card_widget.dart';
 import 'dart:async';
 import 'dart:io';
 
-class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key}) : super(key: key);
+class CameraScreen extends StatefulWidget {
+  final List<XFile>? imageFiles;
+  
+  const CameraScreen({Key? key, this.imageFiles}) : super(key: key);
 
   @override
-  _CameraPageState createState() => _CameraPageState();
+  _CameraScreenState createState() => _CameraScreenState();
 }
 
-class _CameraPageState extends State<CameraPage> {
+class _CameraScreenState extends State<CameraScreen> {
   bool _isLoading = true;
-  bool _isRecording = false;
-  bool _isDone = false;
-  late XFile file;
+  bool _isTaking = false;
+  // bool isARCoreSupported=false;
+
+  List<XFile>? imageFiles;
+
   String modelPath = "";
   late CameraController _cameraController;
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
@@ -27,6 +36,12 @@ class _CameraPageState extends State<CameraPage> {
   void initState() {
     _initCamera();
     super.initState();
+    if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
+      imageFiles = widget.imageFiles;
+    } else {
+      imageFiles = [];
+    }
+    
   }
 
   @override
@@ -39,46 +54,46 @@ class _CameraPageState extends State<CameraPage> {
     final cameras = await availableCameras();
     final camera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back);
-    _cameraController = CameraController(camera, ResolutionPreset.high);
+    _cameraController =
+        CameraController(camera, ResolutionPreset.high, enableAudio: false);
     await _cameraController.initialize();
     setState(() {
       _isLoading = false;
-      _isDone = false;
+    });
+    // isARCoreSupported=await CameraDataFromARCore.isARCoreSupported();
+  }
+
+  _manualTakePicture() async {
+    imageFiles!.add(await _cameraController.takePicture());
+    // if (isARCoreSupported) {
+      
+    //   Map<String, dynamic>? cameraData = await CameraDataFromARCore.getCameraData();
+    //   print('hello pure');
+    //   print(cameraData);
+    // }
+
+
+    setState(() {
+      imageFiles = imageFiles;
     });
   }
 
-  _recordVideo() async {
-    if (_isRecording) {
-      file = await _cameraController.stopVideoRecording();
-      setState(() {
-        _isRecording = false;
-        _isDone = true;
-        _isLoading = true;
-      });
-      await _sendRequestToGenerate3DModel();
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ModelViewer(modelPath: modelPath)));
-    } else {
-      await _cameraController.prepareForVideoRecording();
-      await _cameraController.startVideoRecording();
-      setState(() {
-        _isRecording = true;
-        _isDone = false;
-      });
-    }
-  }
+  _autoTakePicture() async {}
 
-  _sendRequestToGenerate3DModel() async {
-    modelPath = await gen3dModelRepository.gen3DModel(file.path, file.name);
-    print('File name: ${file.name}');
-    print('File path: ${file.path}');
-  }
+  // _sendRequestToGenerate3DModel() async {
+  //   modelPath = await gen3dModelRepository.gen3DModel(file.path, file.name);
+  //   print('File name: ${file.name}');
+  //   print('File path: ${file.path}');
+  // }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     SizeConfig().init(context);
+
     if (_isLoading) {
       return Container(
         color: Colors.white,
@@ -87,116 +102,93 @@ class _CameraPageState extends State<CameraPage> {
         ),
       );
     } else {
-      // return Center(
-      //   child: Stack(
-      //     children: [
-      //       Column(
-      //         children: [
-      //           AppBar(backgroundColor: Colors.white),
-      //           CameraPreview(_cameraController),
-      //         ],
-      //       ),
-      //       Column(
-      //         mainAxisAlignment: MainAxisAlignment.end,
-      //         children: [
-      //           Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //               children: [
-      //                 TextButton(
-      //                   style: TextButton.styleFrom(
-      //                     foregroundColor:
-      //                         Theme.of(context).colorScheme.onPrimary,
-      //                     backgroundColor:
-      //                         Theme.of(context).colorScheme.primary,
-      //                   ),
-      //                   onPressed: () {},
-      //                   child: const Text('Auto'),
-      //                 ),
-      //                 Padding(
-      //                   padding: const EdgeInsets.all(25),
-      //                   child: FloatingActionButton(
-      //                     backgroundColor: Colors.black,
-      //                     child: Icon(_isRecording ? Icons.stop : Icons.circle),
-      //                     onPressed: () => _recordVideo(),
-      //                   ),
-      //                 ),
-      //                 TextButton(
-      //                   style: TextButton.styleFrom(
-      //                     foregroundColor:
-      //                         Theme.of(context).colorScheme.onPrimary,
-      //                     backgroundColor:
-      //                         Theme.of(context).colorScheme.primary,
-      //                   ),
-      //                   onPressed: () {},
-      //                   child: const Text('Done'),
-      //                 )
-      //               ]),
-      //           Container(
-      //             height: 80.0,
-      //             color: Colors.white,
-      //           ),
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // );
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-        ),
-        body: SafeArea(
-          child: Stack(children: [
-            CameraPreview(_cameraController),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // TextButton(
-                      //   style: TextButton.styleFrom(
-                      //     foregroundColor:
-                      //         Theme.of(context).colorScheme.onPrimary,
-                      //     backgroundColor:
-                      //         Theme.of(context).colorScheme.primary,
-                      //   ),
-                      //   onPressed: () {},
-                      //   child: const Text('Auto'),
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.all(25),
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.black,
-                          child: Icon(_isRecording ? Icons.stop : Icons.circle),
-                          onPressed: () => _recordVideo(),
+      return SafeArea(
+        child: Center(
+          child: Stack(
+            children: [
+              CameraPreview(_cameraController),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Visibility(
+                          maintainSize: true,
+                          visible: imageFiles!.isNotEmpty,
+                          maintainAnimation: true,
+                          maintainState: true,
+                          child: GestureDetector(
+                            onTap: () => {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ImageViewerScreen(
+                                      previewImage: imageFiles!.last,
+                                      imageFiles: imageFiles!),
+                                ),
+                              )
+                            },
+                            child:
+                                FileImagePreviewButton(imageFiles: imageFiles!),
+                          ),
                         ),
-                      ),
-                      //       TextButton(
-                      //         style: TextButton.styleFrom(
-                      //           foregroundColor:
-                      //               Theme.of(context).colorScheme.onPrimary,
-                      //           backgroundColor:
-                      //               Theme.of(context).colorScheme.primary,
-                      //         ),
-                      //         onPressed: () async {
-                      //           if (_isDone) {}
-                      //         },
-                      //         child: const Text('Done'),
-                      //       ),
-                    ]),
-                Container(
-                  height: 80.0,
-                  color: Colors.white,
-                ),
-              ],
-            ),
-          ]),
+                        FloatingActionButton(
+                          heroTag: "takePictureButton",
+                          backgroundColor: Colors.white,
+                          onPressed: () => _manualTakePicture(),
+                        ),
+                        Container(
+                          height: 40.0,
+                          width: 40.0,
+                          child: FloatingActionButton(
+                            heroTag: "nextButton",
+                            backgroundColor: Colors.white,
+                            onPressed: () => {                              
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ReconstructionConfigScreen(imageFiles:imageFiles!),
+                                ),
+                              )},
+                            child: const Icon(Icons.arrow_forward_ios,color:Colors.black ,),
+                          ),
+                        ),
+                      ]),
+                  const SizedBox(height: 20),
+                  Container(
+                    height: 80.0,
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       );
     }
   }
 }
+
+// class CameraDataFromARCore {
+//   static const MethodChannel _channel = const MethodChannel('arcore');
+
+//   static Future<bool> isARCoreSupported() async {
+//     try {
+//       final bool result = await _channel.invokeMethod('isARCoreSupported');
+//       return result;
+//     } on PlatformException catch (e) {
+//       print(e);
+//       return false;
+//     }
+//   }
+
+//   static Future<Map<String, dynamic>?> getCameraData() async {
+//     try {
+//       final Map<String, dynamic> result =
+//           await _channel.invokeMethod('getCameraData');
+//       return result;
+//     } on PlatformException catch (e) {
+//       print(e);
+//       return null;
+//     }
+//   }
+// }
