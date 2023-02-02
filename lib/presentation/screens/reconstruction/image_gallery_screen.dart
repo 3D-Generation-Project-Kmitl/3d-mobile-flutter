@@ -14,9 +14,7 @@ class ImageGalleryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: DefaultTextStyle(
-                style: const TextStyle(color: Colors.black, fontSize: 14),
-                child: Text('${imageFiles.length.toString()} รูป')),
+            title: Text('${imageFiles.length.toString()} รูป',style: Theme.of(context).textTheme.headline4),
             leading: BackButton(
               onPressed: () => {
                 Navigator.of(context).push(

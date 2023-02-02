@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-
+import 'package:marketplace/constants/colors.dart';
+import '../../../configs/size_config.dart';
 import 'image_gallery_screen.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 
 enum ModelQuality { HIGH, MEDIUM, LOW }
 
@@ -29,9 +31,8 @@ class _ReconstructionConfigScreenState
     "removeBackground": false,
     "quality": ModelQuality.LOW
   };
-  final List<bool> _selectedFruits = <bool>[true, false, false];
-  final List<bool> _selectedVegetables = <bool>[false, true, false];
-  final List<bool> _selectedWeather = <bool>[false, false, true];
+  final List<bool> _selectModelQuality = <bool>[true, false, false];
+
   bool vertical = false;
   @override
   void initState() {
@@ -48,10 +49,23 @@ class _ReconstructionConfigScreenState
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
-          title: DefaultTextStyle(
-              style: const TextStyle(color: Colors.black, fontSize: 14),
-              child: Text('ตั้งค่าการสร้างโมเดล 3 มิติ')),
+          title: Text("ตั้งค่าการสร้างโมเดล 3 มิติ",
+              style: Theme.of(context).textTheme.headline4),
         ),
+        bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SizedBox(
+          height: getProportionateScreenHeight(50),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushNamed(context, gen3DRoute);
+            },
+            child: const Text(
+              "สร้างโมเดล 3 มิติ",
+            ),
+          ),
+        ),
+      ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -59,57 +73,80 @@ class _ReconstructionConfigScreenState
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("รูปภาพ (${imageFiles!.length})"),
-                          TextButton(
-            style: TextButton.styleFrom(
-              textStyle: const TextStyle(color: Colors.red,fontSize: 12),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ImageGalleryScreen(
-                    imageFiles: imageFiles!,
-                  ),
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("รูปภาพ (${imageFiles!.length})"),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ImageGalleryScreen(
+                                  imageFiles: imageFiles!,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text('รูปภาพทั้งหมด',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(color: primaryColor)),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              );
-            },
-            child: const Text('รูปภาพทั้งหมด'),
-          ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Text("คุณภาพของโมเดล 3 มิติ"),
-                ToggleButtons(
-                  direction: vertical ? Axis.vertical : Axis.horizontal,
-                  onPressed: (int index) {
-                    setState(() {
-                      // The button that is tapped is set to true, and the others to false.
-                      for (int i = 0; i < _selectedFruits.length; i++) {
-                        _selectedFruits[i] = i == index;
-                      }
-                    });
-                  },
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  selectedBorderColor: Colors.red[700],
-                  selectedColor: Colors.white,
-                  fillColor: Colors.red[200],
-                  color: Colors.red[400],
-                  constraints: const BoxConstraints(
-                    minHeight: 40.0,
-                    minWidth: 80.0,
+                Center(
+                  child: ToggleButtons(
+                    direction: vertical ? Axis.vertical : Axis.horizontal,
+                    onPressed: (int index) {
+                      setState(() {
+                        // The button that is tapped is set to true, and the others to false.
+                        for (int i = 0; i < _selectModelQuality.length; i++) {
+                          _selectModelQuality[i] = i == index;
+                        }
+                      });
+                    },
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    selectedBorderColor: Colors.white,
+                    selectedColor: Colors.white,
+                    fillColor: primaryLight,
+                    color: Colors.black,
+                    constraints: const BoxConstraints(
+                      minHeight: 40.0,
+                      minWidth: 80.0,
+                    ),
+                    isSelected: _selectModelQuality,
+                    children: modelQuality,
                   ),
-                  isSelected: _selectedFruits,
-                  children: modelQuality,
                 ),
-                Text("ต้องการลบภาพพื้นหลังหรือไม่"),
-                Switch(
-            value: configs["removeBackground"],
-            onChanged: (value) {
-              setState(() {
-                configs["removeBackground"] = value;
-                print(configs["removeBackground"]);
-              });
-            },
-            activeTrackColor: Colors.lightGreenAccent,
-            activeColor: Colors.green,
-          )
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("ต้องการลบภาพพื้นหลังหรือไม่"),
+                    Switch(
+                      value: configs["removeBackground"],
+                      onChanged: (value) {
+                        setState(() {
+                          configs["removeBackground"] = value;
+                          print(configs["removeBackground"]);
+                        });
+                      },
+                      activeTrackColor: primaryColor,
+                      activeColor: primaryLight,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
