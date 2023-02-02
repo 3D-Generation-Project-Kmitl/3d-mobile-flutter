@@ -40,8 +40,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         if (state is ForgotPasswordLoadingState) {
           //showLoadingDialog(context);
         } else if (state is ForgotPasswordSuccessState) {
+          authCubit.resendOTP(_emailController.text);
           Navigator.pop(context);
-          //showSnackBar(context, state.message);
           Navigator.pushNamed(
             context,
             otpRoute,
