@@ -16,6 +16,6 @@ class SearchScreen extends StatelessWidget {
             child: SearchField(),
           ),
         ),
-        body: SafeArea(child: SingleChildScrollView()));
+        body: const SafeArea(child: SingleChildScrollView()));
   }
 }

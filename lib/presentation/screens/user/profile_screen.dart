@@ -13,10 +13,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final userCubit = context.read<UserCubit>();
-    final authCubit = context.read<AuthCubit>();
-    final cartCubit = context.read<CartCubit>();
-    final favoriteCubit = context.read<FavoriteCubit>();
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -30,8 +26,18 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           title: Text("โปรไฟล์", style: Theme.of(context).textTheme.headline2),
-          actions: const [
-            CartButton(),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, settingRoute);
+              },
+              icon: Icon(
+                Icons.settings_outlined,
+                color: Theme.of(context).primaryColor,
+                size: 27,
+              ),
+            ),
+            const CartButton(),
           ],
         ),
         body: SafeArea(
@@ -72,22 +78,6 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const Spacer(),
-                              ElevatedButton(
-                                onPressed: () {
-                                  authCubit.logout();
-                                  userCubit.clearUser();
-                                  cartCubit.clearCart();
-                                  favoriteCubit.clearFavorite();
-                                },
-                                child: Text(
-                                  "ออกจากระบบ",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      ?.copyWith(color: Colors.white),
-                                ),
-                              )
                             ],
                           ),
                           SizedBox(
@@ -107,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                               dense: true,
                               visualDensity: const VisualDensity(vertical: 4),
                               onTap: () {
-                                //Navigator.pushNamed(context, orderRoute);
+                                Navigator.pushNamed(context, myOrdersRoute);
                               },
                               title: Text(
                                 "รายการสั่งซื้อของฉัน",

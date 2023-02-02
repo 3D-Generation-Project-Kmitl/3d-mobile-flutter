@@ -18,7 +18,7 @@ import android.os.Handler
 import android.widget.Toast
 import common.helpers.CameraPermissionHelper;
 
-class MainActivity: FlutterActivity() {
+//class MainActivity: FlutterActivity() {
 //     private val channel="arcore";
 //     private var session: Session?=null;
 //     private  var isInstallRequest = false;
@@ -163,6 +163,9 @@ class MainActivity: FlutterActivity() {
 
 // }
 
+import io.flutter.embedding.android.FlutterFragmentActivity
+
+class MainActivity: FlutterFragmentActivity() {
 }
 
 

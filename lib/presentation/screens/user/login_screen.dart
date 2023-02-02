@@ -99,7 +99,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, forgotPasswordRoute);
+                        },
                         child: Text(
                           "ลืมรหัสผ่าน?",
                           style: Theme.of(context)

@@ -5,3 +5,8 @@ export './product_detail/product_detail_cubit.dart';
 export './category/category_cubit.dart';
 export './cart/cart_cubit.dart';
 export './favorite/favorite_cubit.dart';
+export './payment/payment_cubit.dart';
+export './orders/orders_cubit.dart';
+export './order_detail/order_detail_cubit.dart';
+export './models/models_cubit.dart';
+export './search_product/search_product_cubit.dart';

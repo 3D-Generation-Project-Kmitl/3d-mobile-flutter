@@ -16,6 +16,14 @@ class AppRouter {
         return _route(const LoginScreen(), loginRoute);
       case registerRoute:
         return _route(const RegisterScreen(), registerRoute);
+      case forgotPasswordRoute:
+        return _route(const ForgotPasswordScreen(), forgotPasswordRoute);
+      case otpRoute:
+        String email = settings.arguments as String;
+        return _route(OtpScreen(email: email), otpRoute);
+      case resetPasswordRoute:
+        String token = settings.arguments as String;
+        return _route(ResetPasswordScreen(token: token), resetPasswordRoute);
       case homeRoute:
         return _route(const HomeScreen(), homeRoute);
       case searchRoute:
@@ -28,6 +36,20 @@ class AppRouter {
         return _route(const ProfileScreen(), profileRoute);
       case cartRoute:
         return _route(const CartScreen(), cartRoute);
+      case orderCompletedRoute:
+        return _route(const OrderCompletedScreen(), orderCompletedRoute);
+      case myOrdersRoute:
+        return _route(const MyOrdersScreen(), myOrdersRoute);
+      case orderDetailRoute:
+        int id = settings.arguments as int;
+        return _route(OrderDetailScreen(orderId: id), orderDetailRoute);
+      case viewModelRoute:
+        Model? model = settings.arguments as Model?;
+        if (model != null) {
+          return _route(ViewModelScreen(model: model), viewModelRoute);
+        } else {
+          return _errorRoute();
+        }
       case productDetailRoute:
         Product? product = settings.arguments as Product?;
         if (product != null) {
@@ -40,6 +62,11 @@ class AppRouter {
         return _route(const CameraScreen(), gen3DRoute);
       case customerModelRoute:
         return _route(const CustomerModelScreen(), customerModelRoute);
+      case settingRoute:
+        return _route(const SettingScreen(), settingRoute);
+      case searchResultRoute:
+        String keyword = settings.arguments as String;
+        return _route(SearchResultScreen(keyword: keyword), searchResultRoute);
       default:
         return _errorRoute();
     }

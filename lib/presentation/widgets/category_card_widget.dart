@@ -13,29 +13,32 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.23),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(7.0),
-            child: Image(
-              image: NetworkImage(category.picture),
-              height: 32,
-              width: 32,
+    return GestureDetector(
+      onTap: () => press(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.23),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(7.0),
+              child: Image(
+                image: NetworkImage(category.picture),
+                height: 32,
+                width: 32,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          category.name,
-          style: Theme.of(context).textTheme.subtitle1,
-        ),
-      ],
+          const SizedBox(height: 5),
+          Text(
+            category.name,
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+        ],
+      ),
     );
   }
 }

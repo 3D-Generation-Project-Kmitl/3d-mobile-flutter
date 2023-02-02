@@ -5,10 +5,14 @@ import 'package:marketplace/configs/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:marketplace/utils/dio_client.dart';
-  
+import 'package:flutter_stripe/flutter_stripe.dart';
 import './routes/app_router.dart';
+import '.env';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = STRIPE_PUBLISHABLE_KEY;
+  await Stripe.instance.applySettings();
   runApp(const MyApp());
   DioClient().init();
 }
@@ -43,7 +47,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightAppTheme,
         onGenerateRoute: AppRouter.onGenerateRoute,
-        home: const CameraScreen(),
+        home: const SplashScreen(),
       ),
     );
   }
