@@ -9,3 +9,4 @@ export './payment/payment_cubit.dart';
 export './orders/orders_cubit.dart';
 export './order_detail/order_detail_cubit.dart';
 export './models/models_cubit.dart';
+export './search_product/search_product_cubit.dart';

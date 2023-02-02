@@ -24,4 +24,16 @@ class ProductRepository {
       throw e.message;
     }
   }
+
+  Future<List<Product>> searchProducts(String keyword) async {
+    try {
+      final response =
+          await DioClient().dio.get('/product/search?keyword=$keyword');
+      final data = BaseResponse.fromJson(response.data).data;
+      final products = List<Product>.from(data.map((x) => Product.fromJson(x)));
+      return products;
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
 }

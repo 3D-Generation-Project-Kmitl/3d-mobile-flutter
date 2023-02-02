@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
+import '../../routes/screens_routes.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const TextField(
+    return TextField(
       textInputAction: TextInputAction.search,
+      onSubmitted: (value) {
+        Navigator.pushNamed(context, searchResultRoute, arguments: value);
+      },
       autofocus: true,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: 'ค้นหาสินค้า',
         hintStyle: TextStyle(color: Colors.grey),
         prefixIcon: Icon(Icons.search),

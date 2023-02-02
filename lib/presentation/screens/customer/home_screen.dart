@@ -123,7 +123,10 @@ class HomeScreen extends StatelessWidget {
               (BuildContext context, int index) {
                 return CategoryCard(
                   category: state.categories[index],
-                  press: () {},
+                  press: () {
+                    Navigator.pushNamed(context, searchResultRoute,
+                        arguments: state.categories[index].name);
+                  },
                 );
               },
               childCount: 5,
