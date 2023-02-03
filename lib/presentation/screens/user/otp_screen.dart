@@ -1,4 +1,5 @@
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/colors.dart';
@@ -23,16 +24,55 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   bool isFull = false;
+  bool isReSendOTP = true;
   String otp = "";
+  Timer timer = Timer(const Duration(seconds: 1), () {});
+  int start = 60;
+
   @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
+
+    void startTimer() {
+      const oneSec = Duration(seconds: 1);
+      timer = Timer.periodic(
+        oneSec,
+        (Timer timer) {
+          if (start == 0) {
+            setState(() {
+              timer.cancel();
+              isReSendOTP = true;
+              start = 60;
+            });
+          } else {
+            setState(() {
+              start--;
+            });
+          }
+        },
+      );
+    }
+
+    void reSendOTP() {
+      if (isReSendOTP) {
+        FocusManager.instance.primaryFocus?.unfocus();
+        authCubit.resendOTP(widget.email);
+        setState(() {
+          isReSendOTP = false;
+          startTimer();
+        });
+      }
+    }
+
     SizeConfig().init(context);
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is CheckOTPLoadingState) {
           //showLoadingDialog(context);
         } else if (state is CheckOTPSuccessState) {
+          setState(() {
+            timer.cancel();
+          });
           Navigator.pop(context);
           if (widget.type == "verify") {
             authCubit.verifyUser(state.token);
@@ -48,11 +88,26 @@ class _OtpScreenState extends State<OtpScreen> {
               arguments: state.token,
             );
           }
-        } else if (state is CheckOTPFailureState) {}
+        } else if (state is CheckOTPFailureState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("รหัส OTP ไม่ถูกต้อง"),
+            ),
+          );
+        }
       },
       child: Scaffold(
         appBar: AppBar(
           leadingWidth: 50,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              setState(() {
+                timer.cancel();
+              });
+              Navigator.pop(context);
+            },
+          ),
         ),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
@@ -79,7 +134,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   numberOfFields: 6,
                   borderColor: borderColor,
                   focusedBorderColor: primaryColor,
-                  fieldWidth: 45,
+                  fieldWidth: SizeConfig.screenWidth * 0.125,
                   textStyle: Theme.of(context).textTheme.headline5,
                   showFieldAsBox: true,
                   onCodeChanged: (code) => {
@@ -94,7 +149,46 @@ class _OtpScreenState extends State<OtpScreen> {
                     });
                   }, // end onSubmit
                 ),
-                SizedBox(height: SizeConfig.screenHeight * 0.05),
+                BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, state) {
+                    String ref = "";
+                    if (state is ResendOTPSuccessState) {
+                      ref = state.message;
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "รหัสอ้างอิง (Ref): $ref",
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        isReSendOTP
+                            ? TextButton(
+                                onPressed: () {
+                                  reSendOTP();
+                                },
+                                child: Text(
+                                  "ส่งรหัสอีกครั้ง",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2!
+                                      .copyWith(color: primaryColor),
+                                ),
+                              )
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(5, 14, 5, 14),
+                                child: Text(
+                                  "ส่งได้อีกครั้งใน $start วินาที",
+                                  style: Theme.of(context).textTheme.subtitle1!,
+                                ),
+                              ),
+                      ],
+                    );
+                  },
+                ),
+                SizedBox(height: SizeConfig.screenHeight * 0.04),
                 SizedBox(
                   width: double.infinity,
                   height: getProportionateScreenHeight(50),

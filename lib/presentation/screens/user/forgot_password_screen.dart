@@ -40,16 +40,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         if (state is ForgotPasswordLoadingState) {
           //showLoadingDialog(context);
         } else if (state is ForgotPasswordSuccessState) {
+          authCubit.resendOTP(_emailController.text);
           Navigator.pop(context);
-          //showSnackBar(context, state.message);
           Navigator.pushNamed(
             context,
             otpRoute,
             arguments: [_emailController.text, "forgot"],
           );
         } else if (state is ForgotPasswordFailureState) {
-          //  print(state.errorMessage);
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("ไม่มีอีเมลนี้อยู่ในระบบ"),
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -83,6 +86,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_keyForm.currentState!.validate()) {
                           authCubit.forgotPassword(_emailController.text);
                         }

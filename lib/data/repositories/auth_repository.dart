@@ -149,4 +149,21 @@ class AuthRepository {
       }
     }
   }
+
+  Future<String> updatePassword(String oldPassword, String newPassword) async {
+    try {
+      final response = await DioClient().dio.put('/auth/updatePassword', data: {
+        'oldPassword': oldPassword,
+        'newPassword': newPassword,
+      });
+      final message = BaseResponse.fromJson(response.data).message;
+      return message;
+    } catch (e) {
+      if (e is DioError) {
+        throw e.response!.data;
+      } else {
+        throw e as Exception;
+      }
+    }
+  }
 }

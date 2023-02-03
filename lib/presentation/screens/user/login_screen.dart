@@ -70,8 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 arguments: [state.user.email, "verify"]);
           }
         } else if (state is LoginFailureState) {
-          //Navigator.pop(context);
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("อีเมลหรือรหัสผ่านไม่ถูกต้อง"),
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -124,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_keyForm.currentState!.validate()) {
                           authCubit.login(
                               _emailController.text, _passwordController.text);

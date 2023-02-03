@@ -20,3 +20,5 @@ const String orderDetailRoute = "/order_detail";
 const String viewModelRoute = "/view_model";
 const String settingRoute = "/setting";
 const String searchResultRoute = "/search_result";
+const String changePasswordRoute = "/change_password";
+const String editProfileRoute = "/edit_profile";

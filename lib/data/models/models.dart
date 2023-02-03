@@ -1,5 +1,6 @@
 export './response_model.dart';
 export './user_model.dart';
+export './identity_model.dart';
 export './model_model.dart';
 export './product_model.dart';
 export './product_detail_model.dart';

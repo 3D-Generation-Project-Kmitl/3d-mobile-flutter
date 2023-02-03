@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 import '../../configs/size_config.dart';
 import 'package:marketplace/data/models/models.dart';
 
@@ -42,7 +43,11 @@ class ProductCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: Text(
-              '฿${product.price}',
+              intl.NumberFormat.currency(
+                locale: 'th',
+                symbol: '฿',
+                decimalDigits: 0,
+              ).format(product.price),
               style: Theme.of(context).textTheme.headline5,
             ),
           ),
