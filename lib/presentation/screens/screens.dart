@@ -25,3 +25,5 @@ export 'customer/view_model_screen.dart';
 export 'customer/search_result_screen.dart';
 
 export 'reconstruction/camera_screen.dart';
+
+export 'store/identity_screen.dart';

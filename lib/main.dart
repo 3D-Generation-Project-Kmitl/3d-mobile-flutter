@@ -29,6 +29,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserCubit>(
           create: (context) => UserCubit(),
         ),
+        BlocProvider(
+          create: (context) => IdentityCubit(),
+        ),
         BlocProvider<ProductsCubit>(
           create: (context) => ProductsCubit(),
         ),

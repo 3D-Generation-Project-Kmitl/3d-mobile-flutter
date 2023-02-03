@@ -19,7 +19,9 @@ class ProfileScreen extends StatelessWidget {
         appBar: AppBar(
           titleSpacing: 20,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, identityRoute);
+            },
             icon: const Icon(
               Icons.storefront,
               size: 27,
