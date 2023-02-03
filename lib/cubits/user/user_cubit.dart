@@ -33,9 +33,11 @@ class UserCubit extends Cubit<UserState> {
       if (user.gender != gender) {
         return true;
       }
-      if (dateOfBirth != "" &&
-          DateFormat('yyyy-MM-dd').format(user.dateOfBirth!) != dateOfBirth) {
-        return true;
+      if (dateOfBirth != "") {
+        if (user.dateOfBirth == null) return true;
+        if (DateFormat('yyyy-MM-dd').format(user.dateOfBirth!) != dateOfBirth) {
+          return true;
+        }
       }
       return false;
     }
@@ -53,13 +55,13 @@ class UserCubit extends Cubit<UserState> {
       emit(UserLoading());
       FormData formData = FormData();
 
-      if (name != null) {
+      if (name != '' && name != null) {
         formData.fields.add(MapEntry('name', name));
       }
-      if (gender != null) {
+      if (gender != '' && gender != null) {
         formData.fields.add(MapEntry('gender', gender));
       }
-      if (dateOfBirth != null) {
+      if (dateOfBirth != '' && dateOfBirth != null) {
         formData.fields.add(MapEntry('dateOfBirth',
             '${DateFormat('yyyy-MM-dd').parse(dateOfBirth).toIso8601String()}Z'));
       }
