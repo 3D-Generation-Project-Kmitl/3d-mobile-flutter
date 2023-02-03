@@ -53,6 +53,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void onSubmit() {
+    FocusManager.instance.primaryFocus?.unfocus();
     context.read<UserCubit>().updateUser(
           userId: user.userId,
           name: _nameController.text,

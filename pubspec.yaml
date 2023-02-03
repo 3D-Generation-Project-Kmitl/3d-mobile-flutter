@@ -49,6 +49,9 @@ dependencies:
   flutter_stripe: ^7.0.0
   intl: ^0.18.0
   image_picker: ^0.8.6+1
+  file_picker: ^5.2.5
+  url_launcher: ^6.1.8
+  permission_handler: ^10.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

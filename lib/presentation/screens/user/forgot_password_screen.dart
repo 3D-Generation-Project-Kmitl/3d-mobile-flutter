@@ -86,6 +86,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_keyForm.currentState!.validate()) {
                           authCubit.forgotPassword(_emailController.text);
                         }

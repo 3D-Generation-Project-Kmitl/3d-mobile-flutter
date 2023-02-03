@@ -55,6 +55,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
     void reSendOTP() {
       if (isReSendOTP) {
+        FocusManager.instance.primaryFocus?.unfocus();
         authCubit.resendOTP(widget.email);
         setState(() {
           isReSendOTP = false;

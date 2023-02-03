@@ -113,6 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: getProportionateScreenHeight(50),
                       child: ElevatedButton(
                         onPressed: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
                           if (_keyForm.currentState!.validate()) {
                             authCubit.register(
                               _emailController.text,

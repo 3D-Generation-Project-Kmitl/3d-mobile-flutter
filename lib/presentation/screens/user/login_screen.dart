@@ -127,6 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_keyForm.currentState!.validate()) {
                           authCubit.login(
                               _emailController.text, _passwordController.text);

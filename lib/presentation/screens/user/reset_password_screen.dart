@@ -98,6 +98,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_keyForm.currentState!.validate()) {
                           authCubit.resetPassword(
                             _passwordController.text,
