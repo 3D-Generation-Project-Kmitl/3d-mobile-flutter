@@ -129,3 +129,17 @@ class VerifyUserFailureState extends AuthState {
 
   VerifyUserFailureState(this.errorMessage);
 }
+
+class ChangePasswordLoadingState extends AuthState {}
+
+class ChangePasswordSuccessState extends AuthState {
+  final String message;
+
+  ChangePasswordSuccessState(this.message);
+}
+
+class ChangePasswordFailureState extends AuthState {
+  final String errorMessage;
+
+  ChangePasswordFailureState(this.errorMessage);
+}
