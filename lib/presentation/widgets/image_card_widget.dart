@@ -25,7 +25,7 @@ class ImageCard extends StatelessWidget {
           )
         : CircleAvatar(
             backgroundColor: Theme.of(context).primaryColor,
-            radius: radius - 10.0,
+            radius: radius,
             child: const Icon(
               Icons.person,
               color: Colors.white,
