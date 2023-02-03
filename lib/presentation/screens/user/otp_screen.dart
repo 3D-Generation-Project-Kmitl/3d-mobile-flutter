@@ -26,32 +26,32 @@ class _OtpScreenState extends State<OtpScreen> {
   bool isFull = false;
   bool isReSendOTP = true;
   String otp = "";
-  late Timer timer;
+  Timer timer = Timer(const Duration(seconds: 1), () {});
   int start = 60;
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-    timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (start == 0) {
-          setState(() {
-            timer.cancel();
-          });
-          isReSendOTP = true;
-          start = 60;
-        } else {
-          setState(() {
-            start--;
-          });
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
+
+    void startTimer() {
+      const oneSec = Duration(seconds: 1);
+      timer = Timer.periodic(
+        oneSec,
+        (Timer timer) {
+          if (start == 0) {
+            setState(() {
+              timer.cancel();
+              isReSendOTP = true;
+              start = 60;
+            });
+          } else {
+            setState(() {
+              start--;
+            });
+          }
+        },
+      );
+    }
 
     void reSendOTP() {
       if (isReSendOTP) {
@@ -69,6 +69,9 @@ class _OtpScreenState extends State<OtpScreen> {
         if (state is CheckOTPLoadingState) {
           //showLoadingDialog(context);
         } else if (state is CheckOTPSuccessState) {
+          setState(() {
+            timer.cancel();
+          });
           Navigator.pop(context);
           if (widget.type == "verify") {
             authCubit.verifyUser(state.token);
@@ -95,6 +98,15 @@ class _OtpScreenState extends State<OtpScreen> {
       child: Scaffold(
         appBar: AppBar(
           leadingWidth: 50,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              setState(() {
+                timer.cancel();
+              });
+              Navigator.pop(context);
+            },
+          ),
         ),
         resizeToAvoidBottomInset: false,
         body: SafeArea(

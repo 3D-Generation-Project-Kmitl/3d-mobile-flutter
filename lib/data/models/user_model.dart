@@ -16,7 +16,7 @@ class User {
   final String? gAuthCode;
   final String? picture;
   final String? gender;
-  final String? dateOfBirth;
+  final DateTime? dateOfBirth;
   final bool isVerified;
   final String role;
   final DateTime createdAt;
@@ -43,7 +43,9 @@ class User {
         gAuthCode: json["gAuthCode"],
         picture: json["picture"],
         gender: json["gender"],
-        dateOfBirth: json["dateOfBirth"],
+        dateOfBirth: json["dateOfBirth"] == null
+            ? null
+            : DateTime.parse(json["dateOfBirth"]),
         isVerified: json["isVerified"],
         role: json["role"],
         createdAt: DateTime.parse(json["createdAt"]),
@@ -57,7 +59,7 @@ class User {
         "gAuthCode": gAuthCode,
         "picture": picture,
         "gender": gender,
-        "dateOfBirth": dateOfBirth,
+        "dateOfBirth": dateOfBirth?.toIso8601String(),
         "isVerified": isVerified,
         "role": role,
         "createdAt": createdAt.toIso8601String(),

@@ -72,6 +72,10 @@ class AppRouter {
       case searchResultRoute:
         String keyword = settings.arguments as String;
         return _route(SearchResultScreen(keyword: keyword), searchResultRoute);
+      case changePasswordRoute:
+        return _route(const ChangePasswordScreen(), changePasswordRoute);
+      case editProfileRoute:
+        return _route(const EditProfileScreen(), editProfileRoute);
       default:
         return _errorRoute();
     }
