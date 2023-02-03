@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
@@ -19,10 +20,14 @@ class UserCubit extends Cubit<UserState> {
     String? name,
     String? gender,
     String? dateOfBirth,
+    XFile? image,
   }) {
     if (state is UserLoaded) {
       final user = (state as UserLoaded).user;
       if (user.name != name) {
+        return true;
+      }
+      if (image != null) {
         return true;
       }
       if (user.gender != gender) {
@@ -42,6 +47,7 @@ class UserCubit extends Cubit<UserState> {
     String? name,
     String? gender,
     String? dateOfBirth,
+    XFile? image,
   }) async {
     try {
       emit(UserLoading());
@@ -56,6 +62,15 @@ class UserCubit extends Cubit<UserState> {
       if (dateOfBirth != null) {
         formData.fields.add(MapEntry('dateOfBirth',
             '${DateFormat('yyyy-MM-dd').parse(dateOfBirth).toIso8601String()}Z'));
+      }
+      if (image != null) {
+        formData.files.add(MapEntry(
+          'picture',
+          await MultipartFile.fromFile(
+            image.path,
+            filename: image.name,
+          ),
+        ));
       }
       final updatedUser = await userRepository.updateUser(formData);
       emit(UserLoaded(updatedUser));

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:marketplace/data/models/models.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:marketplace/cubits/cubits.dart';
@@ -21,7 +24,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _nameController;
   late String? gender;
   late TextEditingController _dateOfBirthController;
-  late String picture;
+  XFile? image;
 
   final _keyForm = GlobalKey<FormState>();
 
@@ -32,7 +35,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _dateOfBirthController = TextEditingController();
     final userCubit = context.read<UserCubit>();
     user = (userCubit.state as UserLoaded).user;
-    picture = user.picture ?? "";
     gender = user.gender;
     _nameController.text = user.name;
     if (user.dateOfBirth != null) {
@@ -56,6 +58,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           name: _nameController.text,
           gender: gender,
           dateOfBirth: _dateOfBirthController.text,
+          image: image,
         );
   }
 
@@ -64,7 +67,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           name: _nameController.text,
           gender: gender,
           dateOfBirth: _dateOfBirthController.text,
+          image: image,
         );
+  }
+
+  Future getImageFromGallery() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    if (pickedFile != null) {
+      setState(() {
+        image = pickedFile;
+      });
+    }
   }
 
   @override
@@ -77,50 +93,69 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             style: Theme.of(context).textTheme.headline2),
       ),
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
-        child: Form(
-          key: _keyForm,
-          child: Column(
-            children: [
-              Center(
-                  child: GestureDetector(
-                onTap: () {},
-                child: Stack(
-                  children: [
-                    ImageCard(
-                      imageURL: picture,
-                      radius: 50,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: buildEditIcon(Theme.of(context).primaryColor),
-                    ),
-                  ],
+      body: BlocListener<UserCubit, UserState>(
+        listener: (context, state) {
+          if (state is UserLoaded) {
+            setState(() {
+              user = state.user;
+              image = null;
+            });
+          }
+        },
+        child: SafeArea(
+            child: Padding(
+          padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
+          child: Form(
+            key: _keyForm,
+            child: Column(
+              children: [
+                Center(
+                    child: GestureDetector(
+                  onTap: () {
+                    getImageFromGallery();
+                  },
+                  child: Stack(
+                    children: [
+                      image != null
+                          ? CircleAvatar(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              radius: 50,
+                              backgroundImage: FileImage(
+                                File(image!.path),
+                              ))
+                          : ImageCard(
+                              imageURL: user.picture ?? '',
+                              radius: 50,
+                            ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: buildEditIcon(Theme.of(context).primaryColor),
+                      ),
+                    ],
+                  ),
+                )),
+                SizedBox(height: SizeConfig.screenHeight * 0.03),
+                buildNameFormField(),
+                SizedBox(height: SizeConfig.screenHeight * 0.02),
+                DropdownWidgetQ(
+                  items: genders,
+                  onChanged: (value) {
+                    setState(() {
+                      gender = value;
+                    });
+                  },
+                  hint: gender ?? "ไม่ระบุ",
+                  value: gender ?? "ไม่ระบุ",
+                  label: "เพศ",
                 ),
-              )),
-              SizedBox(height: SizeConfig.screenHeight * 0.03),
-              buildNameFormField(),
-              SizedBox(height: SizeConfig.screenHeight * 0.02),
-              DropdownWidgetQ(
-                items: genders,
-                onChanged: (value) {
-                  setState(() {
-                    gender = value;
-                  });
-                },
-                hint: gender ?? "ไม่ระบุ",
-                value: gender ?? "ไม่ระบุ",
-                label: "เพศ",
-              ),
-              SizedBox(height: SizeConfig.screenHeight * 0.02),
-              buildDateOfBirthFormField(),
-            ],
+                SizedBox(height: SizeConfig.screenHeight * 0.02),
+                buildDateOfBirthFormField(),
+              ],
+            ),
           ),
-        ),
-      )),
+        )),
+      ),
       bottomNavigationBar: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           return Padding(
