@@ -26,6 +26,7 @@ class _IdentityScreenState extends State<IdentityScreen> {
   late TextEditingController _phoneNumberController;
   late TextEditingController _bankNameController;
   late TextEditingController _bankAccountController;
+  bool isReSend = false;
   XFile? cardPicture;
   XFile? cardFacePicture;
 
@@ -75,28 +76,51 @@ class _IdentityScreenState extends State<IdentityScreen> {
           child: BlocBuilder<IdentityCubit, IdentityState>(
             builder: (context, state) {
               if (state is IdentityLoaded) {
-                // final identity = state.identity;
-                // if (identity != null) {
-                //   if (identity.status == "PENDING") {
-                //     return Center(
-                //       child: Text(
-                //         "รอการตรวจสอบ",
-                //         style: Theme.of(context).textTheme.headline1,
-                //       ),
-                //     );
-                //   } else if (identity.status == "REJECTED") {
-                //     return Center(
-                //       child: Text(
-                //         "ไม่ผ่านการตรวจสอบ",
-                //         style: Theme.of(context).textTheme.headline1,
-                //       ),
-                //     );
-                //   }
-                // }
+                final identity = state.identity;
+                if (identity?.status == "PENDING") {
+                  return Center(
+                    child: Text(
+                      "รอการตรวจสอบ",
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
+                  );
+                } else if (identity?.status == "REJECTED" && !isReSend) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "ไม่ผ่านการตรวจสอบ",
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                        SizedBox(height: SizeConfig.screenHeight * 0.02),
+                        Text(
+                          "เนื่องจาก: ${identity?.issue}",
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        SizedBox(height: SizeConfig.screenHeight * 0.04),
+                        SizedBox(
+                          width: SizeConfig.screenWidth * 0.5,
+                          height: getProportionateScreenHeight(50),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                isReSend = true;
+                              });
+                            },
+                            child: Text("ส่งใหม่"),
+                          ),
+                        ),
+                        SizedBox(height: SizeConfig.screenHeight * 0.05),
+                      ],
+                    ),
+                  );
+                }
                 return Form(
                   key: _keyForm,
                   child: ListView(
                     children: [
+                      SizedBox(height: SizeConfig.screenHeight * 0.02),
                       buildIdCardFormField(),
                       SizedBox(height: SizeConfig.screenHeight * 0.02),
                       buildFirstNameFormField(),
@@ -144,6 +168,15 @@ class _IdentityScreenState extends State<IdentityScreen> {
                         height: getProportionateScreenHeight(50),
                         child: ElevatedButton(
                           onPressed: () {
+                            if (cardPicture == null ||
+                                cardFacePicture == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("กรุณาใส่รูปภาพ"),
+                                ),
+                              );
+                              return;
+                            }
                             if (_keyForm.currentState!.validate()) {
                               if (state.identity == null) {
                                 context.read<IdentityCubit>().createIdentity(

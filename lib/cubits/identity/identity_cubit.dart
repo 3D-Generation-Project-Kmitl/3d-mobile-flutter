@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
 
@@ -38,8 +37,10 @@ class IdentityCubit extends Cubit<IdentityState> {
         'lastName': lastName,
         'phone': phone,
         'idCardNumber': idCardNumber,
-        'cardPicture': await MultipartFile.fromFile(cardPicture.path),
-        'cardFacePicture': await MultipartFile.fromFile(cardFacePicture.path),
+        'cardPicture': await MultipartFile.fromFile(cardPicture.path,
+            filename: cardPicture.name),
+        'cardFacePicture': await MultipartFile.fromFile(cardFacePicture.path,
+            filename: cardFacePicture.name),
         'bankName': bankName,
         'bankAccount': bankAccount,
       });
@@ -66,8 +67,10 @@ class IdentityCubit extends Cubit<IdentityState> {
         'lastName': lastName,
         'phone': phone,
         'idCardNumber': idCardNumber,
-        'cardPicture': await MultipartFile.fromFile(cardPicture.path),
-        'cardFacePicture': await MultipartFile.fromFile(cardFacePicture.path),
+        'cardPicture': await MultipartFile.fromFile(cardPicture.path,
+            filename: cardPicture.name),
+        'cardFacePicture': await MultipartFile.fromFile(cardFacePicture.path,
+            filename: cardFacePicture.name),
         'bankName': bankName,
         'bankAccount': bankAccount,
       });
