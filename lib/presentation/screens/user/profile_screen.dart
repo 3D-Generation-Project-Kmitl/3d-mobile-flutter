@@ -13,6 +13,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    final IdentityCubit identityCubit = context.read<IdentityCubit>();
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -20,7 +21,19 @@ class ProfileScreen extends StatelessWidget {
           titleSpacing: 20,
           leading: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, identityRoute);
+              if (identityCubit.state is IdentityLoaded) {
+                final identity =
+                    (identityCubit.state as IdentityLoaded).identity;
+                if (identity != null) {
+                  if (identity.status == "APPROVED") {
+                    Navigator.pushNamed(context, storeRoute);
+                  } else {
+                    Navigator.pushNamed(context, identityRoute);
+                  }
+                } else {
+                  Navigator.pushNamed(context, identityRoute);
+                }
+              }
             },
             icon: const Icon(
               Icons.storefront,

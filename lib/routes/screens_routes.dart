@@ -24,3 +24,4 @@ const String changePasswordRoute = "/change_password";
 const String editProfileRoute = "/edit_profile";
 
 const String identityRoute = "/identity";
+const String storeRoute = "/store";

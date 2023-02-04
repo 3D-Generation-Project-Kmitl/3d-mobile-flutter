@@ -30,6 +30,12 @@ class _OtpScreenState extends State<OtpScreen> {
   int start = 60;
 
   @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
 

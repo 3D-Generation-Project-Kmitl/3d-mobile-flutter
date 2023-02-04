@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../constants/colors.dart';
-
 class DropdownWidgetQ extends StatefulWidget {
   final List<dynamic> items;
   final Function onChanged;
@@ -9,6 +7,7 @@ class DropdownWidgetQ extends StatefulWidget {
   final String value;
   final String label;
   final List<DropdownMenuItem<String>>? customItems;
+  final bool isValidate;
 
   const DropdownWidgetQ({
     Key? key,
@@ -18,6 +17,7 @@ class DropdownWidgetQ extends StatefulWidget {
     required this.label,
     required this.value,
     this.customItems,
+    this.isValidate = false,
   }) : super(key: key);
 
   @override
@@ -29,6 +29,14 @@ class _DropdownWidgetQState extends State<DropdownWidgetQ> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButtonFormField(
+        validator: widget.isValidate
+            ? (value) {
+                if (widget.value == "") {
+                  return "กรุณาเลือก${widget.label}";
+                }
+                return null;
+              }
+            : null,
         alignment: Alignment.centerLeft,
         decoration: InputDecoration(
           labelText: widget.label,
@@ -52,7 +60,7 @@ class _DropdownWidgetQState extends State<DropdownWidgetQ> {
         hint: Text(
           widget.hint,
         ),
-        value: widget.value,
+        value: widget.value == "" ? null : widget.value,
       ),
     );
   }

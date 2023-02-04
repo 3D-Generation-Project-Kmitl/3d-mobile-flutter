@@ -78,6 +78,8 @@ class AppRouter {
         return _route(const EditProfileScreen(), editProfileRoute);
       case identityRoute:
         return _route(const IdentityScreen(), identityRoute);
+      case storeRoute:
+        return _route(const StoreScreen(), storeRoute);
       default:
         return _errorRoute();
     }
