@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../configs/size_config.dart';
+import '../../../constants/constants.dart';
 import '../../helpers/helpers.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -19,7 +20,6 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  List<String> genders = <String>["ชาย", "หญิง", "ไม่ระบุ"];
   late User user;
   late TextEditingController _nameController;
   late String? gender;
@@ -49,6 +49,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void dispose() {
     _nameController.clear();
     _nameController.dispose();
+    _dateOfBirthController.clear();
+    _dateOfBirthController.dispose();
+
     super.dispose();
   }
 
@@ -164,7 +167,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: SizedBox(
               height: getProportionateScreenHeight(50),
               child: ElevatedButton(
-                onPressed: isChanged() ? onSubmit : null,
+                onPressed: isChanged()
+                    ? () {
+                        if (_keyForm.currentState!.validate()) {
+                          onSubmit();
+                        }
+                      }
+                    : null,
                 child: (state is UserLoading
                     ? const SizedBox(
                         height: 20,

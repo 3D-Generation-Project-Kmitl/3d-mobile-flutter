@@ -13,13 +13,28 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    final IdentityCubit identityCubit = context.read<IdentityCubit>();
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           titleSpacing: 20,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              if (identityCubit.state is IdentityLoaded) {
+                final identity =
+                    (identityCubit.state as IdentityLoaded).identity;
+                if (identity != null) {
+                  if (identity.status == "APPROVED") {
+                    Navigator.pushNamed(context, storeRoute);
+                  } else {
+                    Navigator.pushNamed(context, identityRoute);
+                  }
+                } else {
+                  Navigator.pushNamed(context, identityRoute);
+                }
+              }
+            },
             icon: const Icon(
               Icons.storefront,
               size: 27,

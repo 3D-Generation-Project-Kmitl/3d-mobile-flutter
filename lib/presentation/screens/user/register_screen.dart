@@ -58,6 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final authCubit = context.read<AuthCubit>();
     final userCubit = context.read<UserCubit>();
+    final identityCubit = context.read<IdentityCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
 
@@ -67,6 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           //showLoadingDialog(context);
         } else if (state is RegisterSuccessState) {
           userCubit.setUser(state.user);
+          identityCubit.getIdentity();
           cartCubit.getCart();
           favoriteCubit.getFavorite();
           authCubit.resendOTP(state.user.email);

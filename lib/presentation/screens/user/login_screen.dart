@@ -50,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final authCubit = context.read<AuthCubit>();
     final userCubit = context.read<UserCubit>();
+    final identityCubit = context.read<IdentityCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
 
@@ -59,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           //showLoadingDialog(context);
         } else if (state is LoginSuccessState) {
           userCubit.setUser(state.user);
+          identityCubit.getIdentity();
           cartCubit.getCart();
           favoriteCubit.getFavorite();
           if (state.user.isVerified) {
