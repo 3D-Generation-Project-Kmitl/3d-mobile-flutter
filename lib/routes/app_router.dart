@@ -80,6 +80,9 @@ class AppRouter {
         return _route(const IdentityScreen(), identityRoute);
       case storeRoute:
         return _route(const StoreScreen(), storeRoute);
+      case productsStoreRoute:
+        int id = settings.arguments as int;
+        return _route(ProductsStoreScreen(storeId: id), productsStoreRoute);
       default:
         return _errorRoute();
     }

@@ -24,7 +24,7 @@ class ProductsStore {
     required this.role,
     required this.createdAt,
     required this.updatedAt,
-    required this.product,
+    required this.products,
   });
 
   final int userId;
@@ -38,7 +38,7 @@ class ProductsStore {
   final String role;
   final DateTime createdAt;
   final DateTime updatedAt;
-  List<Product> product;
+  List<Product> products;
 
   factory ProductsStore.fromJson(Map<String, dynamic> json) => ProductsStore(
         userId: json["userId"],
@@ -54,7 +54,7 @@ class ProductsStore {
         role: json["role"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        product:
+        products:
             List<Product>.from(json["Product"].map((x) => Product.fromJson(x))),
       );
 
@@ -70,6 +70,6 @@ class ProductsStore {
         "role": role,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
-        "Product": List<dynamic>.from(product.map((x) => x.toJson())),
+        "Product": List<dynamic>.from(products.map((x) => x.toJson())),
       };
 }
