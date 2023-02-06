@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/configs/theme.dart';
 import 'dart:io';
-
+import '../../../configs/size_config.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_gallery_screen.dart';
 
 class ImageViewerScreen extends StatelessWidget {
@@ -37,9 +37,24 @@ class ImageViewerScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: Image.file(File(previewImage.path),width: double.infinity,),
       )),
+              bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SizedBox(
+          height: getProportionateScreenHeight(50),
+          child: ElevatedButton(
+            onPressed: () {
+
+            },
+            child: const Text(
+              "ลบรูปภาพ",
+            ),
+            
+          ),
+        ),
+      )
     );
   }
 }

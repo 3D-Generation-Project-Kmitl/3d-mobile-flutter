@@ -133,7 +133,7 @@ class _ReconstructionConfigScreenState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("ต้องการลบภาพพื้นหลังหรือไม่"),
+                    Text("ระบบตรวจจับเฉพาะวัตถุ"),
                     Switch(
                       value: configs["removeBackground"],
                       onChanged: (value) {
