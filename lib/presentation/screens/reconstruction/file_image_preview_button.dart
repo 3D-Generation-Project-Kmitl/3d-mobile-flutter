@@ -32,8 +32,8 @@ class FileImagePreviewButton extends StatelessWidget {
             ],
           )
         : Container(
-            height: 50,
-            width: 50,
+            height: 40,
+            width: 40,
             color: Colors.grey.withOpacity(0),
           );
   }

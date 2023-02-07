@@ -6,8 +6,6 @@ import '../../../configs/size_config.dart';
 import 'image_gallery_screen.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 
-enum ModelQuality { HIGH, MEDIUM, LOW }
-
 const List<Widget> modelQuality = <Widget>[
   Text('High'),
   Text('Medium'),
@@ -27,11 +25,8 @@ class ReconstructionConfigScreen extends StatefulWidget {
 class _ReconstructionConfigScreenState
     extends State<ReconstructionConfigScreen> {
   List<XFile>? imageFiles;
-  Map<String, dynamic> configs = {
-    "removeBackground": false,
-    "quality": ModelQuality.LOW
-  };
-  final List<bool> _selectModelQuality = <bool>[true, false, false];
+  Map<String, dynamic> configs = {"removeBackground": false, "quality": 'Low'};
+  final List<bool> _selectModelQuality = <bool>[false, false, true];
 
   bool vertical = false;
   @override
@@ -53,19 +48,19 @@ class _ReconstructionConfigScreenState
               style: Theme.of(context).textTheme.headline4),
         ),
         bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SizedBox(
-          height: getProportionateScreenHeight(50),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, gen3DRoute);
-            },
-            child: const Text(
-              "สร้างโมเดล 3 มิติ",
+          padding: const EdgeInsets.all(20.0),
+          child: SizedBox(
+            height: getProportionateScreenHeight(50),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, gen3DRoute);
+              },
+              child: const Text(
+                "สร้างโมเดล 3 มิติ",
+              ),
             ),
           ),
         ),
-      ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -110,8 +105,15 @@ class _ReconstructionConfigScreenState
                       setState(() {
                         // The button that is tapped is set to true, and the others to false.
                         for (int i = 0; i < _selectModelQuality.length; i++) {
-                          _selectModelQuality[i] = i == index;
+                          if (i == index) {
+                            _selectModelQuality[i] = true;
+                            Text quality = modelQuality[index] as Text;
+                            configs['quality'] = quality.data;
+                          } else {
+                            _selectModelQuality[i] = false;
+                          }
                         }
+
                       });
                     },
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -139,11 +141,10 @@ class _ReconstructionConfigScreenState
                       onChanged: (value) {
                         setState(() {
                           configs["removeBackground"] = value;
-                          print(configs["removeBackground"]);
                         });
                       },
-                      activeTrackColor: primaryColor,
-                      activeColor: primaryLight,
+                      activeTrackColor: primaryLight,
+                      activeColor: primaryColor,
                     ),
                   ],
                 ),
