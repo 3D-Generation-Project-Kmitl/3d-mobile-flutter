@@ -11,3 +11,5 @@ List<String> banks = <String>[
   "ธนาคารออมสิน",
   "ธนาคารทิสโก้"
 ];
+
+List<String> modelFileExtensions = <String>["glb"];

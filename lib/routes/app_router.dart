@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
 import './screens_routes.dart';
@@ -85,7 +86,6 @@ class AppRouter {
         return _route(ProductsStoreScreen(storeId: id), productsStoreRoute);
       case storeModelRoute:
         return _route(const StoreModelScreen(), storeModelRoute);
-
       default:
         return _errorRoute();
     }
