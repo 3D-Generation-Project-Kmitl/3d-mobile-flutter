@@ -29,3 +29,4 @@ export 'reconstruction/camera_screen.dart';
 
 export 'store/identity_screen.dart';
 export 'store/store_screen.dart';
+export 'store/store_model_screen.dart';
