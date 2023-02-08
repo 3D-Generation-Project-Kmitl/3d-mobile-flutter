@@ -11,3 +11,4 @@ export './token_model.dart';
 export './payment_model.dart';
 export './order_model.dart';
 export './order_detail_model.dart';
+export './products_store_model.dart';

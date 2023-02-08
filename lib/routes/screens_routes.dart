@@ -22,6 +22,7 @@ const String settingRoute = "/setting";
 const String searchResultRoute = "/search_result";
 const String changePasswordRoute = "/change_password";
 const String editProfileRoute = "/edit_profile";
+const String productsStoreRoute = "/products_store";
 
 const String identityRoute = "/identity";
 const String storeRoute = "/store";

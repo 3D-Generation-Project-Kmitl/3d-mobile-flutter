@@ -36,4 +36,15 @@ class ProductRepository {
       throw e.message;
     }
   }
+
+  Future<ProductsStore> getProductsByStoreId(int id) async {
+    try {
+      final response = await DioClient().dio.get('/product/store/$id');
+      final data = BaseResponse.fromJson(response.data).data;
+      final productsStore = ProductsStore.fromJson(data);
+      return productsStore;
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
 }
