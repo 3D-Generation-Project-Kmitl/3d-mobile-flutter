@@ -33,95 +33,104 @@ class StoreModelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double width = SizeConfig.screenWidth;
-    return BlocProvider(
-      create: (context) => ModelsCubit(),
-      child: BlocBuilder<ModelsCubit, ModelsState>(
-        builder: (context, state) {
-          if (state is ModelsInitial) {
-            context.read<ModelsCubit>().getModelsStore();
-            return Scaffold(
-                appBar: AppBar(
-                  titleSpacing: 20,
-                  title: Text("โมเดล 3 มิติของฉัน",
-                      style: Theme.of(context).textTheme.headline2),
+    return BlocBuilder<ModelsCubit, ModelsState>(
+      builder: (context, state) {
+        if (state is ModelsInitial) {
+          context.read<ModelsCubit>().getModelsStore();
+          return Scaffold(
+              appBar: AppBar(
+                titleSpacing: 20,
+                title: Text("โมเดล 3 มิติของฉัน",
+                    style: Theme.of(context).textTheme.headline2),
+              ),
+              resizeToAvoidBottomInset: false,
+              body: const SafeArea(
+                  child: Center(
+                child: CircularProgressIndicator(),
+              )));
+        } else if (state is ModelsLoaded) {
+          return Scaffold(
+              appBar: AppBar(
+                titleSpacing: 20,
+                title: Text("โมเดล 3 มิติของฉัน",
+                    style: Theme.of(context).textTheme.headline2),
+              ),
+              resizeToAvoidBottomInset: false,
+              body: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                child: SafeArea(
+                  child: state.models.isEmpty
+                      ? Center(
+                          child: Text(
+                            'ไม่มีโมเดล 3 มิติ',
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                        )
+                      : _modelList(state.models, width),
                 ),
-                resizeToAvoidBottomInset: false,
-                body: const SafeArea(
-                    child: Center(
-                  child: CircularProgressIndicator(),
-                )));
-          } else if (state is ModelsLoaded) {
-            return Scaffold(
-                appBar: AppBar(
-                  titleSpacing: 20,
-                  title: Text("โมเดล 3 มิติของฉัน",
-                      style: Theme.of(context).textTheme.headline2),
-                ),
-                resizeToAvoidBottomInset: false,
-                body: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: SafeArea(
-                    child: state.models.isEmpty
-                        ? Center(
-                            child: Text(
-                              'ไม่มีโมเดล 3 มิติ',
-                              style: Theme.of(context).textTheme.headline1,
-                            ),
-                          )
-                        : _modelList(state.models, width),
-                  ),
-                ),
-                bottomNavigationBar: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  child: SizedBox(
-                    height: getProportionateScreenHeight(50),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        getFileFromStorage(context).then((file) => {
-                              if (file != null)
-                                {
-                                  showConfirmDialog(
-                                    context,
-                                    title:
-                                        'คุณต้องการเพิ่มโมเดล 3 มิตินี้ใช่หรือไม่',
-                                    message:
-                                        'ชื่อไฟล์: ${file.name}\nขนาด: ${(file.size / 1000000).toStringAsFixed(2)} MB',
-                                    onConfirm: () => context
-                                        .read<ModelsCubit>()
-                                        .addModel(file),
-                                  ),
-                                }
-                              else
-                                {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('กรุณาเลือกไฟล์ให้ถูกต้อง'),
+              ),
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                child: SizedBox(
+                  height: getProportionateScreenHeight(50),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      getFileFromStorage(context).then((file) => {
+                            if (file != null)
+                              {
+                                if (file.size > 100000000)
+                                  {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content:
+                                            Text('ขนาดไฟล์ต้องไม่เกิน 100 MB'),
+                                      ),
                                     ),
+                                  }
+                                else
+                                  {
+                                    showConfirmDialog(
+                                      context,
+                                      title:
+                                          'คุณต้องการเพิ่มโมเดล 3 มิตินี้ใช่หรือไม่',
+                                      message:
+                                          'ชื่อไฟล์: ${file.name}\nขนาด: ${(file.size / 1000000).toStringAsFixed(2)} MB',
+                                      onConfirm: () => context
+                                          .read<ModelsCubit>()
+                                          .addModel(file),
+                                    ),
+                                  }
+                              }
+                            else
+                              {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('กรุณาเลือกไฟล์ให้ถูกต้อง'),
                                   ),
-                                }
-                            });
-                      },
-                      child: const Text(
-                        "เพิ่มโมเดล 3 มิติ",
-                      ),
+                                ),
+                              }
+                          });
+                    },
+                    child: const Text(
+                      "เพิ่มโมเดล 3 มิติ",
                     ),
                   ),
-                ));
-          } else {
-            return Scaffold(
-                appBar: AppBar(
-                  titleSpacing: 20,
-                  title: Text("โมเดล 3 มิติของฉัน",
-                      style: Theme.of(context).textTheme.headline2),
                 ),
-                resizeToAvoidBottomInset: false,
-                body: const SafeArea(
-                    child: Center(
-                  child: CircularProgressIndicator(),
-                )));
-          }
-        },
-      ),
+              ));
+        } else {
+          return Scaffold(
+              appBar: AppBar(
+                titleSpacing: 20,
+                title: Text("โมเดล 3 มิติของฉัน",
+                    style: Theme.of(context).textTheme.headline2),
+              ),
+              resizeToAvoidBottomInset: false,
+              body: const SafeArea(
+                  child: Center(
+                child: CircularProgressIndicator(),
+              )));
+        }
+      },
     );
   }
 
@@ -137,7 +146,13 @@ class StoreModelScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final model = models[index];
         return GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              storeViewModelRoute,
+              arguments: model,
+            );
+          },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(

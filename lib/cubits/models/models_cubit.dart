@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,14 +38,33 @@ class ModelsCubit extends Cubit<ModelsState> {
     try {
       if (state is ModelsLoaded) {
         final List<Model> models = (state as ModelsLoaded).models;
+        emit(ModelsLoading());
         final formData = FormData.fromMap({
           'type': 'ADD',
           'model':
               await MultipartFile.fromFile(file.path!, filename: file.name),
         });
         final model = await modelRepository.createModel(formData);
-        print(model.model);
         models.insert(0, model);
+        emit(ModelsLoaded(models));
+      }
+    } on String catch (e) {
+      emit(ModelsFailure(e));
+    }
+  }
+
+  Future<void> updateModel(File file, int modelId) async {
+    try {
+      if (state is ModelsLoaded) {
+        final List<Model> models = (state as ModelsLoaded).models;
+        emit(ModelsLoading());
+        final formData = FormData.fromMap({
+          'picture': await MultipartFile.fromFile(file.path,
+              filename: file.path.split('/').last),
+        });
+        final model = await modelRepository.updateModel(modelId, formData);
+        models.where((element) => element.modelId == modelId).first.picture =
+            model.picture;
         emit(ModelsLoaded(models));
       }
     } on String catch (e) {

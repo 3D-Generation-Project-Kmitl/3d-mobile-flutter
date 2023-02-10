@@ -11,19 +11,10 @@ Future<void> showConfirmDialog(BuildContext context,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        backgroundColor: Colors.black.withOpacity(0.7),
         title: Center(
-            child: Text(
-          title,
-          style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                color: Colors.white,
-              ),
-        )),
+            child: Text(title, style: Theme.of(context).textTheme.bodyText1)),
         content: message != ''
-            ? Text(message,
-                style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                      color: Colors.white,
-                    ))
+            ? Text(message, style: Theme.of(context).textTheme.bodyText2)
             : null,
         actions: [
           TextButton(
@@ -33,7 +24,7 @@ Future<void> showConfirmDialog(BuildContext context,
             child: Text(
               'ยกเลิก',
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    color: Colors.grey[400],
+                    color: Colors.grey[600],
                   ),
             ),
           ),
@@ -45,7 +36,7 @@ Future<void> showConfirmDialog(BuildContext context,
             child: Text(
               'ตกลง',
               style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                   ),
             ),
           ),
