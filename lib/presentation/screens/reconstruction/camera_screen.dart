@@ -10,11 +10,17 @@ import 'package:marketplace/presentation/screens/reconstruction/file_image_previ
 import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_progress_indicator.dart';
 import 'package:marketplace/presentation/widgets/image_card_widget.dart';
+import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
+import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
+import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_camera_manager.dart';
+import 'package:vector_math/vector_math_64.dart' hide Colors;
 import 'dart:async';
 import 'dart:io';
 
 const List<Widget> cameraMode = <Widget>[Text('Manual'), Text('Auto')];
 
+    
 class CameraScreen extends StatefulWidget {
   final List<XFile>? imageFiles;
 
@@ -37,7 +43,12 @@ class _CameraScreenState extends State<CameraScreen> {
   bool vertical = false;
   Timer? timer;
   bool isTaking = false;
+  bool isARCoreSupported = false;
+  ARCameraManager? arCameraManager;
 
+
+  late int? id;
+  
   @override
   void initState() {
     super.initState();
@@ -48,6 +59,7 @@ class _CameraScreenState extends State<CameraScreen> {
     } else {
       imageFiles = [];
     }
+
   }
 
   @override
@@ -81,22 +93,22 @@ class _CameraScreenState extends State<CameraScreen> {
       _initializeControllerFuture = _cameraController.initialize();
     });
     await _cameraController.lockCaptureOrientation();
-    // isARCoreSupported=await CameraDataFromARCore.isARCoreSupported();
+    // isARCoreSupported = await CameraDataFromARCore.isARCoreSupported();
   }
 
   _manualTakePicture() async {
-    await _initializeControllerFuture;
-    imageFiles!.add(await _cameraController.takePicture());
+    // await _initializeControllerFuture;
+    // imageFiles!.add(await _cameraController.takePicture());
     // if (isARCoreSupported) {
 
-    //   Map<String, dynamic>? cameraData = await CameraDataFromARCore.getCameraData();
-    //   print('hello pure');
-    //   print(cameraData);
+      Matrix4? cameraData = await arCameraManager!.getCameraPose();
+      print('hello pure');
+      print(cameraData);
     // }
 
-    setState(() {
-      imageFiles = imageFiles;
-    });
+    // setState(() {
+    //   imageFiles = imageFiles;
+    // });
   }
 
   _autoTakePicture() async {
@@ -118,13 +130,13 @@ class _CameraScreenState extends State<CameraScreen> {
   // }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext buildContext) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
     SizeConfig().init(context);
+    arCameraManager=ARCameraManager(buildContext);
 
     return Material(
       child: SafeArea(
@@ -344,32 +356,27 @@ _showMinmumImagesModal(context) {
       });
 }
 
+class CameraDataFromARCore {
+  static const MethodChannel _channel = const MethodChannel('arcore');
 
+  // static Future<bool> isARCoreSupported() async {
+  //   try {
+  //     final bool result = await _channel.invokeMethod('isARCoreSupported');
+  //     return result;
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //     return false;
+  //   }
+  // }
 
-
-
-
-// class CameraDataFromARCore {
-//   static const MethodChannel _channel = const MethodChannel('arcore');
-
-//   static Future<bool> isARCoreSupported() async {
-//     try {
-//       final bool result = await _channel.invokeMethod('isARCoreSupported');
-//       return result;
-//     } on PlatformException catch (e) {
-//       print(e);
-//       return false;
-//     }
-//   }
-
-//   static Future<Map<String, dynamic>?> getCameraData() async {
-//     try {
-//       final Map<String, dynamic> result =
-//           await _channel.invokeMethod('getCameraData');
-//       return result;
-//     } on PlatformException catch (e) {
-//       print(e);
-//       return null;
-//     }
-//   }
-// }
+  // static Future<Matrix4?> getCameraData(ARCameraManager arCameraManager) async {
+  //   try {
+  //     final Matrix4? result =
+  //         await arCameraManager.getCameraPose();
+  //     return result;
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //     return null;
+  //   }
+  // }
+}
