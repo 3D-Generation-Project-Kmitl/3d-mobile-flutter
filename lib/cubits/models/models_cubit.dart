@@ -63,7 +63,7 @@ class ModelsCubit extends Cubit<ModelsState> {
               filename: file.path.split('/').last),
         });
         final model = await modelRepository.updateModel(modelId, formData);
-        models.where((element) => element.modelId == modelId).first.picture =
+        models.firstWhere((element) => element.modelId == modelId).picture =
             model.picture;
         emit(ModelsLoaded(models));
       }
