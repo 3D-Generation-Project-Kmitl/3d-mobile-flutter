@@ -1,5 +1,6 @@
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:marketplace/data/models/models.dart';
+import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,10 +34,10 @@ class StoreModelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double width = SizeConfig.screenWidth;
-    return BlocBuilder<ModelsCubit, ModelsState>(
+    return BlocBuilder<StoreModelsCubit, StoreModelsState>(
       builder: (context, state) {
-        if (state is ModelsInitial) {
-          context.read<ModelsCubit>().getModelsStore();
+        if (state is StoreModelsInitial) {
+          context.read<StoreModelsCubit>().getModelsStore();
           return Scaffold(
               appBar: AppBar(
                 titleSpacing: 20,
@@ -48,7 +49,7 @@ class StoreModelScreen extends StatelessWidget {
                   child: Center(
                 child: CircularProgressIndicator(),
               )));
-        } else if (state is ModelsLoaded) {
+        } else if (state is StoreModelsLoaded) {
           return Scaffold(
               appBar: AppBar(
                 titleSpacing: 20,
@@ -96,7 +97,7 @@ class StoreModelScreen extends StatelessWidget {
                                       message:
                                           'ชื่อไฟล์: ${file.name}\nขนาด: ${(file.size / 1000000).toStringAsFixed(2)} MB',
                                       onConfirm: () => context
-                                          .read<ModelsCubit>()
+                                          .read<StoreModelsCubit>()
                                           .addModel(file),
                                     ),
                                   }
@@ -153,17 +154,8 @@ class StoreModelScreen extends StatelessWidget {
               arguments: model,
             );
           },
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image(
-              image: model.picture != null
-                  ? NetworkImage(model.picture)
-                  : const AssetImage('assets/images/placeholder3d.jpg')
-                      as ImageProvider,
-              fit: BoxFit.cover,
-              height: width * 0.54,
-              width: double.infinity,
-            ),
+          child: roundedImageCard(
+            imageURL: model.picture,
           ),
         );
       },

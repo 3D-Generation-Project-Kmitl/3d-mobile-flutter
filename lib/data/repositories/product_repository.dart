@@ -47,4 +47,27 @@ class ProductRepository {
       throw e.message;
     }
   }
+
+  Future<Product> createProduct({
+    required String name,
+    required String details,
+    required int price,
+    required int categoryId,
+    required int modelId,
+  }) async {
+    try {
+      final response = await DioClient().dio.post('/product', data: {
+        'name': name,
+        'details': details,
+        'price': price,
+        'categoryId': categoryId,
+        'modelId': modelId,
+      });
+      final data = BaseResponse.fromJson(response.data).data;
+      final productCreated = Product.fromJson(data);
+      return productCreated;
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
 }

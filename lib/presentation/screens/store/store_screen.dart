@@ -65,7 +65,7 @@ class StoreScreen extends StatelessWidget {
                         context,
                         "สินค้าของฉัน",
                         () {
-                          print("สินค้าของฉัน");
+                          Navigator.pushNamed(context, storeProductRoute);
                         },
                       ),
                       _buildStoreCard(

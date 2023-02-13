@@ -3,42 +3,31 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
 
-part 'models_state.dart';
+part 'store_models_state.dart';
 
-class ModelsCubit extends Cubit<ModelsState> {
-  ModelsCubit() : super(ModelsInitial());
+class StoreModelsCubit extends Cubit<StoreModelsState> {
+  StoreModelsCubit() : super(StoreModelsInitial());
 
   final ModelRepository modelRepository = ModelRepository();
 
-  Future<void> getModelsCustomer() async {
-    try {
-      emit(ModelsLoading());
-      final models = await modelRepository.getModelsCustomer();
-      emit(ModelsLoaded(models));
-    } on String catch (e) {
-      emit(ModelsFailure(e));
-    }
-  }
-
   Future<void> getModelsStore() async {
     try {
-      emit(ModelsLoading());
+      emit(StoreModelsLoading());
       final models = await modelRepository.getModelsStore();
-      emit(ModelsLoaded(models));
+      emit(StoreModelsLoaded(models));
     } on String catch (e) {
-      emit(ModelsFailure(e));
+      emit(StoreModelsFailure(e));
     }
   }
 
   Future<void> addModel(PlatformFile file) async {
     try {
-      if (state is ModelsLoaded) {
-        final List<Model> models = (state as ModelsLoaded).models;
-        emit(ModelsLoading());
+      if (state is StoreModelsLoaded) {
+        final List<Model> models = (state as StoreModelsLoaded).models;
+        emit(StoreModelsLoading());
         final formData = FormData.fromMap({
           'type': 'ADD',
           'model':
@@ -46,18 +35,18 @@ class ModelsCubit extends Cubit<ModelsState> {
         });
         final model = await modelRepository.createModel(formData);
         models.insert(0, model);
-        emit(ModelsLoaded(models));
+        emit(StoreModelsLoaded(models));
       }
     } on String catch (e) {
-      emit(ModelsFailure(e));
+      emit(StoreModelsFailure(e));
     }
   }
 
   Future<void> updateModel(File file, int modelId) async {
     try {
-      if (state is ModelsLoaded) {
-        final List<Model> models = (state as ModelsLoaded).models;
-        emit(ModelsLoading());
+      if (state is StoreModelsLoaded) {
+        final List<Model> models = (state as StoreModelsLoaded).models;
+        emit(StoreModelsLoading());
         final formData = FormData.fromMap({
           'picture': await MultipartFile.fromFile(file.path,
               filename: file.path.split('/').last),
@@ -65,10 +54,22 @@ class ModelsCubit extends Cubit<ModelsState> {
         final model = await modelRepository.updateModel(modelId, formData);
         models.firstWhere((element) => element.modelId == modelId).picture =
             model.picture;
-        emit(ModelsLoaded(models));
+        emit(StoreModelsLoaded(models));
       }
     } on String catch (e) {
-      emit(ModelsFailure(e));
+      emit(StoreModelsFailure(e));
+    }
+  }
+
+  void removeModel(int modelId) async {
+    try {
+      if (state is StoreModelsLoaded) {
+        final List<Model> models = (state as StoreModelsLoaded).models;
+        models.removeWhere((element) => element.modelId == modelId);
+        emit(StoreModelsLoaded(models));
+      }
+    } on String catch (e) {
+      emit(StoreModelsFailure(e));
     }
   }
 }
