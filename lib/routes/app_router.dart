@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
 import './screens_routes.dart';
@@ -49,12 +50,8 @@ class AppRouter {
         int id = settings.arguments as int;
         return _route(OrderDetailScreen(orderId: id), orderDetailRoute);
       case viewModelRoute:
-        Model? model = settings.arguments as Model?;
-        if (model != null) {
-          return _route(ViewModelScreen(model: model), viewModelRoute);
-        } else {
-          return _errorRoute();
-        }
+        Model model = settings.arguments as Model;
+        return _route(ViewModelScreen(model: model), viewModelRoute);
       case productDetailRoute:
         Product? product = settings.arguments as Product?;
         if (product != null) {
@@ -83,6 +80,11 @@ class AppRouter {
       case productsStoreRoute:
         int id = settings.arguments as int;
         return _route(ProductsStoreScreen(storeId: id), productsStoreRoute);
+      case storeModelRoute:
+        return _route(const StoreModelScreen(), storeModelRoute);
+      case storeViewModelRoute:
+        Model model = settings.arguments as Model;
+        return _route(StoreViewModelScreen(model: model), storeViewModelRoute);
       default:
         return _errorRoute();
     }

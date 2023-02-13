@@ -201,6 +201,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
                                     ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.screenHeight * 0.005),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "หมวดหมู่สินค้า: ",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                        Text(
+                                          " ${product.category.name}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1,
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
