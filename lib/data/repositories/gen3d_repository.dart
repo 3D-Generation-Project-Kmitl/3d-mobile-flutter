@@ -2,10 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:marketplace/utils/dio_client.dart';
 
 class Gen3DModelRepository {
-  Future<String> gen3DModel(String filePath, String fileName) async {
+  Future<String> gen3DModel(String filePath,Map<String, dynamic> configs) async {
     try {
       var formData = FormData.fromMap({
-        'video': await MultipartFile.fromFile(filePath, filename: fileName),
+        'images': await MultipartFile.fromFile(filePath),
+        'configs': configs
       });
 
       final response = await Dio()
@@ -13,7 +14,7 @@ class Gen3DModelRepository {
 
       return response.data.toString();
     } on DioError catch (e) {
-      throw e.message;
+        throw e.message;
     }
   }
 }

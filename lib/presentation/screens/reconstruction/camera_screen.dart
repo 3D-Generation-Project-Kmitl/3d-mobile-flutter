@@ -3,24 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:marketplace/configs/size_config.dart';
 import 'package:marketplace/constants/colors.dart';
-import 'package:marketplace/data/repositories/gen3d_repository.dart';
+
 import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
 import 'package:marketplace/presentation/screens/reconstruction/reconstruction_config_screen.dart';
 import 'package:marketplace/presentation/screens/reconstruction/file_image_preview_button.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_progress_indicator.dart';
 import 'package:marketplace/presentation/widgets/image_card_widget.dart';
-import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
-import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
-import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
-import 'package:ar_flutter_plugin/managers/ar_camera_manager.dart';
+// import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
+// import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
+// import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
+// import 'package:ar_flutter_plugin/managers/ar_camera_manager.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
+import 'package:path/path.dart' as path;
 import 'dart:async';
 import 'dart:io';
 
 const List<Widget> cameraMode = <Widget>[Text('Manual'), Text('Auto')];
 
-    
 class CameraScreen extends StatefulWidget {
   final List<XFile>? imageFiles;
 
@@ -35,20 +35,19 @@ class _CameraScreenState extends State<CameraScreen> {
 
   List<XFile>? imageFiles;
 
-  String modelPath = "";
+
   late CameraController _cameraController;
   Future<void>? _initializeControllerFuture;
-  final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
+
   final List<bool> _selectCameraMode = <bool>[true, false];
   bool vertical = false;
   Timer? timer;
   bool isTaking = false;
   bool isARCoreSupported = false;
-  ARCameraManager? arCameraManager;
-
+  // ARCameraManager? arCameraManager;
 
   late int? id;
-  
+
   @override
   void initState() {
     super.initState();
@@ -59,7 +58,6 @@ class _CameraScreenState extends State<CameraScreen> {
     } else {
       imageFiles = [];
     }
-
   }
 
   @override
@@ -96,19 +94,30 @@ class _CameraScreenState extends State<CameraScreen> {
     // isARCoreSupported = await CameraDataFromARCore.isARCoreSupported();
   }
 
+  _renameImageFile(XFile imageXFile) async{
+    File imageFile = File(imageXFile.path);
+    print('Original path: ${imageFile.path}');
+    String dir = path.dirname(imageFile.path);
+    String newPath = path.join(dir, "${(imageFiles!.length+1).toString().padLeft(4, '0')}.jpg");
+    print('NewPath: ${newPath}');
+    imageFile=imageFile.renameSync(newPath);
+    return new XFile(imageFile.path);
+  }
+
   _manualTakePicture() async {
-    // await _initializeControllerFuture;
-    // imageFiles!.add(await _cameraController.takePicture());
+    await _initializeControllerFuture;
+    XFile image = await _renameImageFile(await _cameraController.takePicture());
+    imageFiles!.add(image);
     // if (isARCoreSupported) {
 
-      Matrix4? cameraData = await arCameraManager!.getCameraPose();
-      print('hello pure');
-      print(cameraData);
+    // Matrix4? cameraData = await arCameraManager!.getCameraPose();
+    // print('hello pure');
+    // print(cameraData);
     // }
 
-    // setState(() {
-    //   imageFiles = imageFiles;
-    // });
+    setState(() {
+      imageFiles = imageFiles;
+    });
   }
 
   _autoTakePicture() async {
@@ -123,11 +132,7 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  // _sendRequestToGenerate3DModel() async {
-  //   modelPath = await gen3dModelRepository.gen3DModel(file.path, file.name);
-  //   print('File name: ${file.name}');
-  //   print('File path: ${file.path}');
-  // }
+
 
   @override
   Widget build(BuildContext buildContext) {
@@ -136,7 +141,7 @@ class _CameraScreenState extends State<CameraScreen> {
       DeviceOrientation.portraitDown,
     ]);
     SizeConfig().init(context);
-    arCameraManager=ARCameraManager(buildContext);
+    // arCameraManager=ARCameraManager(buildContext);
 
     return Material(
       child: SafeArea(
@@ -250,7 +255,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                                   122, 255, 255, 255),
                                               child: Icon(
                                                 isTaking
-                                                    ? Icons.stop
+                                                    ? Icons.stop_rounded
                                                     : Icons.circle,
                                                 color: _selectCameraMode[0]
                                                     ? Colors.white

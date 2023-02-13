@@ -1,10 +1,13 @@
+import 'package:archive/archive_io.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:marketplace/constants/colors.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../configs/size_config.dart';
 import 'image_gallery_screen.dart';
 import 'package:marketplace/routes/screens_routes.dart';
+import 'package:marketplace/data/repositories/gen3d_repository.dart';
 
 const List<Widget> modelQuality = <Widget>[
   Text('High'),
@@ -27,6 +30,9 @@ class _ReconstructionConfigScreenState
   List<XFile>? imageFiles;
   Map<String, dynamic> configs = {"removeBackground": false, "quality": 'Low'};
   final List<bool> _selectModelQuality = <bool>[false, false, true];
+  final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
+  String zipFilePath = "";
+
 
   bool vertical = false;
   @override
@@ -37,6 +43,26 @@ class _ReconstructionConfigScreenState
     } else {
       imageFiles = [];
     }
+  }
+
+  _sendRequestToGenerate3DModel() async {
+    await _zipFiles();
+    var response = await gen3dModelRepository.gen3DModel(
+        zipFilePath, configs);
+    print(response);
+  }
+
+  _zipFiles() async {
+    Directory? appDocDirectory = await getExternalStorageDirectory();
+    var encoder = ZipFileEncoder();
+    zipFilePath = appDocDirectory!.path + "/purechoo.zip" ;
+    encoder.create(zipFilePath);
+
+    for (var image in imageFiles!) {
+      encoder.addFile(File(image.path));
+    }
+
+    encoder.close();
   }
 
   @override
@@ -53,7 +79,7 @@ class _ReconstructionConfigScreenState
             height: getProportionateScreenHeight(50),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, gen3DRoute);
+                _sendRequestToGenerate3DModel();
               },
               child: const Text(
                 "สร้างโมเดล 3 มิติ",
@@ -113,7 +139,6 @@ class _ReconstructionConfigScreenState
                             _selectModelQuality[i] = false;
                           }
                         }
-
                       });
                     },
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
