@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:marketplace/configs/size_config.dart';
 import 'package:marketplace/constants/colors.dart';
-
+import 'package:marketplace/constants/reconstruction.dart';
 import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
 import 'package:marketplace/presentation/screens/reconstruction/reconstruction_config_screen.dart';
 import 'package:marketplace/presentation/screens/reconstruction/file_image_preview_button.dart';
@@ -277,7 +277,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                             heroTag: "nextButton",
                                             backgroundColor: Colors.white,
                                             onPressed: () => {
-                                              if (imageFiles!.length < 20)
+                                              if (imageFiles!.length < minImages)
                                                 {
                                                   _showMinmumImagesModal(
                                                       context)

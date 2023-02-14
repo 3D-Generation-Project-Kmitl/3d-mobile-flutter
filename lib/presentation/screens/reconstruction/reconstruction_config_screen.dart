@@ -9,6 +9,8 @@ import 'image_gallery_screen.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 
+import 'model_viewer.dart';
+
 const List<Widget> modelQuality = <Widget>[
   Text('High'),
   Text('Medium'),
@@ -50,6 +52,7 @@ class _ReconstructionConfigScreenState
     var response = await gen3dModelRepository.gen3DModel(
         zipFilePath, configs);
     print(response);
+    return response;
   }
 
   _zipFiles() async {
@@ -80,6 +83,7 @@ class _ReconstructionConfigScreenState
             child: ElevatedButton(
               onPressed: () {
                 _sendRequestToGenerate3DModel();
+ 
               },
               child: const Text(
                 "สร้างโมเดล 3 มิติ",
