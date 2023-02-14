@@ -80,7 +80,7 @@ class StoreProductScreen extends StatelessWidget {
   Widget buildProductCard(
       BuildContext context, Product product, String status) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -88,7 +88,8 @@ class StoreProductScreen extends StatelessWidget {
             children: [
               Expanded(
                   flex: 4,
-                  child: roundedImageCard(imageURL: product.model.picture)),
+                  child: roundedImageCard(
+                      imageURL: product.model.picture, ratio: 0.95)),
               const SizedBox(width: 10),
               Expanded(
                 flex: 5,
@@ -132,7 +133,7 @@ class StoreProductScreen extends StatelessWidget {
                         ? buildEditButton(context)
                         : const SizedBox.shrink(),
                     const SizedBox(height: 5),
-                    buildDeleteButton(context, product.productId)
+                    buildDeleteButton(context, product)
                   ],
                 ),
               ),
@@ -245,7 +246,7 @@ class StoreProductScreen extends StatelessWidget {
     );
   }
 
-  Widget buildDeleteButton(BuildContext context, int productId) {
+  Widget buildDeleteButton(BuildContext context, Product product) {
     return SizedBox(
       height: getProportionateScreenHeight(35),
       width: getProportionateScreenWidth(80),
@@ -253,11 +254,12 @@ class StoreProductScreen extends StatelessWidget {
         onPressed: () {
           showConfirmDialog(
             context,
-            title: "คุณต้องการลบสินค้าใช่หรือไม่",
+            title: "คุณต้องการลบสินค้านี้ใช่หรือไม่",
+            message: "ชื่อ: ${product.name}\nหากลบแล้วจะไม่สามารถกู้คืนได้",
             onConfirm: () {
               context
                   .read<MyStoreProductCubit>()
-                  .updateStatusProduct(productId, "DELETED");
+                  .updateStatusProduct(product.productId, "DELETED");
             },
           );
         },
