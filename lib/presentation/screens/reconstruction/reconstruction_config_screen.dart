@@ -5,11 +5,13 @@ import 'dart:io';
 import 'package:marketplace/constants/colors.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../configs/size_config.dart';
+
+import '../../../cubits/cubits.dart';
 import 'image_gallery_screen.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'model_viewer.dart';
 
 const List<Widget> modelQuality = <Widget>[
   Text('High'),
@@ -35,7 +37,6 @@ class _ReconstructionConfigScreenState
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
   String zipFilePath = "";
 
-
   bool vertical = false;
   @override
   void initState() {
@@ -47,18 +48,17 @@ class _ReconstructionConfigScreenState
     }
   }
 
-  _sendRequestToGenerate3DModel() async {
-    await _zipFiles();
-    var response = await gen3dModelRepository.gen3DModel(
-        zipFilePath, configs);
+  _sendRequestToGenerate3DModel(int modelId,int userId) async {
+    await _zipFiles(modelId,userId);
+    var response = await gen3dModelRepository.gen3DModel(zipFilePath, configs,modelId,userId);
     print(response);
     return response;
   }
 
-  _zipFiles() async {
+  _zipFiles(int modelId,int userId) async {
     Directory? appDocDirectory = await getExternalStorageDirectory();
     var encoder = ZipFileEncoder();
-    zipFilePath = appDocDirectory!.path + "/purechoo.zip" ;
+    zipFilePath = appDocDirectory!.path + '/'+modelId.toString()+'_'+userId.toString()+'.zip';
     encoder.create(zipFilePath);
 
     for (var image in imageFiles!) {
@@ -82,8 +82,9 @@ class _ReconstructionConfigScreenState
             height: getProportionateScreenHeight(50),
             child: ElevatedButton(
               onPressed: () {
-                _sendRequestToGenerate3DModel();
- 
+                context.read<ModelsCubit>().getModelsCustomer().then((model)=>{
+                  _sendRequestToGenerate3DModel(1,1)
+                });
               },
               child: const Text(
                 "สร้างโมเดล 3 มิติ",
