@@ -13,8 +13,8 @@ class Model {
   Model({
     required this.modelId,
     required this.userId,
-    required this.model,
-    required this.picture,
+    this.model,
+    this.picture,
     required this.status,
     required this.type,
     this.createdAt,
@@ -23,8 +23,8 @@ class Model {
 
   int modelId;
   int userId;
-  String model;
-  dynamic picture;
+  String? model;
+  String? picture;
   String status;
   String type;
   DateTime? createdAt;

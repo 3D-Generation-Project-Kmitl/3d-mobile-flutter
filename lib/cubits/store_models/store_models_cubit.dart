@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,20 @@ class StoreModelsCubit extends Cubit<StoreModelsState> {
     }
   }
 
+  List<Model> getModelsByStatus(bool isCompleted) {
+    List<Model> models = [];
+    if (state is StoreModelsLoaded) {
+      models = (state as StoreModelsLoaded).models;
+      if (isCompleted) {
+        models = models.where((element) => element.model != null).toList();
+      } else {
+        models = models.where((element) => element.model == null).toList();
+      }
+      return models;
+    }
+    return models;
+  }
+
   Future<void> addModel(PlatformFile file) async {
     try {
       if (state is StoreModelsLoaded) {
@@ -39,6 +54,28 @@ class StoreModelsCubit extends Cubit<StoreModelsState> {
       }
     } on String catch (e) {
       emit(StoreModelsFailure(e));
+    }
+  }
+
+  Future<Model?> addReconstructionModel(XFile file) async {
+    try {
+      if (state is StoreModelsLoaded) {
+        final List<Model> models = (state as StoreModelsLoaded).models;
+        emit(StoreModelsLoading());
+        final formData = FormData.fromMap({
+          'type': 'CREATE',
+          'picture':
+              await MultipartFile.fromFile(file.path, filename: file.name),
+        });
+        final model = await modelRepository.createModel(formData);
+        models.insert(0, model);
+        emit(StoreModelsLoaded(models));
+        return model;
+      }
+      return null;
+    } on String catch (e) {
+      emit(StoreModelsFailure(e));
+      return null;
     }
   }
 

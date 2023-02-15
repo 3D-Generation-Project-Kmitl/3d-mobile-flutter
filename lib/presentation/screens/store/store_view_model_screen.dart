@@ -122,6 +122,14 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
                 height: getProportionateScreenHeight(50),
                 child: ElevatedButton(
                   onPressed: () {
+                    if (widget.model.picture == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("กรุณาบันทึกภาพก่อนลงขาย"),
+                        ),
+                      );
+                      return;
+                    }
                     Navigator.pushNamed(context, storeAddProductRoute,
                         arguments: widget.model);
                   },
@@ -140,7 +148,7 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
       height: SizeConfig.screenHeight,
       width: double.infinity,
       child: BabylonJSViewer(
-        src: widget.model.model,
+        src: widget.model.model!,
       ),
     );
   }
