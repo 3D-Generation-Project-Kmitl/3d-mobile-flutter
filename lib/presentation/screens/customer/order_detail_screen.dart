@@ -90,7 +90,10 @@ class OrderDetailScreen extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image(
-                image: NetworkImage(orderProduct.product.model.picture),
+                image: orderProduct.product.model.picture != null
+                    ? NetworkImage(orderProduct.product.model.picture!)
+                    : const AssetImage('assets/images/placeholder3d.jpg')
+                        as ImageProvider,
                 fit: BoxFit.cover,
               ),
             ),

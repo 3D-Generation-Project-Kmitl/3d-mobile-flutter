@@ -82,6 +82,22 @@ class AuthRepository {
     }
   }
 
+  Future<String> resendOTP(String email) async {
+    try {
+      final response = await DioClient().dio.post('/auth/resendOTP', data: {
+        'email': email,
+      });
+      final String message = BaseResponse.fromJson(response.data).message;
+      return message;
+    } catch (e) {
+      if (e is DioError) {
+        throw e.response!.data;
+      } else {
+        throw e as Exception;
+      }
+    }
+  }
+
   Future<String> checkOTP(String email, String otp) async {
     try {
       final response = await DioClient().dio.post('/auth/checkOTP', data: {
@@ -100,12 +116,45 @@ class AuthRepository {
     }
   }
 
+  Future<String> verifyUser(String token) async {
+    try {
+      final response = await DioClient().dio.post('/auth/verifyUser', data: {
+        'token': token,
+      });
+      final message = BaseResponse.fromJson(response.data).message;
+      return message;
+    } catch (e) {
+      if (e is DioError) {
+        throw e.response!.data;
+      } else {
+        throw e as Exception;
+      }
+    }
+  }
+
   Future<String> forceUpdatePassword(String newPassword, String token) async {
     try {
       final response =
           await DioClient().dio.put('/auth/forceUpdatePassword', data: {
         'newPassword': newPassword,
         'token': token,
+      });
+      final message = BaseResponse.fromJson(response.data).message;
+      return message;
+    } catch (e) {
+      if (e is DioError) {
+        throw e.response!.data;
+      } else {
+        throw e as Exception;
+      }
+    }
+  }
+
+  Future<String> updatePassword(String oldPassword, String newPassword) async {
+    try {
+      final response = await DioClient().dio.put('/auth/updatePassword', data: {
+        'oldPassword': oldPassword,
+        'newPassword': newPassword,
       });
       final message = BaseResponse.fromJson(response.data).message;
       return message;

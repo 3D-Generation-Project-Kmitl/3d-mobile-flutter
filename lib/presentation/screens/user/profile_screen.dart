@@ -13,13 +13,28 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    final IdentityCubit identityCubit = context.read<IdentityCubit>();
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           titleSpacing: 20,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              if (identityCubit.state is IdentityLoaded) {
+                final identity =
+                    (identityCubit.state as IdentityLoaded).identity;
+                if (identity != null) {
+                  if (identity.status == "APPROVED") {
+                    Navigator.pushNamed(context, storeRoute);
+                  } else {
+                    Navigator.pushNamed(context, identityRoute);
+                  }
+                } else {
+                  Navigator.pushNamed(context, identityRoute);
+                }
+              }
+            },
             icon: const Icon(
               Icons.storefront,
               size: 27,
@@ -88,50 +103,19 @@ class ProfileScreen extends StatelessWidget {
                             thickness: 0.5,
                             height: 20,
                           ),
-                          Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 8,
-                            child: ListTile(
-                              dense: true,
-                              visualDensity: const VisualDensity(vertical: 4),
-                              onTap: () {
-                                Navigator.pushNamed(context, myOrdersRoute);
-                              },
-                              title: Text(
-                                "รายการสั่งซื้อของฉัน",
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                              trailing: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                            ),
+                          _buildProfileCard(
+                            context,
+                            "รายการสั่งซื้อของฉัน",
+                            () {
+                              Navigator.pushNamed(context, myOrdersRoute);
+                            },
                           ),
-                          Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 8,
-                            child: ListTile(
-                              dense: true,
-                              visualDensity: const VisualDensity(vertical: 4),
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, customerModelRoute);
-                              },
-                              title: Text(
-                                "โมเดล 3 มิติของฉัน",
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                              trailing: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                            ),
+                          _buildProfileCard(
+                            context,
+                            "โมเดล 3 มิติของฉัน",
+                            () {
+                              Navigator.pushNamed(context, customerModelRoute);
+                            },
                           ),
                         ],
                       );
@@ -197,5 +181,29 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         )));
+  }
+
+  Widget _buildProfileCard(
+      BuildContext context, String title, void Function()? onTap) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 8,
+      child: ListTile(
+        dense: true,
+        visualDensity: const VisualDensity(vertical: 4),
+        onTap: onTap,
+        title: Text(
+          title,
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: Colors.black,
+          size: 20,
+        ),
+      ),
+    );
   }
 }

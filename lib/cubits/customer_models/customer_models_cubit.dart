@@ -2,20 +2,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
 
-part 'models_state.dart';
+part 'customer_models_state.dart';
 
-class ModelsCubit extends Cubit<ModelsState> {
-  ModelsCubit() : super(ModelsInitial());
+class CustomerModelsCubit extends Cubit<CustomerModelsState> {
+  CustomerModelsCubit() : super(CustomerModelsInitial());
 
   final ModelRepository modelRepository = ModelRepository();
 
   Future<void> getModelsCustomer() async {
     try {
-      emit(ModelsLoading());
+      emit(CustomerModelsLoading());
       final models = await modelRepository.getModelsCustomer();
-      emit(ModelsLoaded(models));
+      emit(CustomerModelsLoaded(models));
     } on String catch (e) {
-      emit(ModelsFailure(e));
+      emit(CustomerModelsFailure(e));
     }
   }
 }

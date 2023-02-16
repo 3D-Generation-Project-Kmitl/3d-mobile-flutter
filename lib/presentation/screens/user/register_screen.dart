@@ -58,6 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final authCubit = context.read<AuthCubit>();
     final userCubit = context.read<UserCubit>();
+    final identityCubit = context.read<IdentityCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
 
@@ -67,14 +68,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
           //showLoadingDialog(context);
         } else if (state is RegisterSuccessState) {
           userCubit.setUser(state.user);
+          identityCubit.getIdentity();
           cartCubit.getCart();
           favoriteCubit.getFavorite();
-          Navigator.pushNamedAndRemoveUntil(
-              context, navigationRoute, (route) => false);
+          authCubit.resendOTP(state.user.email);
+          Navigator.pushNamed(context, otpRoute,
+              arguments: [state.user.email, "verify"]);
+          // Navigator.pushNamedAndRemoveUntil(
+          //     context, navigationRoute, (route) => false);
         } else if (state is RegisterFailureState) {
-          //print(state.errorMessage);
-          //hideLoadingDialog(context);
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -108,6 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: getProportionateScreenHeight(50),
                       child: ElevatedButton(
                         onPressed: () {
+                          FocusManager.instance.primaryFocus?.unfocus();
                           if (_keyForm.currentState!.validate()) {
                             authCubit.register(
                               _emailController.text,

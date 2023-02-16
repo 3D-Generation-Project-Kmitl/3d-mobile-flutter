@@ -12,6 +12,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userCubit = context.read<UserCubit>();
+    final identityCubit = context.read<IdentityCubit>();
     final authCubit = context.read<AuthCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
@@ -29,10 +30,17 @@ class SplashScreen extends StatelessWidget {
                 listener: (context, state) {
                   if (state is ValidateTokenSuccessState) {
                     userCubit.setUser(state.user);
+                    identityCubit.getIdentity();
                     cartCubit.getCart();
                     favoriteCubit.getFavorite();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, navigationRoute, (route) => false);
+                    if (state.user.isVerified) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, navigationRoute, (route) => false);
+                    } else {
+                      authCubit.resendOTP(state.user.email);
+                      Navigator.pushNamed(context, otpRoute,
+                          arguments: [state.user.email, "verify"]);
+                    }
                   } else if (state is ValidateTokenFailureState) {
                     Navigator.pushNamedAndRemoveUntil(
                         context, navigationRoute, (route) => false);

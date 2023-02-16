@@ -14,18 +14,14 @@ class ImageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return imageURL != ''
         ? CircleAvatar(
+            backgroundColor: Theme.of(context).primaryColor,
             radius: radius,
-            child: ClipOval(
-              child: Image.network(
-                imageURL,
-                fit: BoxFit.cover,
-                width: double.infinity,
-              ),
-            ),
-          )
+            backgroundImage: NetworkImage(
+              imageURL,
+            ))
         : CircleAvatar(
             backgroundColor: Theme.of(context).primaryColor,
-            radius: radius - 10.0,
+            radius: radius,
             child: const Icon(
               Icons.person,
               color: Colors.white,

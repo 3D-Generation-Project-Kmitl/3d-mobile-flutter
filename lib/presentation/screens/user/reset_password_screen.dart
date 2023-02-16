@@ -63,9 +63,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             (route) => false,
           );
         } else if (state is ResetPasswordFailureState) {
-          print(state.errorMessage);
-          //Navigator.of(context).pop();
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -96,6 +98,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_keyForm.currentState!.validate()) {
                           authCubit.resetPassword(
                             _passwordController.text,

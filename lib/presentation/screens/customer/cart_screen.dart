@@ -106,7 +106,10 @@ class CartScreen extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image(
-                  image: NetworkImage(cart.product.model.picture),
+                  image: cart.product.model.picture != null
+                      ? NetworkImage(cart.product.model.picture!)
+                      : const AssetImage('assets/images/placeholder3d.jpg')
+                          as ImageProvider,
                   fit: BoxFit.cover,
                 ),
               ),

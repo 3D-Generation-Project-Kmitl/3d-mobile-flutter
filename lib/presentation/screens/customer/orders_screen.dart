@@ -29,6 +29,14 @@ class MyOrdersScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else if (state is OrdersLoaded) {
+              if (state.orders.isEmpty) {
+                return Center(
+                  child: Text(
+                    "ไม่มีข้อมูล",
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                );
+              }
               return ListView.builder(
                 itemCount: state.orders.length,
                 itemBuilder: (context, index) {
