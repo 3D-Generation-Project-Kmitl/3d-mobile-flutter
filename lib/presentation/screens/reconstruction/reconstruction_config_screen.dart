@@ -12,7 +12,6 @@ import 'package:marketplace/routes/screens_routes.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 const List<Widget> modelQuality = <Widget>[
   Text('High'),
   Text('Medium'),
@@ -48,17 +47,23 @@ class _ReconstructionConfigScreenState
     }
   }
 
-  _sendRequestToGenerate3DModel(int modelId,int userId) async {
-    await _zipFiles(modelId,userId);
-    var response = await gen3dModelRepository.gen3DModel(zipFilePath, configs,modelId,userId);
+  _sendRequestToGenerate3DModel(int modelId, int userId) async {
+    await _zipFiles(modelId, userId);
+    var response = await gen3dModelRepository.gen3DModel(
+        zipFilePath, configs, modelId, userId);
     print(response);
     return response;
   }
 
-  _zipFiles(int modelId,int userId) async {
+  _zipFiles(int modelId, int userId) async {
     Directory? appDocDirectory = await getExternalStorageDirectory();
     var encoder = ZipFileEncoder();
-    zipFilePath = appDocDirectory!.path + '/'+modelId.toString()+'_'+userId.toString()+'.zip';
+    zipFilePath = appDocDirectory!.path +
+        '/' +
+        modelId.toString() +
+        '_' +
+        userId.toString() +
+        '.zip';
     encoder.create(zipFilePath);
 
     for (var image in imageFiles!) {
@@ -82,9 +87,16 @@ class _ReconstructionConfigScreenState
             height: getProportionateScreenHeight(50),
             child: ElevatedButton(
               onPressed: () {
-                context.read<ModelsCubit>().getModelsCustomer().then((model)=>{
-                  _sendRequestToGenerate3DModel(1,1)
-                });
+                context
+                    .read<StoreModelsCubit>()
+                    .addReconstructionModel(imageFiles![0])
+                    .then((model) => {
+                          if (model != null)
+                            {
+                              _sendRequestToGenerate3DModel(
+                                  model.modelId, model.userId)
+                            }
+                        });
               },
               child: const Text(
                 "สร้างโมเดล 3 มิติ",
