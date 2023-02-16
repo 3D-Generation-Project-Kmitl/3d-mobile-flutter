@@ -84,58 +84,75 @@ class StoreProductScreen extends StatelessWidget {
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
+          child: Column(
             children: [
-              Expanded(
-                  flex: 4,
-                  child: roundedImageCard(
-                      imageURL: product.model.picture, ratio: 0.95)),
-              const SizedBox(width: 10),
-              Expanded(
-                flex: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(product.name,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Colors.black54,
-                            fontWeight: FontWeight.w400)),
-                    const SizedBox(height: 10),
-                    Text(
-                        intl.NumberFormat.currency(
-                          locale: 'th',
-                          symbol: '฿',
-                          decimalDigits: 0,
-                        ).format(product.price),
-                        style: Theme.of(context).textTheme.bodyText1),
-                    const SizedBox(height: 10),
-                    Text('ยอดเข้าชม: ${product.views}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1!
-                            .copyWith(color: Colors.black87)),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    status == "AVAILABLE"
-                        ? buildNotShowButton(context, product.productId)
-                        : const SizedBox.shrink(),
-                    status == "UNAVAILABLE"
-                        ? buildSellButton(context, product.productId)
-                        : const SizedBox.shrink(),
-                    const SizedBox(height: 5),
-                    status != "VIOLATION"
-                        ? buildEditButton(context, product)
-                        : const SizedBox.shrink(),
-                    const SizedBox(height: 5),
-                    buildDeleteButton(context, product)
-                  ],
-                ),
+              Row(
+                children: [
+                  Expanded(
+                      flex: 4,
+                      child: roundedImageCard(
+                          imageURL: product.model.picture, ratio: 0.95)),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    flex: 5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(product.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w400)),
+                        const SizedBox(height: 5),
+                        Text(
+                            intl.NumberFormat.currency(
+                              locale: 'th',
+                              symbol: '฿',
+                              decimalDigits: 0,
+                            ).format(product.price),
+                            style: Theme.of(context).textTheme.bodyText1),
+                        const SizedBox(height: 5),
+                        Text('ขายแล้ว: ${product.count!.orderProduct}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.black87)),
+                        Text('ถูกใจ: ${product.count!.favorite}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.black87)),
+                        Text('ยอดเข้าชม: ${product.views}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .subtitle1!
+                                .copyWith(color: Colors.black87)),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        status == "AVAILABLE"
+                            ? buildNotShowButton(context, product.productId)
+                            : const SizedBox.shrink(),
+                        status == "UNAVAILABLE"
+                            ? buildSellButton(context, product.productId)
+                            : const SizedBox.shrink(),
+                        const SizedBox(height: 5),
+                        status != "VIOLATION"
+                            ? buildEditButton(context, product)
+                            : const SizedBox.shrink(),
+                        const SizedBox(height: 5),
+                        buildDeleteButton(context, product)
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

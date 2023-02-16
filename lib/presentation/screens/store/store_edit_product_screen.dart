@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
-import 'package:marketplace/routes/screens_routes.dart';
 import 'package:native_screenshot/native_screenshot.dart';
 
 import '../../../configs/size_config.dart';

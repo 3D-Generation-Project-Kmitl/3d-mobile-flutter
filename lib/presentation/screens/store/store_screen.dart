@@ -62,24 +62,24 @@ class StoreScreen extends StatelessWidget {
                         height: 20,
                       ),
                       _buildStoreCard(
-                        context,
-                        "สินค้าของฉัน",
-                        () {
+                        context: context,
+                        title: "สินค้าของฉัน",
+                        onTap: () {
                           Navigator.pushNamed(context, storeProductRoute);
                         },
                       ),
                       _buildStoreCard(
-                        context,
-                        "โมเดล 3 มิติของฉัน",
-                        () {
+                        context: context,
+                        title: "โมเดล 3 มิติของฉัน",
+                        onTap: () {
                           Navigator.pushNamed(context, storeModelRoute);
                         },
                       ),
                       _buildStoreCard(
-                        context,
-                        "รายรับของฉัน",
-                        () {
-                          print("รายการขายของฉัน");
+                        context: context,
+                        title: "รายรับของฉัน",
+                        onTap: () {
+                          Navigator.pushNamed(context, storeWalletRoute);
                         },
                       ),
                     ],
@@ -96,7 +96,9 @@ class StoreScreen extends StatelessWidget {
   }
 
   Widget _buildStoreCard(
-      BuildContext context, String title, void Function()? onTap) {
+      {required BuildContext context,
+      required String title,
+      void Function()? onTap}) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

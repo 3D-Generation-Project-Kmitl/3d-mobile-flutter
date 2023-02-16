@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:intl/intl.dart';
 import '../../../data/models/models.dart';
 
 class OrderDetailScreen extends StatelessWidget {
@@ -42,13 +42,42 @@ class OrderDetailScreen extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
                       children: [
-                        Text("รวม",
-                            style: Theme.of(context).textTheme.headline3),
-                        Text("${state.orderDetail.totalPrice.toString()} บาท",
-                            style: Theme.of(context).textTheme.headline2),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("วันที่สั่งซื้อ: ",
+                                style: Theme.of(context).textTheme.bodyText1),
+                            Text(
+                                DateFormat('yyyy-MM-dd')
+                                    .format(state.orderDetail.createdAt),
+                                style: Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("เวลา: ",
+                                style: Theme.of(context).textTheme.bodyText1),
+                            Text(
+                                DateFormat('HH:mm')
+                                    .format(state.orderDetail.createdAt),
+                                style: Theme.of(context).textTheme.bodyText1),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("รวม",
+                                style: Theme.of(context).textTheme.headline3),
+                            Text(
+                                "${state.orderDetail.totalPrice.toString()} บาท",
+                                style: Theme.of(context).textTheme.headline2),
+                          ],
+                        ),
                       ],
                     ),
                   ),

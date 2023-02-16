@@ -1,5 +1,4 @@
 import 'package:marketplace/cubits/cubits.dart';
-import 'package:marketplace/data/models/models.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
