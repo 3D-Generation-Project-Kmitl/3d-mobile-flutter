@@ -96,8 +96,6 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
                         setState(() {
                           imgFile = File(path);
                         });
-                      } else {
-                        print("Error");
                       }
                       toggleLoading();
                       imageDialog();

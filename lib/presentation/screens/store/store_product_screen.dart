@@ -130,7 +130,7 @@ class StoreProductScreen extends StatelessWidget {
                         : const SizedBox.shrink(),
                     const SizedBox(height: 5),
                     status != "VIOLATION"
-                        ? buildEditButton(context)
+                        ? buildEditButton(context, product)
                         : const SizedBox.shrink(),
                     const SizedBox(height: 5),
                     buildDeleteButton(context, product)
@@ -166,12 +166,15 @@ class StoreProductScreen extends StatelessWidget {
     );
   }
 
-  Widget buildEditButton(BuildContext context) {
+  Widget buildEditButton(BuildContext context, Product product) {
     return SizedBox(
       height: getProportionateScreenHeight(35),
       width: getProportionateScreenWidth(80),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, storeEditProductRoute,
+              arguments: product);
+        },
         style: ElevatedButton.styleFrom(
           primary: Colors.white,
           side: const BorderSide(

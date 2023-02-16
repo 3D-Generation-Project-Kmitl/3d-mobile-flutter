@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 Widget roundedImageCard({
   String? imageURL,
+  File? imageFile,
   double radius = 15.0,
   double ratio = 1,
 }) {
@@ -12,8 +15,10 @@ Widget roundedImageCard({
       child: Image(
         image: imageURL != null
             ? NetworkImage(imageURL)
-            : const AssetImage('assets/images/placeholder3d.jpg')
-                as ImageProvider,
+            : imageFile != null
+                ? FileImage(imageFile)
+                : const AssetImage('assets/images/placeholder3d.jpg')
+                    as ImageProvider,
         fit: BoxFit.cover,
       ),
     ),

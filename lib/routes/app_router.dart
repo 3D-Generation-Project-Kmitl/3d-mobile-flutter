@@ -91,6 +91,10 @@ class AppRouter {
         Model model = settings.arguments as Model;
         return _route(
             StoreAddProductScreen(model: model), storeAddProductRoute);
+      case storeEditProductRoute:
+        Product product = settings.arguments as Product;
+        return _route(
+            StoreEditProductScreen(product: product), storeEditProductRoute);
       default:
         return _errorRoute();
     }

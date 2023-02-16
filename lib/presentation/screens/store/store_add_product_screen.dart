@@ -40,9 +40,8 @@ class _StoreAddProductScreenState extends State<StoreAddProductScreen> {
   @override
   void dispose() {
     _nameController.dispose();
-    //_priceController.dispose();
+    _priceController.dispose();
     _descriptionController.dispose();
-    //_categoryController.dispose();
     super.dispose();
   }
 
