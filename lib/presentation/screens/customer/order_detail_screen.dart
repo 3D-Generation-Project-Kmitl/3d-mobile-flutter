@@ -50,7 +50,7 @@ class OrderDetailScreen extends StatelessWidget {
                             Text("วันที่สั่งซื้อ: ",
                                 style: Theme.of(context).textTheme.bodyText1),
                             Text(
-                                DateFormat('yyyy-MM-dd')
+                                DateFormat('dd/MM/yyyy')
                                     .format(state.orderDetail.createdAt),
                                 style: Theme.of(context).textTheme.bodyText1),
                           ],

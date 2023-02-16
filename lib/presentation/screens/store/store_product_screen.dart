@@ -91,7 +91,7 @@ class StoreProductScreen extends StatelessWidget {
                   Expanded(
                       flex: 4,
                       child: roundedImageCard(
-                          imageURL: product.model.picture, ratio: 0.95)),
+                          imageURL: product.model.picture, ratio: 0.9)),
                   const SizedBox(width: 10),
                   Expanded(
                     flex: 5,
