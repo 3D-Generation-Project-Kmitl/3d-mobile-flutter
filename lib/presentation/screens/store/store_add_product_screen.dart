@@ -54,7 +54,6 @@ class _StoreAddProductScreenState extends State<StoreAddProductScreen> {
         title:
             Text("เพิ่มสินค้า", style: Theme.of(context).textTheme.headline2),
       ),
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),

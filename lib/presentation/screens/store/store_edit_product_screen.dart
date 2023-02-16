@@ -82,7 +82,6 @@ class _StoreEditProductScreenState extends State<StoreEditProductScreen> {
         title: Text("แก้ไขข้อมูลสินค้า",
             style: Theme.of(context).textTheme.headline2),
       ),
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
