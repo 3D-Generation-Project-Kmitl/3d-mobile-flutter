@@ -3,15 +3,20 @@ import 'package:marketplace/utils/dio_client.dart';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(
-      String filePath, Map<String, dynamic> configs,int modelId,int userId) async {
+      String filePath, Map<String, dynamic> reconstructionConfigs) async {
     try {
       var formData = FormData.fromMap({
-        'modelId':modelId,
-        'userId':userId,
-        'images': await MultipartFile.fromFile(filePath),
-        'removeBackground': configs['removeBackground'],
-        'quality':configs['quality'],
+        'raw_data': await MultipartFile.fromFile(filePath),
+        'model_id': reconstructionConfigs['modelId'],
+        'user_id': reconstructionConfigs['userId'],
+        'object_detection': reconstructionConfigs['objectDetection'],
+        'quality': reconstructionConfigs['quality'],
       });
+      print('raw_data '+reconstructionConfigs['raw_data'].toString());
+      print('modelId '+reconstructionConfigs['modelId'].toString());
+      print('userId '+reconstructionConfigs['userId'].toString());
+      print('objectDetection '+reconstructionConfigs['objectDetection'].toString());
+      print('quality '+reconstructionConfigs['quality'].toString());
 
       final response = await Dio()
           .post('http://ssh.opencloudai.com:443/gen3DModel', data: formData);
@@ -21,4 +26,4 @@ class Gen3DModelRepository {
       throw e.message;
     }
   }
-} 
+}

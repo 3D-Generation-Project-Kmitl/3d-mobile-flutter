@@ -12,7 +12,6 @@ import 'package:marketplace/routes/screens_routes.dart';
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 const List<Widget> modelQuality = <Widget>[
   Text('High'),
   Text('Medium'),
@@ -32,7 +31,12 @@ class ReconstructionConfigScreen extends StatefulWidget {
 class _ReconstructionConfigScreenState
     extends State<ReconstructionConfigScreen> {
   List<XFile>? imageFiles;
-  Map<String, dynamic> configs = {"removeBackground": false, "quality": 'Low'};
+  Map<String, dynamic> reconstructionConfigs = {
+    "userId": -555,
+    "modelId": -555,
+    "objectDetection": false,
+    "quality": 'Low'
+  };
   final List<bool> _selectModelQuality = <bool>[false, false, true];
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
   String zipFilePath = "";
@@ -48,23 +52,29 @@ class _ReconstructionConfigScreenState
     }
   }
 
-  _sendRequestToGenerate3DModel(int modelId,int userId) async {
-    await _zipFiles(modelId,userId);
-    var response = await gen3dModelRepository.gen3DModel(zipFilePath, configs,modelId,userId);
+  _sendRequestToGenerate3DModel() async {
+    await _zipFiles();
+    var response = await gen3dModelRepository.gen3DModel(
+        zipFilePath, reconstructionConfigs);
     print(response);
     return response;
   }
 
-  _zipFiles(int modelId,int userId) async {
+  _zipFiles() async {
     Directory? appDocDirectory = await getExternalStorageDirectory();
     var encoder = ZipFileEncoder();
-    zipFilePath = appDocDirectory!.path + '/'+modelId.toString()+'_'+userId.toString()+'.zip';
+    zipFilePath = appDocDirectory!.path +
+        '/' +
+        reconstructionConfigs['modelId'].toString() +
+        '_' +
+        reconstructionConfigs['userId'].toString() +
+        '.zip';
     encoder.create(zipFilePath);
 
     for (var image in imageFiles!) {
       encoder.addFile(File(image.path));
     }
-
+    print(zipFilePath);
     encoder.close();
   }
 
@@ -82,9 +92,10 @@ class _ReconstructionConfigScreenState
             height: getProportionateScreenHeight(50),
             child: ElevatedButton(
               onPressed: () {
-                context.read<ModelsCubit>().getModelsCustomer().then((model)=>{
-                  _sendRequestToGenerate3DModel(1,1)
-                });
+                //context.read<ModelsCubit>().getModelsCustomer().then((model)=>{
+                //  _sendRequestToGenerate3DModel(1,1)
+                //});
+                _sendRequestToGenerate3DModel();
               },
               child: const Text(
                 "สร้างโมเดล 3 มิติ",
@@ -139,7 +150,7 @@ class _ReconstructionConfigScreenState
                           if (i == index) {
                             _selectModelQuality[i] = true;
                             Text quality = modelQuality[index] as Text;
-                            configs['quality'] = quality.data;
+                            reconstructionConfigs['quality'] = quality.data;
                           } else {
                             _selectModelQuality[i] = false;
                           }
@@ -167,10 +178,10 @@ class _ReconstructionConfigScreenState
                   children: [
                     Text("ระบบตรวจจับเฉพาะวัตถุ"),
                     Switch(
-                      value: configs["removeBackground"],
+                      value: reconstructionConfigs["objectDetection"],
                       onChanged: (value) {
                         setState(() {
-                          configs["removeBackground"] = value;
+                          reconstructionConfigs["objectDetection"] = value;
                         });
                       },
                       activeTrackColor: primaryLight,
