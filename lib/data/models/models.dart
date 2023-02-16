@@ -1,5 +1,6 @@
 export './response_model.dart';
 export './user_model.dart';
+export './identity_model.dart';
 export './model_model.dart';
 export './product_model.dart';
 export './product_detail_model.dart';
@@ -10,3 +11,4 @@ export './token_model.dart';
 export './payment_model.dart';
 export './order_model.dart';
 export './order_detail_model.dart';
+export './products_store_model.dart';

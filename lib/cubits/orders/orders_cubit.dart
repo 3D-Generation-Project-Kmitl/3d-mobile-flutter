@@ -13,7 +13,6 @@ class OrdersCubit extends Cubit<OrdersState> {
     try {
       emit(OrdersLoading());
       final orders = await orderRepository.getOrders();
-      print(orders);
       emit(OrdersLoaded(orders));
     } on String catch (e) {
       emit(OrdersFailure(e));

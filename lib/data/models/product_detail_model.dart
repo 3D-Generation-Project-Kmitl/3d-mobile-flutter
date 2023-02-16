@@ -25,6 +25,7 @@ class ProductDetail {
     required this.updatedAt,
     required this.model,
     required this.user,
+    required this.category,
   });
 
   int productId;
@@ -39,6 +40,7 @@ class ProductDetail {
   DateTime updatedAt;
   Model model;
   User user;
+  Category category;
 
   factory ProductDetail.fromJson(Map<String, dynamic> json) => ProductDetail(
         productId: json["productId"],
@@ -53,6 +55,7 @@ class ProductDetail {
         updatedAt: DateTime.parse(json["updatedAt"]),
         model: Model.fromJson(json["Model"]),
         user: User.fromJson(json["User"]),
+        category: Category.fromJson(json["Category"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -68,5 +71,6 @@ class ProductDetail {
         "updatedAt": updatedAt.toIso8601String(),
         "Model": model.toJson(),
         "User": user.toJson(),
+        "Category": category.toJson(),
       };
 }

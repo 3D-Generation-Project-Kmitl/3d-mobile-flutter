@@ -32,8 +32,8 @@ class _ReconstructionConfigScreenState
     extends State<ReconstructionConfigScreen> {
   List<XFile>? imageFiles;
   Map<String, dynamic> reconstructionConfigs = {
-    "userId": -555,
-    "modelId": -555,
+    "userId": -888,
+    "modelId": -888,
     "objectDetection": false,
     "quality": 'Low'
   };
@@ -54,27 +54,26 @@ class _ReconstructionConfigScreenState
 
   _sendRequestToGenerate3DModel() async {
     await _zipFiles();
+    print(zipFilePath);
     var response = await gen3dModelRepository.gen3DModel(
         zipFilePath, reconstructionConfigs);
-    print(response);
     return response;
   }
 
   _zipFiles() async {
     Directory? appDocDirectory = await getExternalStorageDirectory();
     var encoder = ZipFileEncoder();
-    zipFilePath = appDocDirectory!.path +
-        '/' +
-        reconstructionConfigs['modelId'].toString() +
-        '_' +
-        reconstructionConfigs['userId'].toString() +
-        '.zip';
+    setState(() {
+      zipFilePath =
+          '${appDocDirectory!.path}/${reconstructionConfigs['modelId']}_${reconstructionConfigs['userId']}.zip';
+    });
+
     encoder.create(zipFilePath);
 
     for (var image in imageFiles!) {
       encoder.addFile(File(image.path));
     }
-    print(zipFilePath);
+
     encoder.close();
   }
 
@@ -92,9 +91,20 @@ class _ReconstructionConfigScreenState
             height: getProportionateScreenHeight(50),
             child: ElevatedButton(
               onPressed: () {
-                //context.read<ModelsCubit>().getModelsCustomer().then((model)=>{
-                //  _sendRequestToGenerate3DModel(1,1)
-                //});
+                // context
+                //     .read<StoreModelsCubit>()
+                //     .addReconstructionModel(imageFiles![0])
+                //     .then((model) => {
+                //           if (model != null)
+                //             {
+                //               setState(() {
+                //                 reconstructionConfigs['modelId'] =
+                //                     model.modelId;
+                //                 reconstructionConfigs['userId'] = model.userId;
+                //               }),
+                //               _sendRequestToGenerate3DModel(),
+                //             }
+                //         });
                 _sendRequestToGenerate3DModel();
               },
               child: const Text(

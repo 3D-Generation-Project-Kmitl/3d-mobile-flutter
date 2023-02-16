@@ -36,4 +36,27 @@ class ModelRepository {
       throw e.message;
     }
   }
+
+  Future<Model> createModel(FormData formData) async {
+    try {
+      final response = await DioClient().dio.post('/model', data: formData);
+      final data = BaseResponse.fromJson(response.data).data;
+      final modelCreated = Model.fromJson(data);
+      return modelCreated;
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
+
+  Future<Model> updateModel(int modelId, FormData formData) async {
+    try {
+      final response =
+          await DioClient().dio.put('/model/$modelId', data: formData);
+      final data = BaseResponse.fromJson(response.data).data;
+      final modelUpdated = Model.fromJson(data);
+      return modelUpdated;
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
 }

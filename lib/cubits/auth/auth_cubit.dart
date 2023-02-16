@@ -60,6 +60,16 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> resendOTP(String email) async {
+    try {
+      emit(ResendOTPLoadingState());
+      final message = await authRepository.resendOTP(email);
+      emit(ResendOTPSuccessState(message));
+    } catch (e) {
+      emit(ResendOTPFailureState(e.toString()));
+    }
+  }
+
   Future<void> checkOTP(String email, String otp) async {
     try {
       emit(CheckOTPLoadingState());
@@ -67,6 +77,16 @@ class AuthCubit extends Cubit<AuthState> {
       emit(CheckOTPSuccessState(token));
     } catch (e) {
       emit(CheckOTPFailureState(e.toString()));
+    }
+  }
+
+  Future<void> verifyUser(String token) async {
+    try {
+      emit(VerifyUserLoadingState());
+      final message = await authRepository.verifyUser(token);
+      emit(VerifyUserSuccessState(message));
+    } catch (e) {
+      emit(VerifyUserFailureState(e.toString()));
     }
   }
 
@@ -78,6 +98,17 @@ class AuthCubit extends Cubit<AuthState> {
       emit(ResetPasswordSuccessState(message));
     } catch (e) {
       emit(ResetPasswordFailureState(e.toString()));
+    }
+  }
+
+  Future<void> changePassword(String oldPassword, String newPassword) async {
+    try {
+      emit(ChangePasswordLoadingState());
+      final message =
+          await authRepository.updatePassword(oldPassword, newPassword);
+      emit(ChangePasswordSuccessState(message));
+    } catch (e) {
+      emit(ChangePasswordFailureState(e.toString()));
     }
   }
 }

@@ -35,7 +35,6 @@ class _CameraScreenState extends State<CameraScreen> {
 
   List<XFile>? imageFiles;
 
-
   late CameraController _cameraController;
   Future<void>? _initializeControllerFuture;
 
@@ -94,13 +93,14 @@ class _CameraScreenState extends State<CameraScreen> {
     // isARCoreSupported = await CameraDataFromARCore.isARCoreSupported();
   }
 
-  _renameImageFile(XFile imageXFile) async{
+  _renameImageFile(XFile imageXFile) async {
     File imageFile = File(imageXFile.path);
     print('Original path: ${imageFile.path}');
     String dir = path.dirname(imageFile.path);
-    String newPath = path.join(dir, "${(imageFiles!.length+1).toString().padLeft(4, '0')}.jpg");
+    String newPath = path.join(
+        dir, "${(imageFiles!.length + 1).toString().padLeft(4, '0')}.jpg");
     print('NewPath: ${newPath}');
-    imageFile=imageFile.renameSync(newPath);
+    imageFile = imageFile.renameSync(newPath);
     return new XFile(imageFile.path);
   }
 
@@ -131,8 +131,6 @@ class _CameraScreenState extends State<CameraScreen> {
       isTaking = !isTaking;
     });
   }
-
-
 
   @override
   Widget build(BuildContext buildContext) {
@@ -240,7 +238,10 @@ class _CameraScreenState extends State<CameraScreen> {
                                                           imageFiles:
                                                               imageFiles!),
                                                 ),
-                                              )
+                                              ),
+                                              setState(() {
+                                                isTaking = !isTaking;
+                                              }),
                                             },
                                             child: FileImagePreviewButton(
                                                 imageFiles: imageFiles!),
@@ -277,7 +278,8 @@ class _CameraScreenState extends State<CameraScreen> {
                                             heroTag: "nextButton",
                                             backgroundColor: Colors.white,
                                             onPressed: () => {
-                                              if (imageFiles!.length < minImages)
+                                              if (imageFiles!.length <
+                                                  minImages)
                                                 {
                                                   _showMinmumImagesModal(
                                                       context)
@@ -291,7 +293,10 @@ class _CameraScreenState extends State<CameraScreen> {
                                                               imageFiles:
                                                                   imageFiles!),
                                                     ),
-                                                  )
+                                                  ),
+                                                  setState(() {
+                                                    isTaking = !isTaking;
+                                                  }),
                                                 }
                                             },
                                             child: const Icon(

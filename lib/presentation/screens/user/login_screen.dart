@@ -50,6 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final authCubit = context.read<AuthCubit>();
     final userCubit = context.read<UserCubit>();
+    final identityCubit = context.read<IdentityCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
 
@@ -59,13 +60,23 @@ class _LoginScreenState extends State<LoginScreen> {
           //showLoadingDialog(context);
         } else if (state is LoginSuccessState) {
           userCubit.setUser(state.user);
+          identityCubit.getIdentity();
           cartCubit.getCart();
           favoriteCubit.getFavorite();
-          Navigator.pushNamedAndRemoveUntil(
-              context, navigationRoute, (route) => false);
+          if (state.user.isVerified) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, navigationRoute, (route) => false);
+          } else {
+            authCubit.resendOTP(state.user.email);
+            Navigator.pushNamed(context, otpRoute,
+                arguments: [state.user.email, "verify"]);
+          }
         } else if (state is LoginFailureState) {
-          //Navigator.pop(context);
-          //showSnackBar(context, state.message);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("อีเมลหรือรหัสผ่านไม่ถูกต้อง"),
+            ),
+          );
         }
       },
       child: Scaffold(
@@ -118,6 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: getProportionateScreenHeight(50),
                     child: ElevatedButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         if (_keyForm.currentState!.validate()) {
                           authCubit.login(
                               _emailController.text, _passwordController.text);

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
@@ -17,5 +18,17 @@ class CategoryCubit extends Cubit<CategoryState> {
     } catch (e) {
       emit(CategoryFailure(e.toString()));
     }
+  }
+
+  List getCategoriesNames() {
+    if (state is CategoryLoaded) {
+      final List<Category> categories = (state as CategoryLoaded).categories;
+      final List<String> categoriesNames = [];
+      categories.forEach((element) {
+        categoriesNames.add(element.name);
+      });
+      return categoriesNames;
+    }
+    return [];
   }
 }

@@ -6,6 +6,8 @@ export 'user/otp_screen.dart';
 export 'user/forgot_password_screen.dart';
 export 'user/reset_password_screen.dart';
 export 'user/setting_screen.dart';
+export 'user/change_password_screen.dart';
+export 'user/edit_profile_screen.dart';
 
 export '../widgets/bottom_navigation.dart';
 
@@ -21,5 +23,14 @@ export 'customer/orders_screen.dart';
 export 'customer/order_detail_screen.dart';
 export 'customer/view_model_screen.dart';
 export 'customer/search_result_screen.dart';
+export 'customer/products_store_screen.dart';
 
 export 'reconstruction/camera_screen.dart';
+
+export 'store/identity_screen.dart';
+export 'store/store_screen.dart';
+export 'store/store_model_screen.dart';
+export 'store/store_view_model_screen.dart';
+export 'store/store_product_screen.dart';
+export 'store/store_add_product_screen.dart';
+export 'store/store_edit_product_screen.dart';

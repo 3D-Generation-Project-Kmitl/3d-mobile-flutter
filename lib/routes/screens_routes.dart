@@ -20,3 +20,14 @@ const String orderDetailRoute = "/order_detail";
 const String viewModelRoute = "/view_model";
 const String settingRoute = "/setting";
 const String searchResultRoute = "/search_result";
+const String changePasswordRoute = "/change_password";
+const String editProfileRoute = "/edit_profile";
+const String productsStoreRoute = "/products_store";
+
+const String identityRoute = "/identity";
+const String storeRoute = "/store";
+const String storeModelRoute = "/store_model";
+const String storeViewModelRoute = "/store_view_model";
+const String storeProductRoute = "/store_product";
+const String storeAddProductRoute = "/store_add_product";
+const String storeEditProductRoute = "/store_edit_product";

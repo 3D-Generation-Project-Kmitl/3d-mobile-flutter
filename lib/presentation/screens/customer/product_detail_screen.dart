@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marketplace/data/models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 
 import '../../../configs/size_config.dart';
 import '../../../cubits/cubits.dart';
@@ -75,7 +76,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 : SizeConfig.screenHeight,
                             width: double.infinity,
                             child: BabylonJSViewer(
-                              src: product.model.model,
+                              src: product.model.model!,
                             ),
                           ),
                           Positioned(
@@ -166,13 +167,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         ),
                                         const Spacer(),
                                         TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                                context, productsStoreRoute,
+                                                arguments: product.user.userId);
+                                          },
                                           child: Text(
                                             "ดูร้านค้า",
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .headline5
-                                                ?.copyWith(
+                                                .headline5!
+                                                .copyWith(
                                                   color: Theme.of(context)
                                                       .primaryColor,
                                                 ),
@@ -195,6 +200,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       product.details,
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.screenHeight * 0.005),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "หมวดหมู่สินค้า: ",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                        Text(
+                                          " ${product.category.name}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
