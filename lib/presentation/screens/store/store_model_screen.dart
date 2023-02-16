@@ -151,7 +151,7 @@ class StoreModelScreen extends StatelessWidget {
       height: getProportionateScreenHeight(50),
       child: ElevatedButton(
         onPressed: () {
-          //Navigator.pushNamed(context, createModelRoute);
+          Navigator.pushNamed(context, gen3DRoute);
         },
         child: const Text(
           'สร้างโมเดล 3 มิติ',
