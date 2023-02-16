@@ -41,7 +41,7 @@ class _ViewModelScreenState extends State<ViewModelScreen> {
           height: SizeConfig.screenHeight,
           width: double.infinity,
           child: BabylonJSViewer(
-            src: widget.model.model,
+            src: widget.model.model!,
           ),
         ),
       ),
@@ -58,8 +58,8 @@ class _ViewModelScreenState extends State<ViewModelScreen> {
                           ? () async {
                               toggleLoading();
                               final file = await downloadFile(
-                                  widget.model.model,
-                                  widget.model.model.split('/').last);
+                                  widget.model.model!,
+                                  widget.model.model!.split('/').last);
                               if (file != null) {
                                 toggleLoading();
                                 await showDialog(

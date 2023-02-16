@@ -39,3 +39,15 @@ final passwordValidator = MultiValidator([
   RequiredValidator(errorText: 'โปรดระบุรหัสผ่าน'),
   MinLengthValidator(8, errorText: 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร'),
 ]);
+
+final productNameValidator = MultiValidator([
+  RequiredValidator(errorText: 'โปรดระบุชื่อสินค้า'),
+]);
+
+final productPriceValidator = MultiValidator([
+  RequiredValidator(errorText: 'โปรดระบุราคาสินค้า'),
+]);
+
+final productDescriptionValidator = MultiValidator([
+  RequiredValidator(errorText: 'โปรดระบุรายละเอียดสินค้า'),
+]);

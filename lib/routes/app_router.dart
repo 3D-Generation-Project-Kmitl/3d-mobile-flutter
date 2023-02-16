@@ -85,6 +85,16 @@ class AppRouter {
       case storeViewModelRoute:
         Model model = settings.arguments as Model;
         return _route(StoreViewModelScreen(model: model), storeViewModelRoute);
+      case storeProductRoute:
+        return _route(const StoreProductScreen(), storeProductRoute);
+      case storeAddProductRoute:
+        Model model = settings.arguments as Model;
+        return _route(
+            StoreAddProductScreen(model: model), storeAddProductRoute);
+      case storeEditProductRoute:
+        Product product = settings.arguments as Product;
+        return _route(
+            StoreEditProductScreen(product: product), storeEditProductRoute);
       default:
         return _errorRoute();
     }

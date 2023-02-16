@@ -28,3 +28,6 @@ const String identityRoute = "/identity";
 const String storeRoute = "/store";
 const String storeModelRoute = "/store_model";
 const String storeViewModelRoute = "/store_view_model";
+const String storeProductRoute = "/store_product";
+const String storeAddProductRoute = "/store_add_product";
+const String storeEditProductRoute = "/store_edit_product";

@@ -11,8 +11,7 @@ Future<void> showConfirmDialog(BuildContext context,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Center(
-            child: Text(title, style: Theme.of(context).textTheme.bodyText1)),
+        title: Text(title, style: Theme.of(context).textTheme.bodyText1),
         content: message != ''
             ? Text(message, style: Theme.of(context).textTheme.bodyText2)
             : null,

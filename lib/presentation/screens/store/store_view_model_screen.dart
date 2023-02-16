@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/cubits/cubits.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 import 'package:native_screenshot/native_screenshot.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -44,6 +45,16 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
     return file;
   }
 
+  Future<void> deleteFile(File file) async {
+    try {
+      if (await file.exists()) {
+        await file.delete();
+      }
+    } catch (e) {
+      // Error in getting access to the file.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,8 +96,6 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
                         setState(() {
                           imgFile = File(path);
                         });
-                      } else {
-                        print("Error");
                       }
                       toggleLoading();
                       imageDialog();
@@ -110,7 +119,18 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
                 width: SizeConfig.screenWidth * 0.45,
                 height: getProportionateScreenHeight(50),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    if (widget.model.picture == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("กรุณาบันทึกภาพก่อนลงขาย"),
+                        ),
+                      );
+                      return;
+                    }
+                    Navigator.pushNamed(context, storeAddProductRoute,
+                        arguments: widget.model);
+                  },
                   child: const Text("ลงขาย"),
                 ),
               ),
@@ -126,7 +146,7 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
       height: SizeConfig.screenHeight,
       width: double.infinity,
       child: BabylonJSViewer(
-        src: widget.model.model,
+        src: widget.model.model!,
       ),
     );
   }
@@ -151,6 +171,7 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
+                deleteFile(imgFile!);
                 Navigator.of(context).pop();
               },
               child: Text(
@@ -163,7 +184,7 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
             TextButton(
               onPressed: () {
                 context
-                    .read<ModelsCubit>()
+                    .read<StoreModelsCubit>()
                     .updateModel(imgFile!, widget.model.modelId)
                     .then((value) => {
                           ScaffoldMessenger.of(context).showSnackBar(

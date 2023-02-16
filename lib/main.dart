@@ -1,3 +1,4 @@
+import 'package:marketplace/cubits/my_store_product/my_store_product_cubit.dart';
 import 'package:marketplace/presentation/screens/user/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/configs/theme.dart';
@@ -44,8 +45,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<FavoriteCubit>(
           create: (context) => FavoriteCubit(),
         ),
-        BlocProvider<ModelsCubit>(
-          create: (context) => ModelsCubit(),
+        BlocProvider<StoreModelsCubit>(
+          create: (context) => StoreModelsCubit(),
+        ),
+        BlocProvider<MyStoreProductCubit>(
+          create: (context) => MyStoreProductCubit(),
         ),
       ],
       child: MaterialApp(

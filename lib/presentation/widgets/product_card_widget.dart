@@ -26,7 +26,10 @@ class ProductCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(15),
             child: Image(
-              image: NetworkImage(product.model.picture),
+              image: product.model.picture != null
+                  ? NetworkImage(product.model.picture!)
+                  : const AssetImage('assets/images/placeholder3d.jpg')
+                      as ImageProvider<Object>,
               fit: BoxFit.cover,
               height: width * 0.54,
               width: double.infinity,

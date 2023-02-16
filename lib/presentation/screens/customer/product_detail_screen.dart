@@ -76,7 +76,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 : SizeConfig.screenHeight,
                             width: double.infinity,
                             child: BabylonJSViewer(
-                              src: product.model.model,
+                              src: product.model.model!,
                             ),
                           ),
                           Positioned(

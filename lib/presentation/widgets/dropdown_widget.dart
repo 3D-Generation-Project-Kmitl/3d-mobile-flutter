@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class DropdownWidgetQ extends StatefulWidget {
-  final List<dynamic> items;
+  final List<dynamic>? items;
   final Function onChanged;
   final String hint;
-  final String value;
+  final dynamic value;
   final String label;
-  final List<DropdownMenuItem<String>>? customItems;
+  final List<DropdownMenuItem>? customItems;
   final bool isValidate;
 
   const DropdownWidgetQ({
     Key? key,
-    required this.items,
+    this.items,
     required this.onChanged,
     required this.hint,
     required this.label,
@@ -28,10 +28,10 @@ class _DropdownWidgetQState extends State<DropdownWidgetQ> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
-      child: DropdownButtonFormField(
+      child: DropdownButtonFormField<dynamic>(
         validator: widget.isValidate
             ? (value) {
-                if (widget.value == "") {
+                if (widget.value == "" || widget.value == null) {
                   return "กรุณาเลือก${widget.label}";
                 }
                 return null;
@@ -43,7 +43,7 @@ class _DropdownWidgetQState extends State<DropdownWidgetQ> {
         ),
         icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
         items: widget.customItems ??
-            widget.items.map<DropdownMenuItem<String>>(
+            widget.items!.map<DropdownMenuItem<String>>(
               (value) {
                 return DropdownMenuItem<String>(
                   value: value,
