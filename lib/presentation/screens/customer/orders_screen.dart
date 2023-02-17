@@ -31,34 +31,44 @@ class MyOrdersScreen extends StatelessWidget {
               );
             } else if (state is OrdersLoaded) {
               if (state.orders.isEmpty) {
-                return Center(
-                  child: Text(
-                    "ไม่มีข้อมูล",
-                    style: Theme.of(context).textTheme.headline1,
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<OrdersCubit>().getOrders();
+                  },
+                  child: Center(
+                    child: Text(
+                      "ไม่มีข้อมูล",
+                      style: Theme.of(context).textTheme.headline1,
+                    ),
                   ),
                 );
               }
-              return ListView.builder(
-                itemCount: state.orders.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.pushNamed(context, orderDetailRoute,
-                            arguments: state.orders[index].orderId);
-                      },
-                      title: Text(
-                          "หมายเลขคำสั่งซื้อ ${state.orders[index].orderId.toString()}"),
-                      subtitle: Text(
-                          "จำนวน ${state.orders[index].count.orderProduct.toString()} รายการ"),
-                      trailing: Text("จำนวนเงิน ${intl.NumberFormat.currency(
-                        locale: 'th',
-                        symbol: '',
-                        decimalDigits: 0,
-                      ).format(state.orders[index].totalPrice)} บาท"),
-                    ),
-                  );
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<OrdersCubit>().getOrders();
                 },
+                child: ListView.builder(
+                  itemCount: state.orders.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.pushNamed(context, orderDetailRoute,
+                              arguments: state.orders[index].orderId);
+                        },
+                        title: Text(
+                            "หมายเลขคำสั่งซื้อ ${state.orders[index].orderId.toString()}"),
+                        subtitle: Text(
+                            "จำนวน ${state.orders[index].count.orderProduct.toString()} รายการ"),
+                        trailing: Text("จำนวนเงิน ${intl.NumberFormat.currency(
+                          locale: 'th',
+                          symbol: '',
+                          decimalDigits: 0,
+                        ).format(state.orders[index].totalPrice)} บาท"),
+                      ),
+                    );
+                  },
+                ),
               );
             } else {
               return const Center(

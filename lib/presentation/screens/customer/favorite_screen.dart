@@ -38,17 +38,26 @@ class FavoriteScreen extends StatelessWidget {
                 );
               } else if (state is FavoriteLoaded) {
                 if (state.favorites.isEmpty) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 100),
-                      child: Text(
-                        'ไม่มีสินค้าในรายการโปรด',
-                        style: Theme.of(context).textTheme.headline1,
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      favoriteCubit.getFavorite();
+                    },
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 100),
+                        child: Text(
+                          'ไม่มีสินค้าในรายการโปรด',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
                       ),
                     ),
                   );
                 } else {
-                  return _favoriteList(context, state.favorites);
+                  return RefreshIndicator(
+                      onRefresh: () async {
+                        favoriteCubit.getFavorite();
+                      },
+                      child: _favoriteList(context, state.favorites));
                 }
               } else {
                 return const Center(

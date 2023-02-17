@@ -37,8 +37,16 @@ class CartScreen extends StatelessWidget {
         child: BlocBuilder<CartCubit, CartState>(
           builder: (context, state) {
             if (state is CartLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Scaffold(
+                appBar: AppBar(
+                  titleSpacing: 20,
+                  title: Text(
+                    'ตะกร้าสินค้า',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                ),
+                resizeToAvoidBottomInset: false,
+                body: const Center(child: CircularProgressIndicator()),
               );
             } else if (state is CartLoaded) {
               return Scaffold(
@@ -51,7 +59,12 @@ class CartScreen extends StatelessWidget {
                   ),
                   resizeToAvoidBottomInset: false,
                   body: SafeArea(
-                    child: _cartList(context, state.carts),
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        cartCubit.getCart();
+                      },
+                      child: _cartList(context, state.carts),
+                    ),
                   ),
                   bottomNavigationBar: state.carts.isEmpty
                       ? null
