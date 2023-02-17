@@ -7,6 +7,8 @@ import '../../../data/models/models.dart';
 import '../../../routes/screens_routes.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../../helpers/helpers.dart';
+
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -139,9 +141,15 @@ class CartScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4),
             trailing: IconButton(
               onPressed: () {
-                context
-                    .read<CartCubit>()
-                    .removeFromCart(productId: cart.productId);
+                showConfirmDialog(context,
+                    title: "ลบสินค้า",
+                    message:
+                        "คุณต้องการลบสินค้าออกจากตะกร้าสินค้าหรือไม่ ?\nชื่อ: ${cart.product.name}",
+                    onConfirm: () {
+                  context
+                      .read<CartCubit>()
+                      .removeFromCart(productId: cart.productId);
+                });
               },
               icon: const Icon(Icons.delete),
               color: Colors.red,

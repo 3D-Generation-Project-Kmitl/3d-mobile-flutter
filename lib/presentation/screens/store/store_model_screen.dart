@@ -130,13 +130,15 @@ class StoreModelScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final model = models[index];
         return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              storeViewModelRoute,
-              arguments: model,
-            );
-          },
+          onTap: model.model != null
+              ? () {
+                  Navigator.pushNamed(
+                    context,
+                    storeViewModelRoute,
+                    arguments: model,
+                  );
+                }
+              : null,
           child: roundedImageCard(
             imageURL: model.picture,
           ),

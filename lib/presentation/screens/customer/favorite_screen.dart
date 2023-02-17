@@ -1,3 +1,5 @@
+import 'package:marketplace/data/models/models.dart';
+import 'package:marketplace/presentation/helpers/confirm_dialog.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,7 +89,7 @@ class FavoriteScreen extends StatelessWidget {
     );
   }
 
-  Widget _favoriteCard(BuildContext context, product) {
+  Widget _favoriteCard(BuildContext context, Product product) {
     SizeConfig().init(context);
     double width = SizeConfig.screenWidth;
     return GestureDetector(
@@ -101,14 +103,9 @@ class FavoriteScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image(
-              image: NetworkImage(product.model.picture),
-              fit: BoxFit.cover,
-              height: width * 0.52,
-              width: double.infinity,
-            ),
+          roundedImageCard(
+            imageURL: product.model.picture,
+            ratio: 0.9,
           ),
           const SizedBox(height: 5),
           Padding(
@@ -135,9 +132,15 @@ class FavoriteScreen extends StatelessWidget {
                 const Spacer(),
                 IconButton(
                   onPressed: () {
-                    context
-                        .read<FavoriteCubit>()
-                        .removeFromFavorite(productId: product.productId);
+                    showConfirmDialog(context,
+                        title: "ลบสินค้า",
+                        message:
+                            "คุณต้องการลบสินค้าออกจากรายการโปรดหรือไม่ ?\nชื่อ: ${product.name}",
+                        onConfirm: () {
+                      context
+                          .read<FavoriteCubit>()
+                          .removeFromFavorite(productId: product.productId);
+                    });
                   },
                   icon: const Icon(
                     Icons.delete_sweep,
