@@ -5,6 +5,7 @@ import '../../../configs/size_config.dart';
 import '../../../cubits/cubits.dart';
 import '../../../data/models/models.dart';
 import '../../../routes/screens_routes.dart';
+import 'package:intl/intl.dart' as intl;
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -116,7 +117,12 @@ class CartScreen extends StatelessWidget {
             ),
             title: Text(cart.product.name,
                 style: Theme.of(context).textTheme.bodyText2),
-            subtitle: Text("฿${cart.product.price}",
+            subtitle: Text(
+                intl.NumberFormat.currency(
+                  locale: 'th',
+                  symbol: '฿',
+                  decimalDigits: 0,
+                ).format(cart.product.price),
                 style: Theme.of(context).textTheme.headline4),
             trailing: IconButton(
               onPressed: () {

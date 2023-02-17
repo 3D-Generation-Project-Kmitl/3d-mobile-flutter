@@ -8,6 +8,7 @@ import '../../../cubits/cubits.dart';
 import '../../helpers/helpers.dart';
 import '../../widgets/widgets.dart';
 import 'package:babylonjs_viewer/babylonjs_viewer.dart';
+import 'package:intl/intl.dart' as intl;
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -127,7 +128,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         height:
                                             SizeConfig.screenHeight * 0.005),
                                     Text(
-                                      "฿${product.price}",
+                                      intl.NumberFormat.currency(
+                                        locale: 'th',
+                                        symbol: '฿',
+                                        decimalDigits: 0,
+                                      ).format(product.price),
                                       style:
                                           Theme.of(context).textTheme.headline1,
                                     ),

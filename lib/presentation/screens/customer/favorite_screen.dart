@@ -1,6 +1,7 @@
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart' as intl;
 
 import '../../../configs/size_config.dart';
 import '../../../cubits/cubits.dart';
@@ -113,7 +114,11 @@ class FavoriteScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                     Text(
-                      '฿${product.price}',
+                      intl.NumberFormat.currency(
+                        locale: 'th',
+                        symbol: '฿',
+                        decimalDigits: 0,
+                      ).format(product.price),
                       style: Theme.of(context).textTheme.headline5,
                     ),
                   ],

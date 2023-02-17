@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/routes/screens_routes.dart';
+import 'package:intl/intl.dart' as intl;
 
 class MyOrdersScreen extends StatelessWidget {
   const MyOrdersScreen({Key? key}) : super(key: key);
@@ -50,8 +51,11 @@ class MyOrdersScreen extends StatelessWidget {
                           "หมายเลขคำสั่งซื้อ ${state.orders[index].orderId.toString()}"),
                       subtitle: Text(
                           "จำนวน ${state.orders[index].count.orderProduct.toString()} รายการ"),
-                      trailing: Text(
-                          "จำนวนเงิน ${state.orders[index].totalPrice.toString()} บาท"),
+                      trailing: Text("จำนวนเงิน ${intl.NumberFormat.currency(
+                        locale: 'th',
+                        symbol: '',
+                        decimalDigits: 0,
+                      ).format(state.orders[index].totalPrice)} บาท"),
                     ),
                   );
                 },

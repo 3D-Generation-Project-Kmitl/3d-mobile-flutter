@@ -3,6 +3,9 @@ import 'package:marketplace/cubits/cubits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/models.dart';
+import 'package:intl/intl.dart' as intl;
+
+import '../../../routes/screens_routes.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   final int orderId;
@@ -50,8 +53,8 @@ class OrderDetailScreen extends StatelessWidget {
                             Text("วันที่สั่งซื้อ: ",
                                 style: Theme.of(context).textTheme.bodyText1),
                             Text(
-                                DateFormat('dd/MM/yyyy')
-                                    .format(state.orderDetail.createdAt),
+                                DateFormat('dd/MM/yyyy').format(
+                                    state.orderDetail.createdAt.toLocal()),
                                 style: Theme.of(context).textTheme.bodyText1),
                           ],
                         ),
@@ -61,8 +64,8 @@ class OrderDetailScreen extends StatelessWidget {
                             Text("เวลา: ",
                                 style: Theme.of(context).textTheme.bodyText1),
                             Text(
-                                DateFormat('HH:mm')
-                                    .format(state.orderDetail.createdAt),
+                                DateFormat('HH:mm').format(
+                                    state.orderDetail.createdAt.toLocal()),
                                 style: Theme.of(context).textTheme.bodyText1),
                           ],
                         ),
@@ -74,7 +77,11 @@ class OrderDetailScreen extends StatelessWidget {
                             Text("รวม",
                                 style: Theme.of(context).textTheme.headline3),
                             Text(
-                                "${state.orderDetail.totalPrice.toString()} บาท",
+                                "${intl.NumberFormat.currency(
+                                  locale: 'th',
+                                  symbol: '',
+                                  decimalDigits: 0,
+                                ).format(state.orderDetail.totalPrice)} บาท",
                                 style: Theme.of(context).textTheme.headline2),
                           ],
                         ),
@@ -102,35 +109,46 @@ class OrderDetailScreen extends StatelessWidget {
       },
       itemBuilder: (context, index) {
         final orderProduct = orderProducts[index];
-        return ListTile(
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 5,
-          ),
-          dense: true,
-          visualDensity: const VisualDensity(vertical: 4),
-          leading: ConstrainedBox(
-            constraints: const BoxConstraints(
-              minWidth: 64,
-              minHeight: 64,
-              maxWidth: 64,
-              maxHeight: 64,
+        return GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, viewModelRoute,
+                arguments: orderProduct.product.model);
+          },
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image(
-                image: orderProduct.product.model.picture != null
-                    ? NetworkImage(orderProduct.product.model.picture!)
-                    : const AssetImage('assets/images/placeholder3d.jpg')
-                        as ImageProvider,
-                fit: BoxFit.cover,
+            dense: true,
+            visualDensity: const VisualDensity(vertical: 4),
+            leading: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 64,
+                minHeight: 64,
+                maxWidth: 64,
+                maxHeight: 64,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image(
+                  image: orderProduct.product.model.picture != null
+                      ? NetworkImage(orderProduct.product.model.picture!)
+                      : const AssetImage('assets/images/placeholder3d.jpg')
+                          as ImageProvider,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
+            title: Text(orderProduct.product.name,
+                style: Theme.of(context).textTheme.bodyText2),
+            subtitle: Text(
+                intl.NumberFormat.currency(
+                  locale: 'th',
+                  symbol: '฿',
+                  decimalDigits: 0,
+                ).format(orderProduct.product.price),
+                style: Theme.of(context).textTheme.headline4),
           ),
-          title: Text(orderProduct.product.name,
-              style: Theme.of(context).textTheme.bodyText2),
-          subtitle: Text("฿${orderProduct.product.price}",
-              style: Theme.of(context).textTheme.headline4),
         );
       },
     );
