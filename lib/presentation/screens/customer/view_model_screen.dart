@@ -20,9 +20,11 @@ class _ViewModelScreenState extends State<ViewModelScreen> {
   bool isLoading = false;
 
   void toggleLoading() {
-    setState(() {
-      isLoading = !isLoading;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = !isLoading;
+      });
+    }
   }
 
   @override
@@ -62,28 +64,30 @@ class _ViewModelScreenState extends State<ViewModelScreen> {
                                   widget.model.model!.split('/').last);
                               if (file != null) {
                                 toggleLoading();
-                                await showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('ดาวน์โหลดสำเร็จ'),
-                                      content: Text(
-                                          'ไฟล์ถูกบันทึกไว้ที่ ${file.path}'),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'ปิด',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3,
-                                            ))
-                                      ],
-                                    );
-                                  },
-                                );
+                                if (mounted) {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text('ดาวน์โหลดสำเร็จ'),
+                                        content: Text(
+                                            'ไฟล์ถูกบันทึกไว้ที่ ${file.path}'),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'ปิด',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline3,
+                                              ))
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
                               }
                             }
                           : () {},

@@ -199,8 +199,9 @@ class StoreModelScreen extends StatelessWidget {
                 else
                   {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('กรุณาเลือกไฟล์ให้ถูกต้อง'),
+                      SnackBar(
+                        content: Text(
+                            'กรุณาเลือกไฟล์นามสกุล ${modelFileExtensions.map((e) => '.$e').join(', ')}'),
                       ),
                     ),
                   }
