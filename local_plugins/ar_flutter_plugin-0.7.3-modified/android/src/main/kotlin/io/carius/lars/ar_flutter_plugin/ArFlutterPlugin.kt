@@ -1,5 +1,6 @@
 package io.carius.lars.ar_flutter_plugin
 
+import android.util.Log
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
@@ -22,6 +23,7 @@ class ArFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   override fun onAttachedToEngine(
       @NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding
   ) {
+    print("hello from onAttachedToEngine")
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "ar_flutter_plugin")
     channel.setMethodCallHandler(this)
 
@@ -49,9 +51,10 @@ class ArFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    // this.flutterPluginBinding.platformViewRegistry.registerViewFactory(
-    //     "ar_flutter_plugin", AndroidARViewFactory(binding.activity, flutterPluginBinding.binaryMessenger))
-    // ArCameraData(binding.activity, flutterPluginBinding.binaryMessenger);
+//    this.flutterPluginBinding.platformViewRegistry.registerViewFactory(
+//        "ar_flutter_plugin", AndroidARViewFactory(binding.activity, flutterPluginBinding.binaryMessenger))
+
+//    ArCameraData(binding.activity,binding.activity.getApplicationContext(), flutterPluginBinding.binaryMessenger);
       }
 
   override fun onDetachedFromActivityForConfigChanges() {

@@ -4,16 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:marketplace/configs/size_config.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/constants/reconstruction.dart';
-import 'package:marketplace/presentation/screens/reconstruction/model_viewer.dart';
 import 'package:marketplace/presentation/screens/reconstruction/reconstruction_config_screen.dart';
 import 'package:marketplace/presentation/screens/reconstruction/file_image_preview_button.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_progress_indicator.dart';
 import 'package:marketplace/presentation/widgets/image_card_widget.dart';
-// import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
-// import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
-// import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
-// import 'package:ar_flutter_plugin/managers/ar_camera_manager.dart';
+import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
+import 'package:ar_flutter_plugin/datatypes/config_planedetection.dart';
+import 'package:ar_flutter_plugin/managers/ar_session_manager.dart';
+import 'package:ar_flutter_plugin/managers/ar_camera_manager.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
 import 'package:path/path.dart' as path;
 import 'dart:async';
@@ -86,10 +85,10 @@ class _CameraScreenState extends State<CameraScreen> {
         (camera) => camera.lensDirection == CameraLensDirection.back);
     _cameraController =
         CameraController(camera, ResolutionPreset.high, enableAudio: false);
+    // await _cameraController.lockCaptureOrientation();
     setState(() {
       _initializeControllerFuture = _cameraController.initialize();
     });
-    await _cameraController.lockCaptureOrientation();
     // isARCoreSupported = await CameraDataFromARCore.isARCoreSupported();
   }
 
@@ -139,6 +138,7 @@ class _CameraScreenState extends State<CameraScreen> {
       DeviceOrientation.portraitDown,
     ]);
     SizeConfig().init(context);
+
     // arCameraManager=ARCameraManager(buildContext);
 
     return Material(
