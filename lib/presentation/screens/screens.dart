@@ -35,3 +35,4 @@ export 'store/store_product_screen.dart';
 export 'store/store_add_product_screen.dart';
 export 'store/store_edit_product_screen.dart';
 export 'store/store_wallet_screen.dart';
+export 'store/store_withdraw_screen.dart';

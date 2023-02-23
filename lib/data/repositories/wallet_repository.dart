@@ -13,4 +13,17 @@ class WalletRepository {
       throw e.message;
     }
   }
+
+  Future<WalletTransaction> withdraw({required int amount}) async {
+    try {
+      final response = await DioClient().dio.post('/wallet/withdraw', data: {
+        'amount': amount,
+      });
+      final data = BaseResponse.fromJson(response.data).data;
+      final walletTransaction = WalletTransaction.fromJson(data);
+      return walletTransaction;
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
 }

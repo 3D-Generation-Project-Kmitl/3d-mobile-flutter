@@ -32,3 +32,4 @@ const String storeProductRoute = "/store_product";
 const String storeAddProductRoute = "/store_add_product";
 const String storeEditProductRoute = "/store_edit_product";
 const String storeWalletRoute = "/store_wallet";
+const String storeWithdrawRoute = "/store_withdraw";
