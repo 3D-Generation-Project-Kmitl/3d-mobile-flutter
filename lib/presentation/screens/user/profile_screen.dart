@@ -103,16 +103,22 @@ class ProfileScreen extends StatelessWidget {
                                       height: SizeConfig.screenHeight * 0.01),
                                   Row(
                                     children: [
-                                      Text(
-                                        "ผู้ติดตาม ${(followCubit.state as FollowLoaded).followers.length}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, followerRoute);
+                                        },
+                                        child: Text(
+                                          "ผู้ติดตาม ${(followCubit.state as FollowLoaded).followers.length}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
                                       ),
                                       Text(" | ",
                                           style: Theme.of(context)
@@ -122,16 +128,22 @@ class ProfileScreen extends StatelessWidget {
                                                 color: Colors.grey,
                                                 fontWeight: FontWeight.w400,
                                               )),
-                                      Text(
-                                        "กำลังติดตาม ${(followCubit.state as FollowLoaded).followings.length}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText2
-                                            ?.copyWith(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, followingRoute);
+                                        },
+                                        child: Text(
+                                          "กำลังติดตาม ${(followCubit.state as FollowLoaded).followings.length}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
                                       ),
                                     ],
                                   ),
