@@ -12,5 +12,7 @@ export './payment_model.dart';
 export './order_model.dart';
 export './order_detail_model.dart';
 export './products_store_model.dart';
-export './count_model.dart';
+export './count_product_model.dart';
 export './wallet_model.dart';
+export './following_model.dart';
+export './follower_model.dart';

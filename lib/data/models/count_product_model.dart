@@ -1,5 +1,5 @@
-class Count {
-  Count({
+class CountProduct {
+  CountProduct({
     this.orderProduct = 0,
     this.favorite = 0,
   });
@@ -7,7 +7,7 @@ class Count {
   int orderProduct;
   int favorite;
 
-  factory Count.fromJson(Map<String, dynamic> json) => Count(
+  factory CountProduct.fromJson(Map<String, dynamic> json) => CountProduct(
         orderProduct: json["OrderProduct"] ?? 0,
         favorite: json["Favorite"] ?? 0,
       );

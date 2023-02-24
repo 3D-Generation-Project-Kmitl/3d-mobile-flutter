@@ -2,6 +2,7 @@
 //
 //     final user = userFromJson(jsonString);
 
+import 'package:marketplace/data/models/count_user_model.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -21,6 +22,7 @@ class User {
   final String role;
   final DateTime createdAt;
   final DateTime updatedAt;
+  CountUser? count;
 
   User({
     required this.userId,
@@ -34,6 +36,7 @@ class User {
     required this.role,
     required this.createdAt,
     required this.updatedAt,
+    this.count,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -50,6 +53,8 @@ class User {
         role: json["role"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
+        count:
+            json["_count"] == null ? null : CountUser.fromJson(json["_count"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -64,5 +69,6 @@ class User {
         "role": role,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
+        "_count": count == null ? null : count!.toJson(),
       };
 }
