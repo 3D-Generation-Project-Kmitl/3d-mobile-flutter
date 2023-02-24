@@ -12,4 +12,4 @@ List<String> banks = <String>[
   "ธนาคารทิสโก้"
 ];
 
-List<String> modelFileExtensions = <String>["glb"];
+List<String> modelFileExtensions = <String>["glb", "gltf"];

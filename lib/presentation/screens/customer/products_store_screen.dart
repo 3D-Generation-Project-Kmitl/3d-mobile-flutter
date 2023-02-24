@@ -94,10 +94,17 @@ class ProductsStoreScreen extends StatelessWidget {
               body: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      _buildProductList(products),
-                    ],
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      context
+                          .read<ProductsStoreCubit>()
+                          .getProductsByStoreId(storeId);
+                    },
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        _buildProductList(products),
+                      ],
+                    ),
                   ),
                 ),
               ),

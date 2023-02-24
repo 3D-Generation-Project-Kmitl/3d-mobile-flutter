@@ -1,5 +1,4 @@
 import 'package:marketplace/cubits/cubits.dart';
-import 'package:marketplace/data/models/models.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
@@ -131,13 +130,15 @@ class StoreModelScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         final model = models[index];
         return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              storeViewModelRoute,
-              arguments: model,
-            );
-          },
+          onTap: model.model != null
+              ? () {
+                  Navigator.pushNamed(
+                    context,
+                    storeViewModelRoute,
+                    arguments: model,
+                  );
+                }
+              : null,
           child: roundedImageCard(
             imageURL: model.picture,
           ),
@@ -200,8 +201,9 @@ class StoreModelScreen extends StatelessWidget {
                 else
                   {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('กรุณาเลือกไฟล์ให้ถูกต้อง'),
+                      SnackBar(
+                        content: Text(
+                            'กรุณาเลือกไฟล์นามสกุล ${modelFileExtensions.map((e) => '.$e').join(', ')}'),
                       ),
                     ),
                   }

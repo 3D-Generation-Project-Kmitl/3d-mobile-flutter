@@ -38,18 +38,29 @@ class CustomerModelScreen extends StatelessWidget {
               } else if (state is CustomerModelsLoaded) {
                 if (state.models.isEmpty) {
                   return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 100),
-                      child: Text(
-                        'ไม่มีโมเดล 3 มิติ',
-                        style: Theme.of(context).textTheme.headline1,
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<CustomerModelsCubit>().getModelsCustomer();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 100),
+                        child: Text(
+                          'ไม่มีโมเดล 3 มิติ',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
                       ),
                     ),
                   );
                 } else {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: _modelList(state.models, width),
+                    child: RefreshIndicator(
+                        onRefresh: () async {
+                          context
+                              .read<CustomerModelsCubit>()
+                              .getModelsCustomer();
+                        },
+                        child: _modelList(state.models, width)),
                   );
                 }
               } else {

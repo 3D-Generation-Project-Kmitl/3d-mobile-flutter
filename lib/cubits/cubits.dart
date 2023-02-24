@@ -14,3 +14,4 @@ export 'store_models/store_models_cubit.dart';
 export './search_product/search_product_cubit.dart';
 export './products_store/products_store_cubit.dart';
 export './my_store_product/my_store_product_cubit.dart';
+export './wallet/wallet_cubit.dart';

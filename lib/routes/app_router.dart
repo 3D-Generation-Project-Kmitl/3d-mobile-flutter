@@ -95,6 +95,10 @@ class AppRouter {
         Product product = settings.arguments as Product;
         return _route(
             StoreEditProductScreen(product: product), storeEditProductRoute);
+      case storeWalletRoute:
+        return _route(const StoreWalletScreen(), storeWalletRoute);
+      case storeWithdrawRoute:
+        return _route(const StoreWithdrawScreen(), storeWithdrawRoute);
       default:
         return _errorRoute();
     }

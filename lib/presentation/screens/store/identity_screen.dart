@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/constants/constants.dart';
-import 'package:marketplace/routes/screens_routes.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../configs/size_config.dart';
