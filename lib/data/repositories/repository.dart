@@ -11,3 +11,4 @@ export './user_repository.dart';
 export './identity_repository.dart';
 export './wallet_repository.dart';
 export './follow_repository.dart';
+export './notification_repository.dart';

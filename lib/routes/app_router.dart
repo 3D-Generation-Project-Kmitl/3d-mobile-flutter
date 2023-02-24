@@ -53,13 +53,9 @@ class AppRouter {
         Model model = settings.arguments as Model;
         return _route(ViewModelScreen(model: model), viewModelRoute);
       case productDetailRoute:
-        Product? product = settings.arguments as Product?;
-        if (product != null) {
-          return _route(
-              ProductDetailScreen(product: product), productDetailRoute);
-        } else {
-          return _errorRoute();
-        }
+        int productId = settings.arguments as int;
+        return _route(
+            ProductDetailScreen(productId: productId), productDetailRoute);
       case gen3DRoute:
         return _route(const CameraScreen(), gen3DRoute);
       case customerModelRoute:

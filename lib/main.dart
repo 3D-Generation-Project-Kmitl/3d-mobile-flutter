@@ -56,6 +56,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<FollowCubit>(
           create: (context) => FollowCubit(),
         ),
+        BlocProvider<NotificationCubit>(
+          create: (context) => NotificationCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -104,7 +104,7 @@ class CartScreen extends StatelessWidget {
           return ListTile(
             onTap: () {
               Navigator.pushNamed(context, productDetailRoute,
-                  arguments: cart.product);
+                  arguments: cart.product.productId);
             },
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,

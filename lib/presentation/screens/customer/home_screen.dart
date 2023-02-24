@@ -167,7 +167,7 @@ class HomeScreen extends StatelessWidget {
                   product: state.products[index],
                   press: () {
                     Navigator.pushNamed(context, productDetailRoute,
-                        arguments: state.products[index]);
+                        arguments: state.products[index].productId);
                   },
                 );
               },

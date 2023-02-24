@@ -97,7 +97,7 @@ class FavoriteScreen extends StatelessWidget {
         Navigator.pushNamed(
           context,
           productDetailRoute,
-          arguments: product,
+          arguments: product.productId,
         );
       },
       child: Column(
