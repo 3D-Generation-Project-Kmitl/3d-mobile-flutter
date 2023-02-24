@@ -58,30 +58,57 @@ class ProductsStoreScreen extends StatelessWidget {
                                 SizedBox(
                                     height: SizeConfig.screenHeight * 0.005),
                                 Text(
-                                  "ออนไลน์",
+                                  "ผู้ติดตาม ${store.count?.followers ?? 0} คน",
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ],
                             ),
                             const Spacer(),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: primaryColor,
-                                onPrimary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: Text(
-                                "ติดตาม",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5!
-                                    .copyWith(
-                                      color: Colors.white,
+                            BlocBuilder<FollowCubit, FollowState>(
+                              builder: (context, state) {
+                                return SizedBox(
+                                  height: 40,
+                                  width: 110,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.white,
+                                      //outline
+                                      side: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 2,
+                                      ),
                                     ),
-                              ),
+                                    onPressed: () {
+                                      if (context
+                                          .read<FollowCubit>()
+                                          .isFollowing(storeId)) {
+                                        context
+                                            .read<FollowCubit>()
+                                            .unFollow(userId: storeId);
+                                      } else {
+                                        context
+                                            .read<FollowCubit>()
+                                            .follow(userId: storeId);
+                                      }
+                                    },
+                                    child: Text(
+                                      context
+                                              .read<FollowCubit>()
+                                              .isFollowing(storeId)
+                                          ? "กำลังติดตาม"
+                                          : "ติดตาม",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5!
+                                          .copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),

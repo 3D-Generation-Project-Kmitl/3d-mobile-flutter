@@ -53,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final identityCubit = context.read<IdentityCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
+    final followCubit = context.read<FollowCubit>();
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -63,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
           identityCubit.getIdentity();
           cartCubit.getCart();
           favoriteCubit.getFavorite();
+          followCubit.getFollow();
           if (state.user.isVerified) {
             Navigator.pushNamedAndRemoveUntil(
                 context, navigationRoute, (route) => false);

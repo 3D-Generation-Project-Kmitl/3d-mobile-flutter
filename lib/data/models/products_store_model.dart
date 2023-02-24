@@ -2,6 +2,7 @@
 //
 //     final productsStore = productsStoreFromJson(jsonString);
 
+import 'package:marketplace/data/models/count_user_model.dart';
 import 'package:meta/meta.dart';
 import 'product_model.dart';
 import 'dart:convert';
@@ -25,6 +26,7 @@ class ProductsStore {
     required this.createdAt,
     required this.updatedAt,
     required this.products,
+    this.count,
   });
 
   final int userId;
@@ -39,6 +41,7 @@ class ProductsStore {
   final DateTime createdAt;
   final DateTime updatedAt;
   List<Product> products;
+  CountUser? count;
 
   factory ProductsStore.fromJson(Map<String, dynamic> json) => ProductsStore(
         userId: json["userId"],
@@ -56,6 +59,8 @@ class ProductsStore {
         updatedAt: DateTime.parse(json["updatedAt"]),
         products:
             List<Product>.from(json["Product"].map((x) => Product.fromJson(x))),
+        count:
+            json["_count"] == null ? null : CountUser.fromJson(json["_count"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -71,5 +76,6 @@ class ProductsStore {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "Product": List<dynamic>.from(products.map((x) => x.toJson())),
+        "_count": count?.toJson(),
       };
 }

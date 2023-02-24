@@ -14,6 +14,11 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final IdentityCubit identityCubit = context.read<IdentityCubit>();
+    final FollowCubit followCubit = context.read<FollowCubit>();
+
+    if (followCubit.state is FollowInitial) {
+      followCubit.getFollow();
+    }
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -70,7 +75,10 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              ImageCard(imageURL: user.picture ?? ""),
+                              ImageCard(
+                                imageURL: user.picture ?? "",
+                                radius: 46,
+                              ),
                               SizedBox(width: SizeConfig.screenWidth * 0.05),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,6 +99,54 @@ class ProfileScreen extends StatelessWidget {
                                           fontWeight: FontWeight.w400,
                                         ),
                                   ),
+                                  SizedBox(
+                                      height: SizeConfig.screenHeight * 0.01),
+                                  Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, followerRoute);
+                                        },
+                                        child: Text(
+                                          "ผู้ติดตาม ${(followCubit.state as FollowLoaded).followers.length}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(" | ",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              ?.copyWith(
+                                                color: Colors.grey,
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                              context, followingRoute);
+                                        },
+                                        child: Text(
+                                          "กำลังติดตาม ${(followCubit.state as FollowLoaded).followings.length}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText2
+                                              ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ],
@@ -101,7 +157,6 @@ class ProfileScreen extends StatelessWidget {
                           Divider(
                             color: Colors.grey.withOpacity(0.2),
                             thickness: 0.5,
-                            height: 20,
                           ),
                           _buildProfileCard(
                             context,

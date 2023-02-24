@@ -99,6 +99,10 @@ class AppRouter {
         return _route(const StoreWalletScreen(), storeWalletRoute);
       case storeWithdrawRoute:
         return _route(const StoreWithdrawScreen(), storeWithdrawRoute);
+      case followerRoute:
+        return _route(const FollowerScreen(), followerRoute);
+      case followingRoute:
+        return _route(const FollowingScreen(), followingRoute);
       default:
         return _errorRoute();
     }

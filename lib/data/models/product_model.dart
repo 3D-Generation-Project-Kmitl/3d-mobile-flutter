@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'dart:convert';
 import './model_model.dart';
 import 'category_model.dart';
-import 'count_model.dart';
+import 'count_product_model.dart';
 
 Product productFromJson(String str) => Product.fromJson(json.decode(str));
 
@@ -39,7 +39,7 @@ class Product {
   DateTime? updatedAt;
   Model model;
   Category? category;
-  Count? count;
+  CountProduct? count;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         productId: json["productId"],
@@ -57,7 +57,9 @@ class Product {
         category: json["Category"] == null
             ? null
             : Category.fromJson(json["Category"]),
-        count: json["_count"] == null ? null : Count.fromJson(json["_count"]),
+        count: json["_count"] == null
+            ? null
+            : CountProduct.fromJson(json["_count"]),
       );
 
   Map<String, dynamic> toJson() => {
