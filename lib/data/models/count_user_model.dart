@@ -1,19 +1,19 @@
 class CountUser {
   CountUser({
-    this.follower = 0,
+    this.followers = 0,
     this.following = 0,
   });
 
-  int follower;
+  int followers;
   int following;
 
   factory CountUser.fromJson(Map<String, dynamic> json) => CountUser(
-        follower: json["Follower"] ?? 0,
+        followers: json["Followers"] ?? 0,
         following: json["Following"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
-        "Follower": follower,
+        "Followers": followers,
         "Following": following,
       };
 }

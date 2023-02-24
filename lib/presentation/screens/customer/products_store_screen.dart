@@ -58,7 +58,7 @@ class ProductsStoreScreen extends StatelessWidget {
                                 SizedBox(
                                     height: SizeConfig.screenHeight * 0.005),
                                 Text(
-                                  "ออนไลน์",
+                                  "ผู้ติดตาม ${store.count?.followers ?? 0} คน",
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ],

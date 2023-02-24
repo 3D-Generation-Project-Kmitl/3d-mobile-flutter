@@ -77,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
                             children: [
                               ImageCard(
                                 imageURL: user.picture ?? "",
-                                radius: 45,
+                                radius: 46,
                               ),
                               SizedBox(width: SizeConfig.screenWidth * 0.05),
                               Column(
@@ -145,7 +145,6 @@ class ProfileScreen extends StatelessWidget {
                           Divider(
                             color: Colors.grey.withOpacity(0.2),
                             thickness: 0.5,
-                            height: 20,
                           ),
                           _buildProfileCard(
                             context,
