@@ -165,11 +165,16 @@ class StoreProductScreen extends StatelessWidget {
       {required BuildContext context, required String status}) {
     final products =
         context.read<MyStoreProductCubit>().getProductByStatus(status);
-    return ListView.builder(
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        return buildProductCard(context, products[index], status);
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<MyStoreProductCubit>().getMyProducts();
       },
+      child: ListView.builder(
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return buildProductCard(context, products[index], status);
+        },
+      ),
     );
   }
 
