@@ -109,7 +109,7 @@ class ProfileScreen extends StatelessWidget {
                                               context, followerRoute);
                                         },
                                         child: Text(
-                                          "ผู้ติดตาม ${(followCubit.state as FollowLoaded).followers.length}",
+                                          "ผู้ติดตาม ${followCubit.state is FollowLoaded ? (followCubit.state as FollowLoaded).followers.length : 0}",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText2
@@ -134,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
                                               context, followingRoute);
                                         },
                                         child: Text(
-                                          "กำลังติดตาม ${(followCubit.state as FollowLoaded).followings.length}",
+                                          "กำลังติดตาม ${followCubit.state is FollowLoaded ? (followCubit.state as FollowLoaded).followings.length : 0}",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText2
@@ -146,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ],
-                                  ),
+                                  )
                                 ],
                               ),
                             ],

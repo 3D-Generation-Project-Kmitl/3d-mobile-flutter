@@ -84,24 +84,25 @@ class _BottomNavigationState extends State<BottomNavigation> {
                       const Icon(Icons.notifications_outlined),
                       BlocBuilder<NotificationCubit, NotificationState>(
                         builder: (context, state) {
-                          if (context.read<NotificationCubit>().isReadAll()) {
-                            return const SizedBox.shrink();
+                          if (state is NotificationLoaded &&
+                              !context.read<NotificationCubit>().isReadAll()) {
+                            return Positioned(
+                              top: 2,
+                              right: 2,
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 10,
+                                  minHeight: 10,
+                                ),
+                              ),
+                            );
                           }
-                          return Positioned(
-                            top: 2,
-                            right: 2,
-                            child: Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              constraints: const BoxConstraints(
-                                minWidth: 10,
-                                minHeight: 10,
-                              ),
-                            ),
-                          );
+                          return const SizedBox.shrink();
                         },
                       ),
                     ],
