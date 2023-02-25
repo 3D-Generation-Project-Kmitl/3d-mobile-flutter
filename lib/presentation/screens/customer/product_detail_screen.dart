@@ -11,10 +11,10 @@ import 'package:babylonjs_viewer/babylonjs_viewer.dart';
 import 'package:intl/intl.dart' as intl;
 
 class ProductDetailScreen extends StatefulWidget {
-  final Product product;
+  final int productId;
   const ProductDetailScreen({
     Key? key,
-    required this.product,
+    required this.productId,
   }) : super(key: key);
 
   @override
@@ -41,9 +41,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
         builder: (context, state) {
           if (state is ProductDetailInitial) {
-            context
-                .read<ProductDetailCubit>()
-                .getProductById(widget.product.productId);
+            context.read<ProductDetailCubit>().getProductById(widget.productId);
           } else if (state is ProductDetailLoading) {
             return Scaffold(
                 appBar: AppBar(),

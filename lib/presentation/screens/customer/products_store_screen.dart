@@ -183,7 +183,7 @@ class ProductsStoreScreen extends StatelessWidget {
             product: products[index],
             press: () {
               Navigator.pushNamed(context, productDetailRoute,
-                  arguments: products[index]);
+                  arguments: products[index].productId);
             },
           );
         },

@@ -62,6 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
     final followCubit = context.read<FollowCubit>();
+    final notificationCubit = context.read<NotificationCubit>();
 
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -73,6 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           cartCubit.getCart();
           favoriteCubit.getFavorite();
           followCubit.getFollow();
+          notificationCubit.getNotifications();
           authCubit.resendOTP(state.user.email);
           Navigator.pushNamed(context, otpRoute,
               arguments: [state.user.email, "verify"]);
