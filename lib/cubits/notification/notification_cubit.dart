@@ -56,4 +56,8 @@ class NotificationCubit extends Cubit<NotificationState> {
     }
     return false;
   }
+
+  void clear() {
+    emit(NotificationInitial());
+  }
 }
