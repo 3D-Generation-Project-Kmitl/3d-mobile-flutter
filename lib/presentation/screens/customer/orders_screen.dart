@@ -50,21 +50,38 @@ class MyOrdersScreen extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: state.orders.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.pushNamed(context, orderDetailRoute,
-                              arguments: state.orders[index].orderId);
-                        },
-                        title: Text(
-                            "หมายเลขคำสั่งซื้อ ${state.orders[index].orderId.toString()}"),
-                        subtitle: Text(
-                            "จำนวน ${state.orders[index].count.orderProduct.toString()} รายการ"),
-                        trailing: Text("จำนวนเงิน ${intl.NumberFormat.currency(
-                          locale: 'th',
-                          symbol: '',
-                          decimalDigits: 0,
-                        ).format(state.orders[index].totalPrice)} บาท"),
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                              offset: const Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.pushNamed(context, orderDetailRoute,
+                                arguments: state.orders[index].orderId);
+                          },
+                          title: Text(
+                              "หมายเลขคำสั่งซื้อ ${state.orders[index].orderId.toString()}"),
+                          subtitle: Text(
+                              "จำนวน ${state.orders[index].count.orderProduct.toString()} รายการ"),
+                          trailing:
+                              Text("จำนวนเงิน ${intl.NumberFormat.currency(
+                            locale: 'th',
+                            symbol: '',
+                            decimalDigits: 0,
+                          ).format(state.orders[index].totalPrice)} บาท"),
+                        ),
                       ),
                     );
                   },

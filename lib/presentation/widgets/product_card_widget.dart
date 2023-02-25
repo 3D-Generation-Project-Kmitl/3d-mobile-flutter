@@ -3,6 +3,8 @@ import 'package:intl/intl.dart' as intl;
 import '../../configs/size_config.dart';
 import 'package:marketplace/data/models/models.dart';
 
+import 'rounded_image_card_widget.dart';
+
 class ProductCard extends StatelessWidget {
   final Product product;
   final Function press;
@@ -23,17 +25,10 @@ class ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image(
-              image: product.model.picture != null
-                  ? NetworkImage(product.model.picture!)
-                  : const AssetImage('assets/images/placeholder3d.jpg')
-                      as ImageProvider<Object>,
-              fit: BoxFit.cover,
-              height: width * 0.54,
-              width: double.infinity,
-            ),
+          roundedImageCard(
+            imageURL: product.model.picture,
+            radius: 15,
+            ratio: 0.85,
           ),
           const SizedBox(height: 5),
           Padding(

@@ -91,7 +91,7 @@ class FavoriteScreen extends StatelessWidget {
 
   Widget _favoriteCard(BuildContext context, Product product) {
     SizeConfig().init(context);
-    double width = SizeConfig.screenWidth;
+
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(

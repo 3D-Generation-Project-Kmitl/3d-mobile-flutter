@@ -33,6 +33,17 @@ class NotificationScreen extends StatelessWidget {
           child: BlocBuilder<NotificationCubit, NotificationState>(
             builder: (context, state) {
               if (state is NotificationLoaded) {
+                if (state.notifications.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 100),
+                      child: Text(
+                        'ไม่มีการแจ้งเตือน',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                  );
+                }
                 return ListView.builder(
                   itemCount: state.notifications.length,
                   itemBuilder: (context, index) {

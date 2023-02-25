@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/data/models/models.dart';
+import 'package:marketplace/presentation/helpers/confirm_dialog.dart';
 import 'package:marketplace/utils/download.dart';
 import '../../../configs/size_config.dart';
 import 'package:babylonjs_viewer/babylonjs_viewer.dart';
 import 'package:flutter/services.dart';
+
+import '../../../cubits/cubits.dart';
 
 class ViewModelScreen extends StatefulWidget {
   final Model model;
@@ -37,6 +41,33 @@ class _ViewModelScreenState extends State<ViewModelScreen> {
           "โมเดล 3 มิติ",
           style: Theme.of(context).textTheme.headline3,
         ),
+        actions: [
+          BlocBuilder<UserCubit, UserState>(
+            builder: (context, state) {
+              if (state is UserLoaded &&
+                  state.user.userId == widget.model.userId) {
+                return IconButton(
+                  onPressed: () {
+                    showConfirmDialog(context,
+                        title: "คุณต้องการลบโมเดลนี้ใช่หรือไม่",
+                        message: "หากลบแล้วจะไม่สามารถกู้คืนได้",
+                        onConfirm: () {
+                      context
+                          .read<CustomerModelsCubit>()
+                          .deleteModel(widget.model.modelId);
+                      Navigator.pop(context);
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: SizedBox(

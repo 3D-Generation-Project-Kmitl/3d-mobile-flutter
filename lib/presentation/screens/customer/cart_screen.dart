@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/presentation/widgets/rounded_image_card_widget.dart';
 
 import '../../../configs/size_config.dart';
 import '../../../cubits/cubits.dart';
@@ -119,15 +120,9 @@ class CartScreen extends StatelessWidget {
                 maxWidth: 64,
                 maxHeight: 64,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image(
-                  image: cart.product.model.picture != null
-                      ? NetworkImage(cart.product.model.picture!)
-                      : const AssetImage('assets/images/placeholder3d.jpg')
-                          as ImageProvider,
-                  fit: BoxFit.cover,
-                ),
+              child: roundedImageCard(
+                imageURL: cart.product.model.picture,
+                radius: 10,
               ),
             ),
             title: Text(cart.product.name,
