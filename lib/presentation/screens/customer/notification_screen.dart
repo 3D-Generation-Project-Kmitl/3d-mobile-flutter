@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../widgets/widgets.dart';
@@ -62,8 +63,8 @@ class NotificationScreen extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             color: notification.isRead
-                                ? Colors.grey.withOpacity(0.005)
-                                : Colors.white,
+                                ? Colors.white
+                                : primaryLight,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
