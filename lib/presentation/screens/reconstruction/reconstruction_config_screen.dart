@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:archive/archive_io.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +21,9 @@ const List<Widget> modelQuality = <Widget>[
 ];
 
 class ReconstructionConfigScreen extends StatefulWidget {
-  final List<XFile>? imageFiles;
-  const ReconstructionConfigScreen({Key? key, this.imageFiles})
+  final List<XFile> imageFiles;
+  final List<Map<String,dynamic>?> cameraParameter;
+  const ReconstructionConfigScreen({Key? key,required this.imageFiles,required this.cameraParameter})
       : super(key: key);
 
   @override
@@ -31,15 +34,17 @@ class ReconstructionConfigScreen extends StatefulWidget {
 class _ReconstructionConfigScreenState
     extends State<ReconstructionConfigScreen> {
   List<XFile>? imageFiles;
+  List<Map<String,dynamic>?>? cameraParameter;
+
   Map<String, dynamic> reconstructionConfigs = {
     "userId": -888,
     "modelId": -888,
     "objectDetection": false,
-    "quality": 'Low'
+    "quality": 'Low',
   };
   final List<bool> _selectModelQuality = <bool>[false, false, true];
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
-  String zipFilePath = "";
+  
 
   bool vertical = false;
   @override
@@ -47,34 +52,39 @@ class _ReconstructionConfigScreenState
     super.initState();
     if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
       imageFiles = widget.imageFiles;
+      cameraParameter=widget.cameraParameter;
     } else {
       imageFiles = [];
+      cameraParameter=[];
     }
   }
 
   _sendRequestToGenerate3DModel() async {
-    await _zipFiles();
+    String zipFilePath = await _zipFiles();
     print(zipFilePath);
     var response = await gen3dModelRepository.gen3DModel(
-        zipFilePath, reconstructionConfigs);
+        zipFilePath, reconstructionConfigs,cameraParameter);
     return response;
   }
 
   _zipFiles() async {
-    Directory? appDocDirectory = await getExternalStorageDirectory();
+    Directory? appDocDirectory = await getApplicationDocumentsDirectory();
     var encoder = ZipFileEncoder();
-    setState(() {
-      zipFilePath =
-          '${appDocDirectory!.path}/${reconstructionConfigs['modelId']}_${reconstructionConfigs['userId']}.zip';
-    });
+
+    String  zipFilePath =
+          '${appDocDirectory.path}/${reconstructionConfigs['modelId']}_${reconstructionConfigs['userId']}.zip';
+
 
     encoder.create(zipFilePath);
 
     for (var image in imageFiles!) {
+      
       encoder.addFile(File(image.path));
     }
 
     encoder.close();
+
+    return zipFilePath;
   }
 
   @override

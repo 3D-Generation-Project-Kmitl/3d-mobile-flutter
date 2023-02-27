@@ -1,4 +1,3 @@
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,9 +31,9 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   // bool isARCoreSupported=false;
-MethodChannel channel = const MethodChannel('ar.core.platform/depth');
+  MethodChannel channel = const MethodChannel('ar.core.platform/depth');
   List<XFile>? imageFiles;
-
+  List<Map<String, dynamic>?> cameraParameter = [];
   late CameraController _cameraController;
   Future<void>? _initializeControllerFuture;
 
@@ -64,20 +63,20 @@ MethodChannel channel = const MethodChannel('ar.core.platform/depth');
     super.dispose();
   }
 
-  _renameImageFile(XFile imageXFile) async {
+  _renameImageFile(XFile imageXFile, String fileName) async {
     File imageFile = File(imageXFile.path);
     print('Original path: ${imageFile.path}');
     String dir = path.dirname(imageFile.path);
-    String newPath = path.join(
-        dir, "${(imageFiles!.length + 1).toString().padLeft(4, '0')}.jpg");
+    String newPath = path.join(dir, fileName);
     print('NewPath: ${newPath}');
     imageFile = imageFile.renameSync(newPath);
     return new XFile(imageFile.path);
   }
+
   Future<XFile> takePicture() async {
     try {
       final path = await channel.invokeMethod<String>('takePicture');
-      print('path '+path!!);
+      print('path ' + path!!);
       if (path != null) return XFile(path);
       throw Exception('error taking picture');
     } catch (e) {
@@ -85,27 +84,50 @@ MethodChannel channel = const MethodChannel('ar.core.platform/depth');
       throw Exception();
     }
   }
-  Future<dynamic> getCameraPost() async{
-       try {
-      final cameraPose = await channel.invokeMethod<dynamic>('getCameraPose');
 
-      if (cameraPose != null) return cameraPose;
-      throw Exception('error get camera pose');
+  List<List<double>> decodeDoubleArray(List<double> cameraPose) {
+    List<List<double>> cameraPose2DArray =
+        List.generate(4, (i) => List.generate(4, (j) => 0.00));
+    for (var i = 0; i < cameraPose.length; i++) {
+      cameraPose2DArray[i % 4][i ~/ 4] = cameraPose[i];
+    }
+
+    return cameraPose2DArray;
+  }
+
+  Future<Map<dynamic,dynamic>> getCameraParameter() async {
+    try {
+      final cameraParameter =
+          await channel.invokeMethod<Map<dynamic,dynamic>>('getCameraParameter');
+      // final resultMap = Map<String, dynamic>.from(cameraParameter!.cast<String, dynamic>()); 
+      if (cameraParameter != null) {
+        print('cameraParameter: $cameraParameter');
+        print('cameraParameter Type: ${cameraParameter.runtimeType}');
+        // resultMap['cameraPose']=decodeDoubleArray(resultMap['cameraPose']);
+
+        return cameraParameter;
+      }
+      throw Exception('error get camera parameter');
     } catch (e) {
-      print('getCameraPose error: $e');
+      print('getcameraParameter error: $e');
       throw Exception();
     }
   }
+
   _manualTakePicture() async {
-    XFile image = await _renameImageFile(await takePicture());
+    String fileName =
+        "${(imageFiles!.length + 1).toString().padLeft(4, '0')}.jpg";
+    XFile image = await _renameImageFile(await takePicture(), fileName);
     imageFiles!.add(image);
 
-    dynamic cameraData = await getCameraPost();
-    print('hello pure: $cameraData');
-    
+     Map<dynamic,dynamic> cameraData = await getCameraParameter();
+
+    cameraParameter
+        .add({'file_path': 'images/$fileName', 'camera_parameter': cameraData});
+    print('cameraParameter: $cameraParameter');
 
     setState(() {
-      imageFiles=imageFiles;
+      imageFiles = imageFiles;
     });
   }
 
@@ -128,7 +150,6 @@ MethodChannel channel = const MethodChannel('ar.core.platform/depth');
       DeviceOrientation.portraitDown,
     ]);
     SizeConfig().init(context);
-
 
     return Material(
       child: SafeArea(
@@ -241,7 +262,7 @@ MethodChannel channel = const MethodChannel('ar.core.platform/depth');
                                         backgroundColor:
                                             Color.fromARGB(122, 255, 255, 255),
                                         child: Icon(
-                                          isTaking
+                                          isTaking && _selectCameraMode[1]
                                               ? Icons.stop_rounded
                                               : Icons.circle,
                                           color: _selectCameraMode[0]
@@ -271,12 +292,14 @@ MethodChannel channel = const MethodChannel('ar.core.platform/depth');
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     ReconstructionConfigScreen(
-                                                        imageFiles:
-                                                            imageFiles!),
+                                                  imageFiles: imageFiles!,
+                                                  cameraParameter:
+                                                      cameraParameter,
+                                                ),
                                               ),
                                             ),
                                             setState(() {
-                                              isTaking = !isTaking;
+                                              isTaking = false;
                                             }),
                                           }
                                       },
@@ -335,7 +358,3 @@ _showMinmumImagesModal(context) {
         );
       });
 }
-
-
- 
-

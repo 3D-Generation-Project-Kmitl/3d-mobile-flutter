@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:marketplace/utils/dio_client.dart';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(
-      String filePath, Map<String, dynamic> reconstructionConfigs) async {
+      String filePath, Map<String, dynamic> reconstructionConfigs,List<Map<String,dynamic>?>? cameraParameter) async {
     print('filePath ' + filePath);
     try {
       var formData = FormData.fromMap({
@@ -12,15 +14,9 @@ class Gen3DModelRepository {
         'user_id': reconstructionConfigs['userId'],
         'object_detection': reconstructionConfigs['objectDetection'],
         'quality': reconstructionConfigs['quality'],
+        'camera_parameter':json.encode(cameraParameter),
 
       });
-
-      // print('raw_data ' + formData.toString());
-      // print('modelId ' + reconstructionConfigs['modelId'].toString());
-      // print('userId ' + reconstructionConfigs['userId'].toString());
-      // print('objectDetection ' +
-      //     reconstructionConfigs['objectDetection'].toString());
-      // print('quality ' + reconstructionConfigs['quality'].toString());
 
       final response = await Dio()
           .post('http://ssh.opencloudai.com:443/gen3DModel', data: formData);

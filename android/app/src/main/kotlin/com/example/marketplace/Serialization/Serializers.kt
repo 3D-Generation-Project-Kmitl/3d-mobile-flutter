@@ -1,6 +1,7 @@
 package io.carius.lars.ar_flutter_plugin.Serialization
 
 import com.google.ar.core.*
+import kotlin.doubleArrayOf
 
 
 fun serializePose(pose: Pose): DoubleArray {
@@ -11,6 +12,8 @@ fun serializePose(pose: Pose): DoubleArray {
     for (i in serializedPose.indices) {
         serializedPoseDouble[i] = serializedPose[i].toDouble()
     }
+
+
     return serializedPoseDouble
 }
 
