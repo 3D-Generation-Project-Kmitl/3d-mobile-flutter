@@ -103,7 +103,7 @@ class _CameraScreenState extends State<CameraScreen> {
       if (cameraParameter != null) {
         print('cameraParameter: $cameraParameter');
         print('cameraParameter Type: ${cameraParameter.runtimeType}');
-        // resultMap['cameraPose']=decodeDoubleArray(resultMap['cameraPose']);
+        cameraParameter['cameraPose']=decodeDoubleArray(cameraParameter['cameraPose']);
 
         return cameraParameter;
       }
