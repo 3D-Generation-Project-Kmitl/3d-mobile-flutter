@@ -4,9 +4,14 @@ package com.example.marketplace;
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.Image;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,16 +42,26 @@ public class ImageSaver implements Runnable {
         this.file = file;
         this.callback = callback;
     }
-
+    private Bitmap rotateBitmap(Bitmap bitmap) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
     @Override
     public void run() {
         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
+        Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+        Bitmap rotatedBitmap=rotateBitmap(bitmapImage);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        rotatedBitmap.recycle();
         FileOutputStream output = null;
         try {
             output = FileOutputStreamFactory.create(file);
-            output.write(bytes);
+            output.write(byteArray);
 
             callback.onComplete(file.getAbsolutePath());
 

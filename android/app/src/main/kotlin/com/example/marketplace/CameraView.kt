@@ -3,9 +3,8 @@ package com.example.marketplace
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.graphics.Color
+import android.graphics.*
 import android.graphics.ImageFormat
-import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.media.Image
 import android.media.ImageReader
@@ -15,22 +14,20 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
 import android.util.Size
-import android.view.Surface
-import android.view.TextureView
-import android.view.View
-import android.view.ViewGroup
+import android.util.SparseIntArray
+import android.view.*
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.ar.core.*
 import com.google.ar.core.exceptions.CameraNotAvailableException
+import io.carius.lars.ar_flutter_plugin.Serialization.serializePose
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
-import io.carius.lars.ar_flutter_plugin.Serialization.serializePose
 import java.io.File
 import java.io.IOException
 import java.nio.ByteOrder
@@ -100,11 +97,19 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
     //    private var depth: ((ArrayList<ArrayList<String>>) -> Unit)? = null
     //    private var depth: ((ShortArray) -> Unit)? = null
     private lateinit var array: ShortArray
-    private var imageWidth: Int = 720
-    private var imageHeight: Int = 1280
+    private var imageWidth: Int = 1080
+    private var imageHeight: Int = 1980
+    private var mSensorOrientation = 0
+    private val ORIENTATIONS: SparseIntArray = SparseIntArray()
+
+
 
     init {
         Log.d("ARCore:", "Init starting -> $this")
+        ORIENTATIONS.append(Surface.ROTATION_0, 90)
+        ORIENTATIONS.append(Surface.ROTATION_90, 0)
+        ORIENTATIONS.append(Surface.ROTATION_180, 270)
+        ORIENTATIONS.append(Surface.ROTATION_270, 180)
 
         frameLayout = FrameLayout(this.activity)
         surfaceView = GLSurfaceView(this.activity)
@@ -273,6 +278,19 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
         } catch (e: CameraAccessException) {
             Log.d("ARCore:", "CameraAccessException$e")
         }
+    }
+    private fun rotateBitmap(bitmap: Bitmap): Bitmap? {
+        val matrix = Matrix()
+        matrix.postRotate(90F)
+        return Bitmap.createBitmap(
+            bitmap,
+            0,
+            0,
+            bitmap.getWidth(),
+            bitmap.getHeight(),
+            matrix,
+            true
+        )
     }
 
     private val cameraSessionStateCallback =
@@ -599,7 +617,7 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
             )
 
             backgroundHandler!!.post(
-                    ImageSaver(cpuImageReader!!.acquireNextImage(), captureFile, imageSaverCallback)
+                    ImageSaver(imageReader!!.acquireNextImage(), captureFile, imageSaverCallback)
             )
         }
         val image: Image? = imageReader.acquireLatestImage()
@@ -657,6 +675,14 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
         previewCaptureRequestBuilder =
                 cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
         previewCaptureRequestBuilder.addTarget(cpuImageReader!!.surface)
+        val rotation = activity.windowManager.defaultDisplay.rotation
+        val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val characteristics = manager.getCameraCharacteristics(cameraId)
+        mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!;
+                
+        previewCaptureRequestBuilder.set(
+            CaptureRequest.JPEG_ORIENTATION,
+            getJpegOrientation(characteristics,rotation));
         captureSession!!.capture(
                 previewCaptureRequestBuilder.build(),
                 cameraCaptureCallback,
@@ -665,6 +691,35 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
 
         isTakePic = true
     }
+    private fun getOrientation(rotation: Int): Int {
+        // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
+        // We have to take that into account and rotate JPEG properly.
+        // For devices with orientation of 90, we simply return our mapping from ORIENTATIONS.
+        // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
+        return 360
+        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360
+    }
+    private fun getJpegOrientation(
+        c: CameraCharacteristics,
+        deviceOrientation: Int
+    ): Int {
+        var deviceOrientation = deviceOrientation
+        if (deviceOrientation == OrientationEventListener.ORIENTATION_UNKNOWN) return 0
+        val sensorOrientation = c[CameraCharacteristics.SENSOR_ORIENTATION]!!
+
+        // Round device orientation to a multiple of 90
+        deviceOrientation = (deviceOrientation + 45) / 90 * 90
+
+        // Reverse device orientation for front-facing cameras
+        val facingFront =
+            c[CameraCharacteristics.LENS_FACING] === CameraCharacteristics.LENS_FACING_FRONT
+        if (facingFront) deviceOrientation = -deviceOrientation
+
+        // Calculate desired JPEG orientation relative to camera orientation to make
+        // the image upright relative to the device orientation
+        return (sensorOrientation + deviceOrientation + 360) % 360
+    }
+    
     private fun getCameraParameter(result: MethodChannel.Result) {
         flutterPoseResult = result
         isTakePose = true

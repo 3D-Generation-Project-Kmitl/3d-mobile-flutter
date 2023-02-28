@@ -1,4 +1,4 @@
-import 'package:camera/camera.dart';
+ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:marketplace/configs/size_config.dart';
