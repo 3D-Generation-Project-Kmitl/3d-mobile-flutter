@@ -52,12 +52,14 @@ public class ImageSaver implements Runnable {
         ByteBuffer buffer = image.getPlanes()[0].getBuffer();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
+        
         Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
         Bitmap rotatedBitmap=rotateBitmap(bitmapImage);
+        Bitmap resized = Bitmap.createScaledBitmap(rotatedBitmap, 720, 1280, true);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        resized.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        rotatedBitmap.recycle();
+        resized.recycle();
         FileOutputStream output = null;
         try {
             output = FileOutputStreamFactory.create(file);

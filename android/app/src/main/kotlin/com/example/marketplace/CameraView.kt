@@ -97,8 +97,8 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
     //    private var depth: ((ArrayList<ArrayList<String>>) -> Unit)? = null
     //    private var depth: ((ShortArray) -> Unit)? = null
     private lateinit var array: ShortArray
-    private var imageWidth: Int = 1080
-    private var imageHeight: Int = 1980
+    private var imageWidth: Int = 720
+    private var imageHeight: Int = 1280
     private var mSensorOrientation = 0
     private val ORIENTATIONS: SparseIntArray = SparseIntArray()
 

@@ -8,8 +8,9 @@ import io.flutter.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterFragmentActivity() {
     private val CHANNEL = "ar.core.platform"
     private var isSupported = false
     private var session: Session? = null
@@ -30,7 +31,7 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        flutterEngine.platformViewsController.registry.registerViewFactory("ar.core.platform", CameraViewFactory(activity, flutterEngine.dartExecutor))
+        flutterEngine.platformViewsController.registry.registerViewFactory("ar.core.platform", CameraViewFactory(this, flutterEngine.dartExecutor))
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             if (call.method.equals("isARCoreSupported")) {
                 isSupported = isARCoreSupportedAndUpToDate()

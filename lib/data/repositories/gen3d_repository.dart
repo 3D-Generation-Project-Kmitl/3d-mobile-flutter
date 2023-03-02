@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:marketplace/utils/dio_client.dart';
+import 'package:marketplace/.env';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(

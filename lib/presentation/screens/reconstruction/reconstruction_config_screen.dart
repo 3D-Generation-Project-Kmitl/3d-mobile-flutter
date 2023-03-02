@@ -57,6 +57,7 @@ class _ReconstructionConfigScreenState
       imageFiles = [];
       cameraParameter=[];
     }
+    
   }
 
   _sendRequestToGenerate3DModel() async {
@@ -101,21 +102,20 @@ class _ReconstructionConfigScreenState
             height: getProportionateScreenHeight(50),
             child: ElevatedButton(
               onPressed: () {
-                // context
-                //     .read<StoreModelsCubit>()
-                //     .addReconstructionModel(imageFiles![0])
-                //     .then((model) => {
-                //           if (model != null)
-                //             {
-                //               setState(() {
-                //                 reconstructionConfigs['modelId'] =
-                //                     model.modelId;
-                //                 reconstructionConfigs['userId'] = model.userId;
-                //               }),
-                //               _sendRequestToGenerate3DModel(),
-                //             }
-                //         });
-                _sendRequestToGenerate3DModel();
+                context
+                    .read<StoreModelsCubit>()
+                    .addReconstructionModel(imageFiles![0])
+                    .then((model) => {
+                          if (model != null)
+                            {
+                              setState(() {
+                                reconstructionConfigs['modelId'] =
+                                    model.modelId;
+                                reconstructionConfigs['userId'] = model.userId;
+                              }),
+                              _sendRequestToGenerate3DModel(),
+                            }
+                        });
               },
               child: const Text(
                 "สร้างโมเดล 3 มิติ",

@@ -29,6 +29,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<UserCubit>(
           create: (context) => UserCubit(),
         ),
+        BlocProvider(
+          create: (context) => IdentityCubit(),
+        ),
         BlocProvider<ProductsCubit>(
           create: (context) => ProductsCubit(),
         ),
@@ -41,6 +44,13 @@ class MyApp extends StatelessWidget {
         BlocProvider<FavoriteCubit>(
           create: (context) => FavoriteCubit(),
         ),
+        BlocProvider<StoreModelsCubit>(
+          create: (context) => StoreModelsCubit(),
+        ),
+        BlocProvider<MyStoreProductCubit>(
+          create: (context) => MyStoreProductCubit(),
+        ),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
