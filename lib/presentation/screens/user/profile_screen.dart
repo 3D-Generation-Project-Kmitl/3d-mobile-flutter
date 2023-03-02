@@ -75,9 +75,15 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              ImageCard(
-                                imageURL: user.picture ?? "",
-                                radius: 46,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, editProfileRoute);
+                                },
+                                child: ImageCard(
+                                  imageURL: user.picture ?? "",
+                                  radius: 46,
+                                ),
                               ),
                               SizedBox(width: SizeConfig.screenWidth * 0.05),
                               Column(
