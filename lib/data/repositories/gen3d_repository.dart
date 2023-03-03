@@ -15,6 +15,7 @@ class Gen3DModelRepository {
         'user_id': reconstructionConfigs['userId'],
         'object_detection': reconstructionConfigs['objectDetection'],
         'quality': reconstructionConfigs['quality'],
+        'google_ARCore':reconstructionConfigs['googleARCore'],
         'camera_parameter':json.encode(cameraParameter),
 
       });

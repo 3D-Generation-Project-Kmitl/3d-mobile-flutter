@@ -828,7 +828,7 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
             cameraParameter["imageHeight"]=imageHeight
             cameraParameter["focalLength"] = intrinsics.focalLength
             cameraParameter["principlePoint"] = intrinsics.principalPoint
-            cameraParameter["cameraPose"] = serializePose(camera.displayOrientedPose)
+            cameraParameter["cameraPose"] = serializePose(camera.pose)
             Log.d("cameraParameter kotlin", "${cameraParameter} kotlin")
             flutterPoseResult.success(cameraParameter)
             isTakePose = false

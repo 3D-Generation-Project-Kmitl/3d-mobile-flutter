@@ -41,6 +41,7 @@ class _ReconstructionConfigScreenState
     "modelId": -888,
     "objectDetection": false,
     "quality": 'Low',
+    "googleARCore":false,
   };
   final List<bool> _selectModelQuality = <bool>[false, false, true];
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
@@ -209,6 +210,22 @@ class _ReconstructionConfigScreenState
                     ),
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("ระบบ Google ARCore"),
+                    Switch(
+                      value: reconstructionConfigs["googleARCore"],
+                      onChanged: (value) {
+                        setState(() {
+                          reconstructionConfigs["googleARCore"] = value;
+                        });
+                      },
+                      activeTrackColor: primaryLight,
+                      activeColor: primaryColor,
+                    ),
+                  ],
+                )
               ],
             ),
           ),
