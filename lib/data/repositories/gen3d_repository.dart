@@ -6,7 +6,7 @@ import 'package:marketplace/.env';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(
-      String filePath, Map<String, dynamic> reconstructionConfigs,List<Map<String,dynamic>?>? cameraParameter) async {
+      String filePath, Map<String, dynamic> reconstructionConfigs,List<Map<String,dynamic>?>? cameraParameterList) async {
     print('filePath ' + filePath);
     try {
       var formData = FormData.fromMap({
@@ -16,7 +16,7 @@ class Gen3DModelRepository {
         'object_detection': reconstructionConfigs['objectDetection'],
         'quality': reconstructionConfigs['quality'],
         'google_ARCore':reconstructionConfigs['googleARCore'],
-        'camera_parameter':json.encode(cameraParameter),
+        'camera_parameter_list':json.encode(cameraParameterList),
 
       });
 

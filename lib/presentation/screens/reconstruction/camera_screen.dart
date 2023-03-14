@@ -33,7 +33,7 @@ class _CameraScreenState extends State<CameraScreen> {
   // bool isARCoreSupported=false;
   MethodChannel channel = const MethodChannel('ar.core.platform/depth');
   List<XFile>? imageFiles;
-  List<Map<String, dynamic>?> cameraParameter = [];
+  List<Map<String, dynamic>?> cameraParameterList = [];
   late CameraController _cameraController;
   Future<void>? _initializeControllerFuture;
 
@@ -99,17 +99,16 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       final cameraParameter =
           await channel.invokeMethod<Map<dynamic,dynamic>>('getCameraParameter');
-      // final resultMap = Map<String, dynamic>.from(cameraParameter!.cast<String, dynamic>()); 
+      // final resultMap = Map<String, dynamic>.from(cameraParameterList!.cast<String, dynamic>()); 
       if (cameraParameter != null) {
         print('cameraParameter: $cameraParameter');
         print('cameraParameter Type: ${cameraParameter.runtimeType}');
-        cameraParameter['cameraPose']=decodeDoubleArray(cameraParameter['cameraPose']);
 
         return cameraParameter;
       }
       throw Exception('error get camera parameter');
     } catch (e) {
-      print('getcameraParameter error: $e');
+      print('getcameraParameterList error: $e');
       throw Exception();
     }
   }
@@ -120,11 +119,11 @@ class _CameraScreenState extends State<CameraScreen> {
     XFile image = await _renameImageFile(await takePicture(), fileName);
     imageFiles!.add(image);
 
-     Map<dynamic,dynamic> cameraData = await getCameraParameter();
+     Map<dynamic,dynamic> cameraParameter = await getCameraParameter();
 
-    cameraParameter
-        .add({'file_path': 'images/$fileName', 'camera_parameter': cameraData});
-    print('cameraParameter: $cameraParameter');
+    cameraParameterList
+        .add({'file_path': 'images/$fileName', 'camera_parameter': cameraParameter});
+    print('cameraParameterList: $cameraParameterList');
 
     setState(() {
       imageFiles = imageFiles;
@@ -293,8 +292,8 @@ class _CameraScreenState extends State<CameraScreen> {
                                                 builder: (context) =>
                                                     ReconstructionConfigScreen(
                                                   imageFiles: imageFiles!,
-                                                  cameraParameter:
-                                                      cameraParameter,
+                                                  cameraParameterList:
+                                                      cameraParameterList,
                                                 ),
                                               ),
                                             ),

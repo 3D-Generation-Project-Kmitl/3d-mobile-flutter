@@ -36,6 +36,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
+
+
 class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
         DefaultLifecycleObserver,
         PlatformView,
@@ -44,6 +46,7 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
         EventChannel.StreamHandler,
         SurfaceTexture.OnFrameAvailableListener,
         GLSurfaceView.Renderer {
+
     private var isTakePose: Boolean = false
     private lateinit var flutterPoseResult: MethodChannel.Result
     private val channel = MethodChannel(dartExecutor, "ar.core.platform/depth")
@@ -97,8 +100,8 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
     //    private var depth: ((ArrayList<ArrayList<String>>) -> Unit)? = null
     //    private var depth: ((ShortArray) -> Unit)? = null
     private lateinit var array: ShortArray
-    private var imageWidth: Int = 720
-    private var imageHeight: Int = 1280
+    private var imageWidth: Int = 800
+    private var imageHeight: Int = 800
     private var mSensorOrientation = 0
     private val ORIENTATIONS: SparseIntArray = SparseIntArray()
 
@@ -482,6 +485,7 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
 
         previewSize = session!!.cameraConfig.imageSize
         Log.d("ARCore", "preview: ${previewSize.width}, ${previewSize.height}")
+
         cpuImageReader = ImageReader.newInstance(imageWidth, imageHeight, ImageFormat.JPEG, 2)
         cpuImageReader!!.setOnImageAvailableListener(this, backgroundHandler)
 
@@ -675,14 +679,16 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
         previewCaptureRequestBuilder =
                 cameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
         previewCaptureRequestBuilder.addTarget(cpuImageReader!!.surface)
-        val rotation = activity.windowManager.defaultDisplay.rotation
-        val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        val characteristics = manager.getCameraCharacteristics(cameraId)
-        mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!;
-                
-        previewCaptureRequestBuilder.set(
-            CaptureRequest.JPEG_ORIENTATION,
-            getJpegOrientation(characteristics,rotation));
+
+//        val rotation = activity.windowManager.defaultDisplay.rotation
+//        val manager = activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+//        val characteristics = manager.getCameraCharacteristics(cameraId)
+//        mSensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)!!;
+//
+//        previewCaptureRequestBuilder.set(
+//            CaptureRequest.JPEG_ORIENTATION,
+//            getJpegOrientation(characteristics,rotation));
+        previewCaptureRequestBuilder.set(CaptureRequest.JPEG_QUALITY, 80.toByte())
         captureSession!!.capture(
                 previewCaptureRequestBuilder.build(),
                 cameraCaptureCallback,
@@ -690,14 +696,6 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
         )
 
         isTakePic = true
-    }
-    private fun getOrientation(rotation: Int): Int {
-        // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
-        // We have to take that into account and rotate JPEG properly.
-        // For devices with orientation of 90, we simply return our mapping from ORIENTATIONS.
-        // For devices with orientation of 270, we need to rotate the JPEG 180 degrees.
-        return 360
-        return (ORIENTATIONS.get(rotation) + mSensorOrientation + 270) % 360
     }
     private fun getJpegOrientation(
         c: CameraCharacteristics,
@@ -818,17 +816,22 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
         val camera = frame.camera
         if (isTakePose) {
 
-            // To transform 2D depth pixels into 3D points we retrieve the intrinsic camera
-            // parameters
-            // corresponding to the depth image. See more information about the depth values at
-            // https://developers.google.com/ar/develop/java/depth/overview#understand-depth-values.
-            val intrinsics = camera.textureIntrinsics
+            val intrinsics = camera.imageIntrinsics
             var cameraParameter = hashMapOf<Any, Any>()
             cameraParameter["imageWidth"]=imageWidth
             cameraParameter["imageHeight"]=imageHeight
             cameraParameter["focalLength"] = intrinsics.focalLength
             cameraParameter["principlePoint"] = intrinsics.principalPoint
-            cameraParameter["cameraPose"] = serializePose(camera.pose)
+            val cameraPose = camera.pose
+            cameraParameter["cameraPose"] = floatArrayOf(
+                    cameraPose.qw(),
+                    cameraPose.qx(),
+                    cameraPose.qy(),
+                    cameraPose.qz(),
+                    cameraPose.tx(),
+                    cameraPose.ty(),
+                    cameraPose.tz(),
+            )
             Log.d("cameraParameter kotlin", "${cameraParameter} kotlin")
             flutterPoseResult.success(cameraParameter)
             isTakePose = false

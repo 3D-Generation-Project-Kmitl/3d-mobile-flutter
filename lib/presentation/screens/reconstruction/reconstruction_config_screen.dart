@@ -22,8 +22,8 @@ const List<Widget> modelQuality = <Widget>[
 
 class ReconstructionConfigScreen extends StatefulWidget {
   final List<XFile> imageFiles;
-  final List<Map<String,dynamic>?> cameraParameter;
-  const ReconstructionConfigScreen({Key? key,required this.imageFiles,required this.cameraParameter})
+  final List<Map<String,dynamic>?> cameraParameterList;
+  const ReconstructionConfigScreen({Key? key,required this.imageFiles,required this.cameraParameterList})
       : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class ReconstructionConfigScreen extends StatefulWidget {
 class _ReconstructionConfigScreenState
     extends State<ReconstructionConfigScreen> {
   List<XFile>? imageFiles;
-  List<Map<String,dynamic>?>? cameraParameter;
+  List<Map<String,dynamic>?>? cameraParameterList;
 
   Map<String, dynamic> reconstructionConfigs = {
     "userId": -888,
@@ -53,10 +53,10 @@ class _ReconstructionConfigScreenState
     super.initState();
     if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
       imageFiles = widget.imageFiles;
-      cameraParameter=widget.cameraParameter;
+      cameraParameterList=widget.cameraParameterList;
     } else {
       imageFiles = [];
-      cameraParameter=[];
+      cameraParameterList=[];
     }
     
   }
@@ -65,7 +65,7 @@ class _ReconstructionConfigScreenState
     String zipFilePath = await _zipFiles();
     print(zipFilePath);
     var response = await gen3dModelRepository.gen3DModel(
-        zipFilePath, reconstructionConfigs,cameraParameter);
+        zipFilePath, reconstructionConfigs,cameraParameterList);
     return response;
   }
 
