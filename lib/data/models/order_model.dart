@@ -5,6 +5,8 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
+import 'count_product_model.dart';
+
 Order orderFromJson(String str) => Order.fromJson(json.decode(str));
 
 String orderToJson(Order data) => json.encode(data.toJson());
@@ -26,7 +28,7 @@ class Order {
   DateTime orderDateTime;
   DateTime createdAt;
   DateTime updatedAt;
-  Count count;
+  CountProduct count;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         orderId: json["orderId"],
@@ -35,7 +37,7 @@ class Order {
         orderDateTime: DateTime.parse(json["orderDateTime"]),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        count: Count.fromJson(json["_count"]),
+        count: CountProduct.fromJson(json["_count"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -46,21 +48,5 @@ class Order {
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "_count": count.toJson(),
-      };
-}
-
-class Count {
-  Count({
-    required this.orderProduct,
-  });
-
-  int orderProduct;
-
-  factory Count.fromJson(Map<String, dynamic> json) => Count(
-        orderProduct: json["OrderProduct"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "OrderProduct": orderProduct,
       };
 }

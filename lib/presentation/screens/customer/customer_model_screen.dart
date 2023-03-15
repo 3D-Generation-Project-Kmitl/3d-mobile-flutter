@@ -14,30 +14,32 @@ class CustomerModelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double width = SizeConfig.screenWidth;
-    return BlocProvider(
-      create: (context) => CustomerModelsCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          titleSpacing: 20,
-          title: Text("โมเดล 3 มิติของฉัน",
-              style: Theme.of(context).textTheme.headline2),
-        ),
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: BlocBuilder<CustomerModelsCubit, CustomerModelsState>(
-            builder: (context, state) {
-              if (state is CustomerModelsInitial) {
-                context.read<CustomerModelsCubit>().getModelsCustomer();
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is CustomerModelsLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is CustomerModelsLoaded) {
-                if (state.models.isEmpty) {
-                  return Center(
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 20,
+        title: Text("โมเดล 3 มิติของฉัน",
+            style: Theme.of(context).textTheme.headline2),
+      ),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: BlocBuilder<CustomerModelsCubit, CustomerModelsState>(
+          builder: (context, state) {
+            if (state is CustomerModelsInitial) {
+              context.read<CustomerModelsCubit>().getModelsCustomer();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is CustomerModelsLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (state is CustomerModelsLoaded) {
+              if (state.models.isEmpty) {
+                return Center(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<CustomerModelsCubit>().getModelsCustomer();
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 100),
                       child: Text(
@@ -45,20 +47,24 @@ class CustomerModelScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline1,
                       ),
                     ),
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: _modelList(state.models, width),
-                  );
-                }
+                  ),
+                );
               } else {
-                return const Center(
-                  child: Text('Error'),
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  child: RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<CustomerModelsCubit>().getModelsCustomer();
+                      },
+                      child: _modelList(state.models, width)),
                 );
               }
-            },
-          ),
+            } else {
+              return const Center(
+                child: Text('Error'),
+              );
+            }
+          },
         ),
       ),
     );

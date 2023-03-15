@@ -15,6 +15,8 @@ class SettingScreen extends StatelessWidget {
     final authCubit = context.read<AuthCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
+    final followCubit = context.read<FollowCubit>();
+    final notificationCubit = context.read<NotificationCubit>();
     return Scaffold(
         appBar: AppBar(
           titleSpacing: 20,
@@ -90,6 +92,8 @@ class SettingScreen extends StatelessWidget {
                     userCubit.clearUser();
                     cartCubit.clearCart();
                     favoriteCubit.clearFavorite();
+                    followCubit.clear();
+                    notificationCubit.clear();
                     Navigator.pop(context);
                   },
                   child: const Text(

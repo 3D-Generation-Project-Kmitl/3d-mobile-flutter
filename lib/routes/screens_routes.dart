@@ -23,6 +23,9 @@ const String searchResultRoute = "/search_result";
 const String changePasswordRoute = "/change_password";
 const String editProfileRoute = "/edit_profile";
 const String productsStoreRoute = "/products_store";
+const String followerRoute = "/follower";
+const String followingRoute = "/following";
+const String reportRoute = "/report";
 
 const String identityRoute = "/identity";
 const String storeRoute = "/store";
@@ -31,3 +34,5 @@ const String storeViewModelRoute = "/store_view_model";
 const String storeProductRoute = "/store_product";
 const String storeAddProductRoute = "/store_add_product";
 const String storeEditProductRoute = "/store_edit_product";
+const String storeWalletRoute = "/store_wallet";
+const String storeWithdrawRoute = "/store_withdraw";

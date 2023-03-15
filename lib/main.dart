@@ -44,13 +44,24 @@ class MyApp extends StatelessWidget {
         BlocProvider<FavoriteCubit>(
           create: (context) => FavoriteCubit(),
         ),
+        BlocProvider(
+          create: (context) => CustomerModelsCubit(),
+        ),
         BlocProvider<StoreModelsCubit>(
           create: (context) => StoreModelsCubit(),
         ),
         BlocProvider<MyStoreProductCubit>(
           create: (context) => MyStoreProductCubit(),
         ),
-
+        BlocProvider<WalletCubit>(
+          create: (context) => WalletCubit(),
+        ),
+        BlocProvider<FollowCubit>(
+          create: (context) => FollowCubit(),
+        ),
+        BlocProvider<NotificationCubit>(
+          create: (context) => NotificationCubit(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

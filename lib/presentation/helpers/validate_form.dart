@@ -51,3 +51,7 @@ final productPriceValidator = MultiValidator([
 final productDescriptionValidator = MultiValidator([
   RequiredValidator(errorText: 'โปรดระบุรายละเอียดสินค้า'),
 ]);
+
+final reportProblemValidator = MultiValidator([
+  RequiredValidator(errorText: 'โปรดระบุรายละเอียดการรายงาน'),
+]);

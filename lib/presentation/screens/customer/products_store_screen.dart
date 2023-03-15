@@ -58,30 +58,57 @@ class ProductsStoreScreen extends StatelessWidget {
                                 SizedBox(
                                     height: SizeConfig.screenHeight * 0.005),
                                 Text(
-                                  "ออนไลน์",
+                                  "ผู้ติดตาม ${store.count?.followers ?? 0} คน",
                                   style: Theme.of(context).textTheme.subtitle1,
                                 ),
                               ],
                             ),
                             const Spacer(),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: primaryColor,
-                                onPrimary: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: Text(
-                                "ติดตาม",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5!
-                                    .copyWith(
-                                      color: Colors.white,
+                            BlocBuilder<FollowCubit, FollowState>(
+                              builder: (context, state) {
+                                return SizedBox(
+                                  height: 40,
+                                  width: 110,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.white,
+                                      //outline
+                                      side: BorderSide(
+                                        color: Theme.of(context).primaryColor,
+                                        width: 2,
+                                      ),
                                     ),
-                              ),
+                                    onPressed: () {
+                                      if (context
+                                          .read<FollowCubit>()
+                                          .isFollowing(storeId)) {
+                                        context
+                                            .read<FollowCubit>()
+                                            .unFollow(userId: storeId);
+                                      } else {
+                                        context
+                                            .read<FollowCubit>()
+                                            .follow(userId: storeId);
+                                      }
+                                    },
+                                    child: Text(
+                                      context
+                                              .read<FollowCubit>()
+                                              .isFollowing(storeId)
+                                          ? "กำลังติดตาม"
+                                          : "ติดตาม",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5!
+                                          .copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -94,10 +121,17 @@ class ProductsStoreScreen extends StatelessWidget {
               body: SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                  child: CustomScrollView(
-                    slivers: <Widget>[
-                      _buildProductList(products),
-                    ],
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      context
+                          .read<ProductsStoreCubit>()
+                          .getProductsByStoreId(storeId);
+                    },
+                    child: CustomScrollView(
+                      slivers: <Widget>[
+                        _buildProductList(products),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -129,7 +163,7 @@ class ProductsStoreScreen extends StatelessWidget {
             const SizedBox(
               height: 500,
               child: Center(
-                child: Text('ไม่พบสินค้าที่ค้นหา'),
+                child: Text('ไม่มีสินค้า'),
               ),
             ),
           ],
@@ -149,7 +183,7 @@ class ProductsStoreScreen extends StatelessWidget {
             product: products[index],
             press: () {
               Navigator.pushNamed(context, productDetailRoute,
-                  arguments: products[index]);
+                  arguments: products[index].productId);
             },
           );
         },

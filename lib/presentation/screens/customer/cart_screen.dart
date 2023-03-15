@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/presentation/widgets/rounded_image_card_widget.dart';
 
 import '../../../configs/size_config.dart';
 import '../../../cubits/cubits.dart';
 import '../../../data/models/models.dart';
 import '../../../routes/screens_routes.dart';
+import 'package:intl/intl.dart' as intl;
+
+import '../../helpers/helpers.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -36,8 +40,16 @@ class CartScreen extends StatelessWidget {
         child: BlocBuilder<CartCubit, CartState>(
           builder: (context, state) {
             if (state is CartLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Scaffold(
+                appBar: AppBar(
+                  titleSpacing: 20,
+                  title: Text(
+                    'ตะกร้าสินค้า',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                ),
+                resizeToAvoidBottomInset: false,
+                body: const Center(child: CircularProgressIndicator()),
               );
             } else if (state is CartLoaded) {
               return Scaffold(
@@ -50,7 +62,12 @@ class CartScreen extends StatelessWidget {
                   ),
                   resizeToAvoidBottomInset: false,
                   body: SafeArea(
-                    child: _cartList(context, state.carts),
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        cartCubit.getCart();
+                      },
+                      child: _cartList(context, state.carts),
+                    ),
                   ),
                   bottomNavigationBar: state.carts.isEmpty
                       ? null
@@ -88,7 +105,7 @@ class CartScreen extends StatelessWidget {
           return ListTile(
             onTap: () {
               Navigator.pushNamed(context, productDetailRoute,
-                  arguments: cart.product);
+                  arguments: cart.product.productId);
             },
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
@@ -103,26 +120,31 @@ class CartScreen extends StatelessWidget {
                 maxWidth: 64,
                 maxHeight: 64,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image(
-                  image: cart.product.model.picture != null
-                      ? NetworkImage(cart.product.model.picture!)
-                      : const AssetImage('assets/images/placeholder3d.jpg')
-                          as ImageProvider,
-                  fit: BoxFit.cover,
-                ),
+              child: roundedImageCard(
+                imageURL: cart.product.model.picture,
+                radius: 10,
               ),
             ),
             title: Text(cart.product.name,
                 style: Theme.of(context).textTheme.bodyText2),
-            subtitle: Text("฿${cart.product.price}",
+            subtitle: Text(
+                intl.NumberFormat.currency(
+                  locale: 'th',
+                  symbol: '฿',
+                  decimalDigits: 0,
+                ).format(cart.product.price),
                 style: Theme.of(context).textTheme.headline4),
             trailing: IconButton(
               onPressed: () {
-                context
-                    .read<CartCubit>()
-                    .removeFromCart(productId: cart.productId);
+                showConfirmDialog(context,
+                    title: "ลบสินค้า",
+                    message:
+                        "คุณต้องการลบสินค้าออกจากตะกร้าสินค้าหรือไม่ ?\nชื่อ: ${cart.product.name}",
+                    onConfirm: () {
+                  context
+                      .read<CartCubit>()
+                      .removeFromCart(productId: cart.productId);
+                });
               },
               icon: const Icon(Icons.delete),
               color: Colors.red,

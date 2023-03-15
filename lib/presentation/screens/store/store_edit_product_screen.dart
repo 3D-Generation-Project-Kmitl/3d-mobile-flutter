@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
-import 'package:marketplace/routes/screens_routes.dart';
 import 'package:native_screenshot/native_screenshot.dart';
 
 import '../../../configs/size_config.dart';
@@ -83,7 +82,6 @@ class _StoreEditProductScreenState extends State<StoreEditProductScreen> {
         title: Text("แก้ไขข้อมูลสินค้า",
             style: Theme.of(context).textTheme.headline2),
       ),
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),

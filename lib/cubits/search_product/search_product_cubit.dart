@@ -18,4 +18,33 @@ class SearchProductsCubit extends Cubit<SearchProductsState> {
       emit(SearchProductsFailure(e));
     }
   }
+
+  List<Product> getLatestProducts() {
+    List<Product> products = [];
+    if (state is SearchProductsLoaded) {
+      products.addAll((state as SearchProductsLoaded).products);
+      products.sort((a, b) => b.productId.compareTo(a.productId));
+    }
+    return products;
+  }
+
+  List<Product> getPopularProducts() {
+    List<Product> products = [];
+    if (state is SearchProductsLoaded) {
+      products.addAll((state as SearchProductsLoaded).products);
+      products.sort((a, b) => b.views.compareTo(a.views));
+    }
+    return products;
+  }
+
+  List<Product> getBestSellerProducts() {
+    List<Product> products = [];
+    if (state is SearchProductsLoaded) {
+      products.addAll((state as SearchProductsLoaded).products);
+      products.sort(
+          (a, b) => b.count!.orderProduct.compareTo(a.count!.orderProduct));
+    }
+    print(products[0].count!.orderProduct);
+    return products;
+  }
 }

@@ -8,12 +8,13 @@ import '../../../cubits/cubits.dart';
 import '../../helpers/helpers.dart';
 import '../../widgets/widgets.dart';
 import 'package:babylonjs_viewer/babylonjs_viewer.dart';
+import 'package:intl/intl.dart' as intl;
 
 class ProductDetailScreen extends StatefulWidget {
-  final Product product;
+  final int productId;
   const ProductDetailScreen({
     Key? key,
-    required this.product,
+    required this.productId,
   }) : super(key: key);
 
   @override
@@ -33,6 +34,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
+    final UserCubit userCubit = context.read<UserCubit>();
     SizeConfig().init(context);
 
     return BlocProvider(
@@ -40,9 +42,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
         builder: (context, state) {
           if (state is ProductDetailInitial) {
-            context
-                .read<ProductDetailCubit>()
-                .getProductById(widget.product.productId);
+            context.read<ProductDetailCubit>().getProductById(widget.productId);
           } else if (state is ProductDetailLoading) {
             return Scaffold(
                 appBar: AppBar(),
@@ -58,8 +58,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         product.name,
                         style: Theme.of(context).textTheme.headline3,
                       ),
-                      actions: const [
-                        CartButton(),
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            if (userCubit.state is UserLoaded) {
+                              Navigator.pushNamed(context, reportRoute,
+                                  arguments: product);
+                            } else {
+                              Navigator.pushNamed(context, loginRoute);
+                            }
+                          },
+                          icon: Icon(
+                            Icons.report_outlined,
+                            color: Theme.of(context).primaryColor,
+                            size: 27,
+                          ),
+                        ),
+                        const CartButton(),
                       ],
                     )
                   : null,
@@ -127,7 +142,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         height:
                                             SizeConfig.screenHeight * 0.005),
                                     Text(
-                                      "฿${product.price}",
+                                      intl.NumberFormat.currency(
+                                        locale: 'th',
+                                        symbol: '฿',
+                                        decimalDigits: 0,
+                                      ).format(product.price),
                                       style:
                                           Theme.of(context).textTheme.headline1,
                                     ),
@@ -158,7 +177,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                     SizeConfig.screenHeight *
                                                         0.005),
                                             Text(
-                                              "ออนไลน์",
+                                              "ผู้ติดตาม ${product.user.count?.followers ?? 0} คน",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .subtitle1,

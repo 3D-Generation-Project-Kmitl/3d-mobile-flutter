@@ -67,23 +67,50 @@ class _BottomNavigationState extends State<BottomNavigation> {
             return BottomNavigationBar(
               currentIndex: _selectedIndex,
               onTap: state is UserLoaded ? _onItemTapped : navigateToNoAuth,
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
+              items: <BottomNavigationBarItem>[
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.home_outlined),
                   activeIcon: Icon(Icons.home),
                   label: 'หน้าแรก',
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.favorite_outline),
                   activeIcon: Icon(Icons.favorite),
                   label: 'รายการโปรด',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications_outlined),
-                  activeIcon: Icon(Icons.notifications),
+                  icon: Stack(
+                    children: [
+                      const Icon(Icons.notifications_outlined),
+                      BlocBuilder<NotificationCubit, NotificationState>(
+                        builder: (context, state) {
+                          if (state is NotificationLoaded &&
+                              !context.read<NotificationCubit>().isReadAll()) {
+                            return Positioned(
+                              top: 2,
+                              right: 2,
+                              child: Container(
+                                padding: const EdgeInsets.all(2),
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 10,
+                                  minHeight: 10,
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
+                    ],
+                  ),
+                  activeIcon: const Icon(Icons.notifications),
                   label: 'การแจ้งเตือน',
                 ),
-                BottomNavigationBarItem(
+                const BottomNavigationBarItem(
                   icon: Icon(Icons.person_outline),
                   activeIcon: Icon(Icons.person),
                   label: 'โปรไฟล์',

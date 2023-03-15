@@ -1,5 +1,4 @@
 import 'package:marketplace/cubits/cubits.dart';
-import 'package:marketplace/data/models/models.dart';
 import 'package:marketplace/presentation/widgets/widgets.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 import 'package:flutter/material.dart';
@@ -120,29 +119,36 @@ class StoreModelScreen extends StatelessWidget {
       {required bool isCompleted, required double width}) {
     final models =
         context.read<StoreModelsCubit>().getModelsByStatus(isCompleted);
-    return GridView.builder(
-      itemCount: models.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 10,
-      ),
-      itemBuilder: (context, index) {
-        final model = models[index];
-        return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              storeViewModelRoute,
-              arguments: model,
-            );
-          },
-          child: roundedImageCard(
-            imageURL: model.picture,
-          ),
-        );
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<StoreModelsCubit>().getModelsStore();
       },
+      child: GridView.builder(
+        itemCount: models.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1,
+          crossAxisSpacing: 14,
+          mainAxisSpacing: 10,
+        ),
+        itemBuilder: (context, index) {
+          final model = models[index];
+          return GestureDetector(
+            onTap: model.model != null
+                ? () {
+                    Navigator.pushNamed(
+                      context,
+                      storeViewModelRoute,
+                      arguments: model,
+                    );
+                  }
+                : null,
+            child: roundedImageCard(
+              imageURL: model.picture,
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -200,8 +206,9 @@ class StoreModelScreen extends StatelessWidget {
                 else
                   {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('กรุณาเลือกไฟล์ให้ถูกต้อง'),
+                      SnackBar(
+                        content: Text(
+                            'กรุณาเลือกไฟล์นามสกุล ${modelFileExtensions.map((e) => '.$e').join(', ')}'),
                       ),
                     ),
                   }

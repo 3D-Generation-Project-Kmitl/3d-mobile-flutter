@@ -16,6 +16,8 @@ class SplashScreen extends StatelessWidget {
     final authCubit = context.read<AuthCubit>();
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
+    final followCubit = context.read<FollowCubit>();
+    final notificationCubit = context.read<NotificationCubit>();
 
     //wait initial in main.dart
     Timer(const Duration(milliseconds: 1000), () async {
@@ -33,6 +35,8 @@ class SplashScreen extends StatelessWidget {
                     identityCubit.getIdentity();
                     cartCubit.getCart();
                     favoriteCubit.getFavorite();
+                    followCubit.getFollow();
+                    notificationCubit.getNotifications();
                     if (state.user.isVerified) {
                       Navigator.pushNamedAndRemoveUntil(
                           context, navigationRoute, (route) => false);

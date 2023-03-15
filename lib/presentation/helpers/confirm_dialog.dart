@@ -11,7 +11,8 @@ Future<void> showConfirmDialog(BuildContext context,
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title, style: Theme.of(context).textTheme.bodyText1),
+        contentPadding: const EdgeInsets.fromLTRB(24, 10, 24, 10),
+        title: Text(title, style: Theme.of(context).textTheme.headline4),
         content: message != ''
             ? Text(message, style: Theme.of(context).textTheme.bodyText2)
             : null,
