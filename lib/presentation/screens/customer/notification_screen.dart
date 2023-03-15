@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/cubits/cubits.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../widgets/widgets.dart';
@@ -33,6 +34,17 @@ class NotificationScreen extends StatelessWidget {
           child: BlocBuilder<NotificationCubit, NotificationState>(
             builder: (context, state) {
               if (state is NotificationLoaded) {
+                if (state.notifications.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 100),
+                      child: Text(
+                        'ไม่มีการแจ้งเตือน',
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                  );
+                }
                 return ListView.builder(
                   itemCount: state.notifications.length,
                   itemBuilder: (context, index) {
@@ -51,8 +63,8 @@ class NotificationScreen extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             color: notification.isRead
-                                ? Colors.grey.withOpacity(0.005)
-                                : Colors.white,
+                                ? Colors.white
+                                : primaryLight,
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(

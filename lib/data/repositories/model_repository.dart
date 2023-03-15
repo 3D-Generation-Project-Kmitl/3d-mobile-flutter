@@ -59,4 +59,12 @@ class ModelRepository {
       throw e.message;
     }
   }
+
+  Future<void> deleteModel(int modelId) async {
+    try {
+      await DioClient().dio.delete('/model/$modelId');
+    } on DioError catch (e) {
+      throw e.message;
+    }
+  }
 }

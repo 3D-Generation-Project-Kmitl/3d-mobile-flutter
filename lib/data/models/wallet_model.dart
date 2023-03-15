@@ -38,7 +38,8 @@ class WalletTransaction {
     required this.userId,
     required this.amountMoney,
     required this.type,
-    required this.isCompleted,
+    required this.status,
+    required this.evidence,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -47,7 +48,8 @@ class WalletTransaction {
   int userId;
   int amountMoney;
   String type;
-  bool isCompleted;
+  String status;
+  dynamic evidence;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -57,7 +59,8 @@ class WalletTransaction {
         userId: json["userId"],
         amountMoney: json["amountMoney"],
         type: json["type"],
-        isCompleted: json["isCompleted"],
+        status: json["status"],
+        evidence: json["evidence"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
@@ -67,7 +70,8 @@ class WalletTransaction {
         "userId": userId,
         "amountMoney": amountMoney,
         "type": type,
-        "isCompleted": isCompleted,
+        "status": status,
+        "evidence": evidence,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
       };

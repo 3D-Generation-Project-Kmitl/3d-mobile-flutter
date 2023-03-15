@@ -119,31 +119,36 @@ class StoreModelScreen extends StatelessWidget {
       {required bool isCompleted, required double width}) {
     final models =
         context.read<StoreModelsCubit>().getModelsByStatus(isCompleted);
-    return GridView.builder(
-      itemCount: models.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 10,
-      ),
-      itemBuilder: (context, index) {
-        final model = models[index];
-        return GestureDetector(
-          onTap: model.model != null
-              ? () {
-                  Navigator.pushNamed(
-                    context,
-                    storeViewModelRoute,
-                    arguments: model,
-                  );
-                }
-              : null,
-          child: roundedImageCard(
-            imageURL: model.picture,
-          ),
-        );
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<StoreModelsCubit>().getModelsStore();
       },
+      child: GridView.builder(
+        itemCount: models.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1,
+          crossAxisSpacing: 14,
+          mainAxisSpacing: 10,
+        ),
+        itemBuilder: (context, index) {
+          final model = models[index];
+          return GestureDetector(
+            onTap: model.model != null
+                ? () {
+                    Navigator.pushNamed(
+                      context,
+                      storeViewModelRoute,
+                      arguments: model,
+                    );
+                  }
+                : null,
+            child: roundedImageCard(
+              imageURL: model.picture,
+            ),
+          );
+        },
+      ),
     );
   }
 

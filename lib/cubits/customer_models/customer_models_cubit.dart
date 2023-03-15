@@ -18,4 +18,17 @@ class CustomerModelsCubit extends Cubit<CustomerModelsState> {
       emit(CustomerModelsFailure(e));
     }
   }
+
+  Future<void> deleteModel(int modelId) async {
+    try {
+      if (state is CustomerModelsLoaded) {
+        final models = (state as CustomerModelsLoaded).models;
+        await modelRepository.deleteModel(modelId);
+        models.removeWhere((element) => element.modelId == modelId);
+        emit(CustomerModelsLoaded(models));
+      }
+    } on String catch (e) {
+      emit(CustomerModelsFailure(e));
+    }
+  }
 }

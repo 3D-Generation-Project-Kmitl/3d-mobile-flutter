@@ -12,14 +12,20 @@ Widget roundedImageCard({
     borderRadius: BorderRadius.circular(radius),
     child: AspectRatio(
       aspectRatio: ratio,
-      child: Image(
-        image: imageURL != null
-            ? NetworkImage(imageURL)
-            : imageFile != null
-                ? FileImage(imageFile)
-                : const AssetImage('assets/images/placeholder3d.jpg')
-                    as ImageProvider,
-        fit: BoxFit.cover,
+      child: ColorFiltered(
+        colorFilter: const ColorFilter.mode(
+          Colors.grey,
+          BlendMode.softLight,
+        ),
+        child: Image(
+          image: imageURL != null
+              ? NetworkImage(imageURL)
+              : imageFile != null
+                  ? FileImage(imageFile)
+                  : const AssetImage('assets/images/placeholder3d.jpg')
+                      as ImageProvider,
+          fit: BoxFit.cover,
+        ),
       ),
     ),
   );

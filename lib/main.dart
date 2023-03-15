@@ -44,6 +44,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<FavoriteCubit>(
           create: (context) => FavoriteCubit(),
         ),
+        BlocProvider(
+          create: (context) => CustomerModelsCubit(),
+        ),
         BlocProvider<StoreModelsCubit>(
           create: (context) => StoreModelsCubit(),
         ),

@@ -163,7 +163,7 @@ class ProductsStoreScreen extends StatelessWidget {
             const SizedBox(
               height: 500,
               child: Center(
-                child: Text('ไม่พบสินค้าที่ค้นหา'),
+                child: Text('ไม่มีสินค้า'),
               ),
             ),
           ],

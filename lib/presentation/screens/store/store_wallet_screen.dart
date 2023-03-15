@@ -129,84 +129,109 @@ class StoreWalletScreen extends StatelessWidget {
                       height: SizeConfig.screenHeight * 0.005,
                     ),
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: state.wallet.walletTransactions.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 2),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.4),
-                                    spreadRadius: 1,
-                                    blurRadius: 1,
-                                    offset: const Offset(0, 1),
-                                  ),
-                                ],
-                              ),
-                              child: ListTile(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  title: state.wallet.walletTransactions[index]
-                                              .type ==
-                                          "ORDER"
-                                      ? Text(
-                                          "ขายสินค้า",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        )
-                                      : Text(
-                                          state.wallet.walletTransactions[index]
-                                                  .isCompleted
-                                              ? "ถอนเงิน (สำเร็จ)"
-                                              : "ถอนเงิน (รอดำเนินการ)",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                  subtitle: Text(
-                                    intl.DateFormat('dd/MM/yyyy HH:mm').format(
-                                        state.wallet.walletTransactions[index]
-                                            .createdAt
-                                            .toLocal()),
-                                  ),
-                                  trailing: state.wallet
-                                              .walletTransactions[index].type ==
-                                          "ORDER"
-                                      ? Text(
-                                          "+ ${intl.NumberFormat.currency(
-                                            locale: 'th',
-                                            symbol: '',
-                                            decimalDigits: 0,
-                                          ).format(state.wallet.walletTransactions[index].amountMoney)} บาท",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3!
-                                              .copyWith(
-                                                  color: Colors.green,
-                                                  fontWeight: FontWeight.w600),
-                                        )
-                                      : Text(
-                                          "- ${intl.NumberFormat.currency(
-                                            locale: 'th',
-                                            symbol: '',
-                                            decimalDigits: 0,
-                                          ).format(state.wallet.walletTransactions[index].amountMoney)} บาท",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3!
-                                              .copyWith(
-                                                  color: Colors.red,
-                                                  fontWeight: FontWeight.w600),
-                                        )),
-                            ),
-                          );
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          context.read<WalletCubit>().getWallet();
                         },
+                        child: ListView.builder(
+                          itemCount: state.wallet.walletTransactions.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 2),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 0),
+                                    title: state
+                                                .wallet
+                                                .walletTransactions[index]
+                                                .type ==
+                                            "ORDER"
+                                        ? Text(
+                                            "ขายสินค้า",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          )
+                                        : Text(
+                                            (() {
+                                              if (state
+                                                      .wallet
+                                                      .walletTransactions[index]
+                                                      .status ==
+                                                  "PENDING") {
+                                                return "ถอนเงิน (รอดำเนินการ)";
+                                              } else if (state
+                                                      .wallet
+                                                      .walletTransactions[index]
+                                                      .status ==
+                                                  "REJECTED") {
+                                                return "ถอนเงิน (ไม่อนุมัติ)";
+                                              }
+                                              return "ถอนเงิน (สำเร็จ)";
+                                            })(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
+                                    subtitle: Text(
+                                      intl.DateFormat('dd/MM/yyyy HH:mm')
+                                          .format(state
+                                              .wallet
+                                              .walletTransactions[index]
+                                              .createdAt
+                                              .toLocal()),
+                                    ),
+                                    trailing: state
+                                                .wallet
+                                                .walletTransactions[index]
+                                                .type ==
+                                            "ORDER"
+                                        ? Text(
+                                            "+ ${intl.NumberFormat.currency(
+                                              locale: 'th',
+                                              symbol: '',
+                                              decimalDigits: 0,
+                                            ).format(state.wallet.walletTransactions[index].amountMoney)} บาท",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3!
+                                                .copyWith(
+                                                    color: Colors.green,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                          )
+                                        : Text(
+                                            "- ${intl.NumberFormat.currency(
+                                              locale: 'th',
+                                              symbol: '',
+                                              decimalDigits: 0,
+                                            ).format(state.wallet.walletTransactions[index].amountMoney)} บาท",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline3!
+                                                .copyWith(
+                                                    color: Colors.red,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                          )),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],
