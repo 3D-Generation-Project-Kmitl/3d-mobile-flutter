@@ -167,12 +167,22 @@ class StoreWalletScreen extends StatelessWidget {
                                                 .bodyText1,
                                           )
                                         : Text(
-                                            state
-                                                    .wallet
-                                                    .walletTransactions[index]
-                                                    .isCompleted
-                                                ? "ถอนเงิน (สำเร็จ)"
-                                                : "ถอนเงิน (รอดำเนินการ)",
+                                            (() {
+                                              if (state
+                                                      .wallet
+                                                      .walletTransactions[index]
+                                                      .status ==
+                                                  "PENDING") {
+                                                return "ถอนเงิน (รอดำเนินการ)";
+                                              } else if (state
+                                                      .wallet
+                                                      .walletTransactions[index]
+                                                      .status ==
+                                                  "REJECTED") {
+                                                return "ถอนเงิน (ไม่อนุมัติ)";
+                                              }
+                                              return "ถอนเงิน (สำเร็จ)";
+                                            })(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyText1,
