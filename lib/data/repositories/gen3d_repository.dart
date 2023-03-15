@@ -1,16 +1,23 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:marketplace/utils/dio_client.dart';
+import 'package:marketplace/.env';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(
-      String filePath, Map<String, dynamic> configs,int modelId,int userId) async {
+      String filePath, Map<String, dynamic> reconstructionConfigs,List<Map<String,dynamic>?>? cameraParameterList) async {
+    print('filePath ' + filePath);
     try {
       var formData = FormData.fromMap({
-        'modelId':modelId,
-        'userId':userId,
-        'images': await MultipartFile.fromFile(filePath),
-        'removeBackground': configs['removeBackground'],
-        'quality':configs['quality'],
+        'raw_data': await MultipartFile.fromFile(filePath),
+        'model_id': reconstructionConfigs['modelId'],
+        'user_id': reconstructionConfigs['userId'],
+        'object_detection': reconstructionConfigs['objectDetection'],
+        'quality': reconstructionConfigs['quality'],
+        'google_ARCore':reconstructionConfigs['googleARCore'],
+        'camera_parameter_list':json.encode(cameraParameterList),
+
       });
 
       final response = await Dio()
@@ -21,4 +28,4 @@ class Gen3DModelRepository {
       throw e.message;
     }
   }
-} 
+}

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:archive/archive_io.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +21,9 @@ const List<Widget> modelQuality = <Widget>[
 ];
 
 class ReconstructionConfigScreen extends StatefulWidget {
-  final List<XFile>? imageFiles;
-  const ReconstructionConfigScreen({Key? key, this.imageFiles})
+  final List<XFile> imageFiles;
+  final List<Map<String,dynamic>?> cameraParameterList;
+  const ReconstructionConfigScreen({Key? key,required this.imageFiles,required this.cameraParameterList})
       : super(key: key);
 
   @override
@@ -31,10 +34,18 @@ class ReconstructionConfigScreen extends StatefulWidget {
 class _ReconstructionConfigScreenState
     extends State<ReconstructionConfigScreen> {
   List<XFile>? imageFiles;
-  Map<String, dynamic> configs = {"removeBackground": false, "quality": 'Low'};
+  List<Map<String,dynamic>?>? cameraParameterList;
+
+  Map<String, dynamic> reconstructionConfigs = {
+    "userId": -888,
+    "modelId": -888,
+    "objectDetection": false,
+    "quality": 'Low',
+    "googleARCore":false,
+  };
   final List<bool> _selectModelQuality = <bool>[false, false, true];
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
-  String zipFilePath = "";
+  
 
   bool vertical = false;
   @override
@@ -42,35 +53,40 @@ class _ReconstructionConfigScreenState
     super.initState();
     if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
       imageFiles = widget.imageFiles;
+      cameraParameterList=widget.cameraParameterList;
     } else {
       imageFiles = [];
+      cameraParameterList=[];
     }
+    
   }
 
-  _sendRequestToGenerate3DModel(int modelId, int userId) async {
-    await _zipFiles(modelId, userId);
+  _sendRequestToGenerate3DModel() async {
+    String zipFilePath = await _zipFiles();
+    print(zipFilePath);
     var response = await gen3dModelRepository.gen3DModel(
-        zipFilePath, configs, modelId, userId);
-    print(response);
+        zipFilePath, reconstructionConfigs,cameraParameterList);
     return response;
   }
 
-  _zipFiles(int modelId, int userId) async {
-    Directory? appDocDirectory = await getExternalStorageDirectory();
+  _zipFiles() async {
+    Directory? appDocDirectory = await getApplicationDocumentsDirectory();
     var encoder = ZipFileEncoder();
-    zipFilePath = appDocDirectory!.path +
-        '/' +
-        modelId.toString() +
-        '_' +
-        userId.toString() +
-        '.zip';
+
+    String  zipFilePath =
+          '${appDocDirectory.path}/${reconstructionConfigs['modelId']}_${reconstructionConfigs['userId']}.zip';
+
+
     encoder.create(zipFilePath);
 
     for (var image in imageFiles!) {
+      
       encoder.addFile(File(image.path));
     }
 
     encoder.close();
+
+    return zipFilePath;
   }
 
   @override
@@ -93,8 +109,12 @@ class _ReconstructionConfigScreenState
                     .then((model) => {
                           if (model != null)
                             {
-                              _sendRequestToGenerate3DModel(
-                                  model.modelId, model.userId)
+                              setState(() {
+                                reconstructionConfigs['modelId'] =
+                                    model.modelId;
+                                reconstructionConfigs['userId'] = model.userId;
+                              }),
+                              _sendRequestToGenerate3DModel(),
                             }
                         });
               },
@@ -151,7 +171,7 @@ class _ReconstructionConfigScreenState
                           if (i == index) {
                             _selectModelQuality[i] = true;
                             Text quality = modelQuality[index] as Text;
-                            configs['quality'] = quality.data;
+                            reconstructionConfigs['quality'] = quality.data;
                           } else {
                             _selectModelQuality[i] = false;
                           }
@@ -179,10 +199,10 @@ class _ReconstructionConfigScreenState
                   children: [
                     Text("ระบบตรวจจับเฉพาะวัตถุ"),
                     Switch(
-                      value: configs["removeBackground"],
+                      value: reconstructionConfigs["objectDetection"],
                       onChanged: (value) {
                         setState(() {
-                          configs["removeBackground"] = value;
+                          reconstructionConfigs["objectDetection"] = value;
                         });
                       },
                       activeTrackColor: primaryLight,
@@ -190,6 +210,22 @@ class _ReconstructionConfigScreenState
                     ),
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("ระบบ Google ARCore"),
+                    Switch(
+                      value: reconstructionConfigs["googleARCore"],
+                      onChanged: (value) {
+                        setState(() {
+                          reconstructionConfigs["googleARCore"] = value;
+                        });
+                      },
+                      activeTrackColor: primaryLight,
+                      activeColor: primaryColor,
+                    ),
+                  ],
+                )
               ],
             ),
           ),

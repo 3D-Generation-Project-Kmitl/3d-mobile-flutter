@@ -12,7 +12,7 @@ class ImageViewerScreen extends StatelessWidget {
   final List<XFile> imageFiles;
 
   const ImageViewerScreen(
-      {super.key, required this.previewImage, required this.imageFiles});
+      {super.key, required this.previewImage, required this.imageFiles,});
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +45,11 @@ class ImageViewerScreen extends StatelessWidget {
         body: SafeArea(
             child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: Image.file(
-            File(previewImage.path),
-            width: double.infinity,
+          child: Center(
+            child: Image.file(
+              File(previewImage.path),
+              width: double.infinity,
+            ),
           ),
         )),
         bottomNavigationBar: Padding(
