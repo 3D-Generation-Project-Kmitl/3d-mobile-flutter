@@ -25,6 +25,7 @@ const String editProfileRoute = "/edit_profile";
 const String productsStoreRoute = "/products_store";
 const String followerRoute = "/follower";
 const String followingRoute = "/following";
+const String reportRoute = "/report";
 
 const String identityRoute = "/identity";
 const String storeRoute = "/store";

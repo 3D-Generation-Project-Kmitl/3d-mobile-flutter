@@ -34,6 +34,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final cartCubit = context.read<CartCubit>();
     final favoriteCubit = context.read<FavoriteCubit>();
+    final UserCubit userCubit = context.read<UserCubit>();
     SizeConfig().init(context);
 
     return BlocProvider(
@@ -57,8 +58,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         product.name,
                         style: Theme.of(context).textTheme.headline3,
                       ),
-                      actions: const [
-                        CartButton(),
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            if (userCubit.state is UserLoaded) {
+                              Navigator.pushNamed(context, reportRoute,
+                                  arguments: product);
+                            } else {
+                              Navigator.pushNamed(context, loginRoute);
+                            }
+                          },
+                          icon: Icon(
+                            Icons.report_outlined,
+                            color: Theme.of(context).primaryColor,
+                            size: 27,
+                          ),
+                        ),
+                        const CartButton(),
                       ],
                     )
                   : null,
