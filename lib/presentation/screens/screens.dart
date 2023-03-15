@@ -26,6 +26,7 @@ export 'customer/order_detail_screen.dart';
 export 'customer/view_model_screen.dart';
 export 'customer/search_result_screen.dart';
 export 'customer/products_store_screen.dart';
+export 'customer/report_screen.dart';
 
 export 'reconstruction/camera_screen.dart';
 

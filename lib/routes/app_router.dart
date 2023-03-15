@@ -99,6 +99,9 @@ class AppRouter {
         return _route(const FollowerScreen(), followerRoute);
       case followingRoute:
         return _route(const FollowingScreen(), followingRoute);
+      case reportRoute:
+        ProductDetail product = settings.arguments as ProductDetail;
+        return _route(ReportScreen(product: product), reportRoute);
       default:
         return _errorRoute();
     }
