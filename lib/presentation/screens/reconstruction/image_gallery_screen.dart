@@ -4,11 +4,14 @@ import 'package:marketplace/presentation/screens/reconstruction/camera_screen.da
 import 'dart:io';
 
 import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
+import 'package:marketplace/presentation/screens/reconstruction/reconstruction_config_screen.dart';
 
 class ImageGalleryScreen extends StatelessWidget {
   final List<XFile> imageFiles;
+  final List<Map<String, dynamic>?>? cameraParameterList;
+  final String previousScreen;
 
-  const ImageGalleryScreen({super.key, required this.imageFiles});
+  const ImageGalleryScreen({super.key, required this.imageFiles, required this.previousScreen, this.cameraParameterList });
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +20,22 @@ class ImageGalleryScreen extends StatelessWidget {
             title: Text('${imageFiles.length.toString()} รูป',style: Theme.of(context).textTheme.headline4),
             leading: BackButton(
               onPressed: () => {
-                Navigator.of(context).push(
+                if(previousScreen == "iv")
+                  Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => CameraScreen(imageFiles: imageFiles),
+                    builder: (context) => CameraScreen(imageFiles: imageFiles,cameraParameterList: cameraParameterList),
                   ),
                 )
+                else if(previousScreen == "rc")
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>  ReconstructionConfigScreen(
+                                                  imageFiles: imageFiles,
+                                                  cameraParameterList:
+                                                      cameraParameterList,
+                                                ),
+                    ),
+                  )
               },
             )),
         body: SafeArea(
@@ -42,7 +56,10 @@ class ImageGalleryScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ImageViewerScreen(
                                 previewImage: imageFiles[index],
-                                imageFiles: imageFiles),
+                                cameraParameter: cameraParameterList?[index],
+                                cameraParameterList:cameraParameterList,
+                                imageFiles: imageFiles,
+                                previousScreen: 'ig',),
                           ),
                         )
                       },

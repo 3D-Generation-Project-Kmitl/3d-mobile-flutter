@@ -36,18 +36,18 @@ class MainActivity : FlutterFragmentActivity() {
             if (call.method.equals("isARCoreSupported")) {
                 isSupported = isARCoreSupportedAndUpToDate()
                 if (isSupported) {
-                    if (session == null) {
+//                    if (session == null) {
                         
-                            session = Session(this)
-                            if (!session!!.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
-                                session = null
-                                result.success("notSupport")
-                            } else {
-                                session = null
+//                            session = Session(this)
+//                            if (!session!!.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
+//                                session = null
+//                                result.success("notSupport")
+//                            } else {
+//                                session = null
                                 result.success("support")
-                            }
+//                            }
                         
-                    }
+//                    }
                 } else if (!isSupported && isInstallRequest) {
                     flutterResult = result
                 } else {

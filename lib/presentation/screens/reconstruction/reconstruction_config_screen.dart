@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:marketplace/constants/colors.dart';
+import 'package:marketplace/presentation/screens/reconstruction/camera_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../configs/size_config.dart';
 
@@ -22,8 +23,8 @@ const List<Widget> modelQuality = <Widget>[
 
 class ReconstructionConfigScreen extends StatefulWidget {
   final List<XFile> imageFiles;
-  final List<Map<String,dynamic>?> cameraParameterList;
-  const ReconstructionConfigScreen({Key? key,required this.imageFiles,required this.cameraParameterList})
+  final List<Map<String,dynamic>?>? cameraParameterList;
+  const ReconstructionConfigScreen({Key? key,required this.imageFiles, this.cameraParameterList})
       : super(key: key);
 
   @override
@@ -53,10 +54,14 @@ class _ReconstructionConfigScreenState
     super.initState();
     if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
       imageFiles = widget.imageFiles;
-      cameraParameterList=widget.cameraParameterList;
     } else {
       imageFiles = [];
-      cameraParameterList=[];
+  
+    }
+            if (widget.cameraParameterList != null && widget.cameraParameterList!.isNotEmpty) {
+      cameraParameterList = widget.cameraParameterList;
+    } else {
+      cameraParameterList = [];
     }
     
   }
@@ -96,6 +101,17 @@ class _ReconstructionConfigScreenState
         appBar: AppBar(
           title: Text("ตั้งค่าการสร้างโมเดล 3 มิติ",
               style: Theme.of(context).textTheme.headline4),
+          leading: BackButton(
+              onPressed: () => {
+                  Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CameraScreen(imageFiles: imageFiles,cameraParameterList:cameraParameterList),
+                  ),
+                )
+
+              },
+            )
+          
         ),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -143,6 +159,8 @@ class _ReconstructionConfigScreenState
                               MaterialPageRoute(
                                 builder: (context) => ImageGalleryScreen(
                                   imageFiles: imageFiles!,
+                                  cameraParameterList:cameraParameterList!,
+                                  previousScreen: "rc",
                                 ),
                               ),
                             );
@@ -181,7 +199,7 @@ class _ReconstructionConfigScreenState
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                     selectedBorderColor: Colors.white,
                     selectedColor: Colors.white,
-                    fillColor: primaryLight,
+                    fillColor: primaryColor,
                     color: Colors.black,
                     constraints: const BoxConstraints(
                       minHeight: 40.0,
@@ -205,7 +223,7 @@ class _ReconstructionConfigScreenState
                           reconstructionConfigs["objectDetection"] = value;
                         });
                       },
-                      activeTrackColor: primaryLight,
+                      activeTrackColor: primarySoftColor,
                       activeColor: primaryColor,
                     ),
                   ],
@@ -221,7 +239,7 @@ class _ReconstructionConfigScreenState
                           reconstructionConfigs["googleARCore"] = value;
                         });
                       },
-                      activeTrackColor: primaryLight,
+                      activeTrackColor: primarySoftColor,
                       activeColor: primaryColor,
                     ),
                   ],

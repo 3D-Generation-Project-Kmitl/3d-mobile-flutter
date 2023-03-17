@@ -49,7 +49,7 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
 
     private var isTakePose: Boolean = false
     private lateinit var flutterPoseResult: MethodChannel.Result
-    private val channel = MethodChannel(dartExecutor, "ar.core.platform/depth")
+    private val channel = MethodChannel(dartExecutor, "ar.core.platform/cameraParameter")
     private val eventChanel = EventChannel(dartExecutor, "ar.core.platform/tracking")
     private val frameLayout: FrameLayout
     private val surfaceView: GLSurfaceView
@@ -100,8 +100,8 @@ class CameraView(private val activity: Activity, dartExecutor: DartExecutor) :
     //    private var depth: ((ArrayList<ArrayList<String>>) -> Unit)? = null
     //    private var depth: ((ShortArray) -> Unit)? = null
     private lateinit var array: ShortArray
-    private var imageWidth: Int = 800
-    private var imageHeight: Int = 800
+    private var imageWidth: Int = 2000
+    private var imageHeight: Int = 2000
     private var mSensorOrientation = 0
     private val ORIENTATIONS: SparseIntArray = SparseIntArray()
 

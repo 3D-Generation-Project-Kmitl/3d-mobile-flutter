@@ -10,9 +10,12 @@ import 'package:marketplace/presentation/screens/reconstruction/camera_screen.da
 class ImageViewerScreen extends StatelessWidget {
   final XFile previewImage;
   final List<XFile> imageFiles;
+  final Map<String, dynamic>? cameraParameter;
+  final List<Map<String, dynamic>?>? cameraParameterList;
+  final String previousScreen;
 
   const ImageViewerScreen(
-      {super.key, required this.previewImage, required this.imageFiles,});
+      {super.key, required this.previewImage,this.cameraParameter, required this.imageFiles,this.cameraParameterList,required this.previousScreen});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,8 @@ class ImageViewerScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) => ImageGalleryScreen(
                       imageFiles: imageFiles,
+                      cameraParameterList:cameraParameterList,
+                      previousScreen: "iv",
                     ),
                   ),
                 );
@@ -59,11 +64,30 @@ class ImageViewerScreen extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 imageFiles.removeWhere((image) => image == previewImage);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CameraScreen(imageFiles: imageFiles),
-                  ),
-                );
+                if(cameraParameter!=null){
+                  cameraParameterList!.removeWhere((camera)=>camera==cameraParameter);
+                }
+                if(previousScreen=='ig'){
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ImageGalleryScreen(
+                        imageFiles: imageFiles,
+                        cameraParameterList:cameraParameterList,
+                        previousScreen: "iv",
+                      ),
+                    ),
+                  );
+                }else if (previousScreen=='c'){
+                    Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => CameraScreen(
+                        imageFiles: imageFiles,
+                        cameraParameterList:cameraParameterList,
+                      )
+                    ),
+                  );
+                }
+
               },
               child: const Text(
                 "ลบรูปภาพ",
