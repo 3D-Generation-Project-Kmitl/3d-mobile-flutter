@@ -109,4 +109,18 @@ class StoreModelsCubit extends Cubit<StoreModelsState> {
       emit(StoreModelsFailure(e));
     }
   }
+
+  Future<void> deleteModel(int modelId) async {
+    try {
+      if (state is StoreModelsLoaded) {
+        print(modelId);
+        final models = (state as StoreModelsLoaded).models;
+        await modelRepository.deleteModel(modelId);
+        models.removeWhere((element) => element.modelId == modelId);
+        emit(StoreModelsLoaded(models));
+      }
+    } on String catch (e) {
+      emit(StoreModelsFailure(e));
+    }
+  }
 }
