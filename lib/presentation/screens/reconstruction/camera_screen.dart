@@ -31,7 +31,7 @@ class _CameraScreenState extends State<CameraScreen> {
   MethodChannel channel =
       const MethodChannel('$arcoreMethodChannel/cameraParameter');
   List<XFile>? imageFiles;
-  List<Map<String, dynamic>?>? cameraParameterList = [];
+  List<Map<String, dynamic>?>? cameraParameterList;
   late CameraController _cameraController;
   Future<void>? _initializeControllerFuture;
 
@@ -45,23 +45,27 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   void initState() {
+    if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
+        imageFiles = widget.imageFiles;
+      } else {
+        imageFiles = [];
+      }
+      if (widget.cameraParameterList != null &&
+          widget.cameraParameterList!.isNotEmpty) {
+        cameraParameterList = widget.cameraParameterList;
+      } else {
+        cameraParameterList = [];
+      }
     _checkARCoreSupport();
+
     print('isARCoreSupported: $isARCoreSupported');
     if (!isARCoreSupported) {
       _initFlutterCamera();
-    }
+      cameraParameterList = null;
+      
+    } 
+
     super.initState();
-    if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
-      imageFiles = widget.imageFiles;
-    } else {
-      imageFiles = [];
-    }
-    if (widget.cameraParameterList != null &&
-        widget.cameraParameterList!.isNotEmpty) {
-      cameraParameterList = widget.cameraParameterList;
-    } else {
-      cameraParameterList = [];
-    }
   }
 
   void onPlatformViewCreated(int id) async {
@@ -90,13 +94,12 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _initFlutterCamera() async {
     final cameras = await availableCameras();
-    
 
     final camera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back);
 
     _cameraController =
-        CameraController(camera, ResolutionPreset.veryHigh, enableAudio: false);
+        CameraController(camera, ResolutionPreset.max, enableAudio: false);
     await _cameraController.initialize();
     await _cameraController.lockCaptureOrientation();
     setState(() => isLoading = false);
@@ -178,6 +181,7 @@ class _CameraScreenState extends State<CameraScreen> {
       print('cameraParameterList: $cameraParameterList');
     } else {
       await _cameraController.initialize();
+      await _cameraController.lockCaptureOrientation();
       XFile image = await _renameImageFile(
           await _cameraController.takePicture(), fileName);
       imageFiles!.add(image);
@@ -191,7 +195,11 @@ class _CameraScreenState extends State<CameraScreen> {
   _autoTakePicture() async {
     if (isTaking == false) {
       timer = Timer.periodic(
-          Duration(milliseconds: 1250), (Timer t) => _manualTakePicture());
+          Duration(milliseconds: 1250), (Timer t) => {
+            if(!_cameraController.value.isTakingPicture){
+            _manualTakePicture()
+            }
+            });
     } else {
       timer?.cancel();
     }
@@ -207,6 +215,7 @@ class _CameraScreenState extends State<CameraScreen> {
       DeviceOrientation.portraitDown,
     ]);
     SizeConfig().init(context);
+    print('cameraParameterList: $cameraParameterList');
     if (isLoading) {
       return Container(
         color: Colors.white,
@@ -310,9 +319,12 @@ class _CameraScreenState extends State<CameraScreen> {
                                               builder: (context) =>
                                                   ImageViewerScreen(
                                                 cameraParameterList:
-                                                    cameraParameterList!,
+                                                    cameraParameterList,
                                                 cameraParameter:
-                                                    cameraParameterList!.last,
+                                                    cameraParameterList != null
+                                                        ? cameraParameterList!
+                                                            .last
+                                                        : null,
                                                 previewImage: imageFiles!.last,
                                                 imageFiles: imageFiles!,
                                                 previousScreen: 'c',
@@ -367,7 +379,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                                       ReconstructionConfigScreen(
                                                     imageFiles: imageFiles!,
                                                     cameraParameterList:
-                                                        cameraParameterList!,
+                                                        cameraParameterList,
                                                   ),
                                                 ),
                                               ),

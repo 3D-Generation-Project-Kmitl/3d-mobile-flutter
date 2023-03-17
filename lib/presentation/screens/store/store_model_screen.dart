@@ -143,8 +143,11 @@ class StoreModelScreen extends StatelessWidget {
                     );
                   }
                 : null,
-            child: roundedImageCard(
+            child: isCompleted?roundedImageCard(
               imageURL: model.picture,
+            ):roundedImageCard(
+              imageURL: model.picture,
+              describes: "กำลังสร้าง"
             ),
           );
         },

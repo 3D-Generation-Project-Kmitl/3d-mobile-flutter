@@ -63,8 +63,11 @@ class ImageViewerScreen extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 imageFiles.removeWhere((image) => image == previewImage);
-                if(cameraParameter!=null){
+                if(cameraParameterList!=null ){
+                  if(cameraParameterList!.isNotEmpty){
                   cameraParameterList!.removeWhere((camera)=>camera==cameraParameter);
+
+                  }
                 }
                 if(previousScreen=='ig'){
                   Navigator.of(context).push(

@@ -11,29 +11,35 @@ class ImageGalleryScreen extends StatelessWidget {
   final List<Map<String, dynamic>?>? cameraParameterList;
   final String previousScreen;
 
-  const ImageGalleryScreen({super.key, required this.imageFiles, required this.previousScreen, this.cameraParameterList });
+  const ImageGalleryScreen(
+      {super.key,
+      required this.imageFiles,
+      required this.previousScreen,
+      this.cameraParameterList});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text('${imageFiles.length.toString()} รูป',style: Theme.of(context).textTheme.headline4),
+            title: Text('${imageFiles.length.toString()} รูป',
+                style: Theme.of(context).textTheme.headline4),
             leading: BackButton(
               onPressed: () => {
-                if(previousScreen == "iv")
-                  Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CameraScreen(imageFiles: imageFiles,cameraParameterList: cameraParameterList),
-                  ),
-                )
-                else if(previousScreen == "rc")
+                if (previousScreen == "iv")
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) =>  ReconstructionConfigScreen(
-                                                  imageFiles: imageFiles,
-                                                  cameraParameterList:
-                                                      cameraParameterList,
-                                                ),
+                      builder: (context) => CameraScreen(
+                          imageFiles: imageFiles,
+                          cameraParameterList: cameraParameterList),
+                    ),
+                  )
+                else if (previousScreen == "rc")
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ReconstructionConfigScreen(
+                        imageFiles: imageFiles,
+                        cameraParameterList: cameraParameterList,
+                      ),
                     ),
                   )
               },
@@ -55,21 +61,22 @@ class ImageGalleryScreen extends StatelessWidget {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => ImageViewerScreen(
-                                previewImage: imageFiles[index],
-                                cameraParameter: cameraParameterList?[index],
-                                cameraParameterList:cameraParameterList,
-                                imageFiles: imageFiles,
-                                previousScreen: 'ig',),
+                              previewImage: imageFiles[index],
+                              cameraParameter: cameraParameterList != null
+                                  ? cameraParameterList![index]
+                                  : null,
+                              cameraParameterList: cameraParameterList,
+                              imageFiles: imageFiles,
+                              previousScreen: 'ig',
+                            ),
                           ),
                         )
                       },
-
-                        child: FittedBox(
-                          fit:BoxFit.cover,
-                          clipBehavior: Clip.hardEdge,
-                          child:Image.file(File(imageFiles[index].path)) ,
-                        ),
-  
+                      child: FittedBox(
+                        fit: BoxFit.cover,
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.file(File(imageFiles[index].path)),
+                      ),
                     );
                   },
                   childCount: imageFiles.length,

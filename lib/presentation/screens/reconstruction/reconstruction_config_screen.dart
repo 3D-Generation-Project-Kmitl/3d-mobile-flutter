@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:archive/archive_io.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +8,8 @@ import 'package:path_provider/path_provider.dart';
 import '../../../configs/size_config.dart';
 
 import '../../../cubits/cubits.dart';
+import '../../../routes/screens_routes.dart';
+
 import 'image_gallery_screen.dart';
 
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
@@ -23,8 +23,9 @@ const List<Widget> modelQuality = <Widget>[
 
 class ReconstructionConfigScreen extends StatefulWidget {
   final List<XFile> imageFiles;
-  final List<Map<String,dynamic>?>? cameraParameterList;
-  const ReconstructionConfigScreen({Key? key,required this.imageFiles, this.cameraParameterList})
+  final List<Map<String, dynamic>?>? cameraParameterList;
+  const ReconstructionConfigScreen(
+      {Key? key, required this.imageFiles, this.cameraParameterList})
       : super(key: key);
 
   @override
@@ -35,18 +36,17 @@ class ReconstructionConfigScreen extends StatefulWidget {
 class _ReconstructionConfigScreenState
     extends State<ReconstructionConfigScreen> {
   List<XFile>? imageFiles;
-  List<Map<String,dynamic>?>? cameraParameterList;
+  List<Map<String, dynamic>?>? cameraParameterList;
 
   Map<String, dynamic> reconstructionConfigs = {
     "userId": -888,
     "modelId": -888,
     "objectDetection": false,
     "quality": 'Low',
-    "googleARCore":false,
+    "googleARCore": false,
   };
   final List<bool> _selectModelQuality = <bool>[false, false, true];
   final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
-  
 
   bool vertical = false;
   @override
@@ -56,21 +56,20 @@ class _ReconstructionConfigScreenState
       imageFiles = widget.imageFiles;
     } else {
       imageFiles = [];
-  
     }
-            if (widget.cameraParameterList != null && widget.cameraParameterList!.isNotEmpty) {
+    if (widget.cameraParameterList != null &&
+        widget.cameraParameterList!.isNotEmpty) {
       cameraParameterList = widget.cameraParameterList;
     } else {
       cameraParameterList = [];
     }
-    
   }
 
   _sendRequestToGenerate3DModel() async {
     String zipFilePath = await _zipFiles();
     print(zipFilePath);
     var response = await gen3dModelRepository.gen3DModel(
-        zipFilePath, reconstructionConfigs,cameraParameterList);
+        zipFilePath, reconstructionConfigs, cameraParameterList);
     return response;
   }
 
@@ -78,14 +77,12 @@ class _ReconstructionConfigScreenState
     Directory? appDocDirectory = await getApplicationDocumentsDirectory();
     var encoder = ZipFileEncoder();
 
-    String  zipFilePath =
-          '${appDocDirectory.path}/${reconstructionConfigs['modelId']}_${reconstructionConfigs['userId']}.zip';
-
+    String zipFilePath =
+        '${appDocDirectory.path}/${reconstructionConfigs['userId']}_${reconstructionConfigs['modelId']}.zip';
 
     encoder.create(zipFilePath);
 
     for (var image in imageFiles!) {
-      
       encoder.addFile(File(image.path));
     }
 
@@ -99,20 +96,19 @@ class _ReconstructionConfigScreenState
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
-          title: Text("ตั้งค่าการสร้างโมเดล 3 มิติ",
-              style: Theme.of(context).textTheme.headline4),
-          leading: BackButton(
+            title: Text("ตั้งค่าการสร้างโมเดล 3 มิติ",
+                style: Theme.of(context).textTheme.headline4),
+            leading: BackButton(
               onPressed: () => {
-                  Navigator.of(context).push(
+                Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => CameraScreen(imageFiles: imageFiles,cameraParameterList:cameraParameterList),
+                    builder: (context) => CameraScreen(
+                        imageFiles: imageFiles,
+                        cameraParameterList: cameraParameterList),
                   ),
                 )
-
               },
-            )
-          
-        ),
+            )),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(20.0),
           child: SizedBox(
@@ -131,8 +127,9 @@ class _ReconstructionConfigScreenState
                                 reconstructionConfigs['userId'] = model.userId;
                               }),
                               _sendRequestToGenerate3DModel(),
-                            }
+                            },
                         });
+                Navigator.pushNamed(context, storeModelRoute);
               },
               child: const Text(
                 "สร้างโมเดล 3 มิติ",
@@ -159,7 +156,7 @@ class _ReconstructionConfigScreenState
                               MaterialPageRoute(
                                 builder: (context) => ImageGalleryScreen(
                                   imageFiles: imageFiles!,
-                                  cameraParameterList:cameraParameterList!,
+                                  cameraParameterList: cameraParameterList!,
                                   previousScreen: "rc",
                                 ),
                               ),
