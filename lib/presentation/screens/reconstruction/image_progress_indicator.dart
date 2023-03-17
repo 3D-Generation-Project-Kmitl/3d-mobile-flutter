@@ -1,9 +1,9 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/constants/reconstruction.dart';
-import 'package:flutter/material.dart';
+
 
 class ImageProgressIndicatior extends StatelessWidget {
   final List<XFile>? imageFiles;

@@ -11,7 +11,7 @@ import '../../../configs/size_config.dart';
 
 import '../../../cubits/cubits.dart';
 import 'image_gallery_screen.dart';
-import 'package:marketplace/routes/screens_routes.dart';
+
 import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

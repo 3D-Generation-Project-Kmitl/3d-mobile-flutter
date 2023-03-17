@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/constants/colors.dart';
-import 'package:marketplace/configs/theme.dart';
 import 'dart:io';
 import '../../../configs/size_config.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_gallery_screen.dart';
