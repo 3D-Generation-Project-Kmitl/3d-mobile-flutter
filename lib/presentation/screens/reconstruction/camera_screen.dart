@@ -45,9 +45,9 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     // _checkARCoreSupport();
-  
+
     _initFlutterCamera();
-    
+
     super.initState();
     widget.imageFiles ??= [];
   }
@@ -73,7 +73,7 @@ class _CameraScreenState extends State<CameraScreen> {
   //         isARCoreSupported = false;
   //         widget.cameraParameterList = null;
   //       });
-        
+
   //     }
   //   } on PlatformException catch (e) {
   //     throw Exception();
@@ -158,7 +158,6 @@ class _CameraScreenState extends State<CameraScreen> {
         'camera_parameter': cameraParameter
       });
     } else {
-
       if (!_cameraController.value.isTakingPicture) {
         XFile image = await _renameImageFile(
             await _cameraController.takePicture(), fileName);
@@ -246,6 +245,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                 direction:
                                     vertical ? Axis.vertical : Axis.horizontal,
                                 onPressed: (int index) {
+                                  timer?.cancel();
                                   setState(() {
                                     // The button that is tapped is set to true, and the others to false.
                                     for (int i = 0;
@@ -306,8 +306,12 @@ class _CameraScreenState extends State<CameraScreen> {
                                             ),
                                           ),
                                         ),
+                                        timer?.cancel(),
                                         setState(() {
-                                          isTaking = !isTaking;
+                                          isTaking = false;
+                                        
+                                            
+                                          
                                         }),
                                       },
                                       child: FileImagePreviewButton(
@@ -344,6 +348,10 @@ class _CameraScreenState extends State<CameraScreen> {
                                       heroTag: "nextButton",
                                       backgroundColor: Colors.white,
                                       onPressed: () => {
+                                        timer?.cancel(),
+                                        setState(() {
+                                          isTaking = false;
+                                        }),
                                         if (widget.imageFiles!.length <
                                             minImages)
                                           {_showMinimumImagesModal(context)}
@@ -360,9 +368,6 @@ class _CameraScreenState extends State<CameraScreen> {
                                                 ),
                                               ),
                                             ),
-                                            setState(() {
-                                              isTaking = false;
-                                            }),
                                           }
                                       },
                                       child: const Icon(

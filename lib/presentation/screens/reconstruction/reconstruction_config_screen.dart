@@ -87,7 +87,10 @@ class _ReconstructionConfigScreenState
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
+                const CircularProgressIndicator(),
+                const SizedBox(
+                  height: 5,
+                ),
                 Text('กำลังส่งข้อมูล',
                     style: Theme.of(context)
                         .textTheme
