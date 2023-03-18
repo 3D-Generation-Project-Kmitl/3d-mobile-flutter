@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/constants/reconstruction.dart';
-
 
 class ImageProgressIndicatior extends StatelessWidget {
   final List<XFile>? imageFiles;
@@ -19,50 +17,50 @@ class ImageProgressIndicatior extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  flex:minImages,
+                  flex: minImages,
                   child: Container(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      'ขั้นต่ำ',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(width: 1.0, color: primaryColor),
                       ),
                       color: Colors.white,
                     ),
+                    child: const Text(
+                      'ขั้นต่ำ',
+                      style: TextStyle(fontSize: 10),
+                    ),
                   ),
                 ),
                 Expanded(
-                  flex:goodImages,
+                  flex: goodImages,
                   child: Container(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      'ดี',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(width: 1, color: primaryColor),
                       ),
                       color: Colors.white,
                     ),
+                    child: const Text(
+                      'ดี',
+                      style: TextStyle(fontSize: 10),
+                    ),
                   ),
                 ),
                 Expanded(
-                  flex:maxImages-goodImages-minImages,
+                  flex: maxImages - goodImages - minImages,
                   child: Container(
                     alignment: Alignment.centerRight,
-                    child: Text(
-                      'เยี่ยม',
-                      style: TextStyle(fontSize: 10),
-                    ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         right: BorderSide(width: 1.0, color: primaryColor),
                       ),
                       color: Colors.white,
+                    ),
+                    child: const Text(
+                      'เยี่ยม',
+                      style: TextStyle(fontSize: 10),
                     ),
                   ),
                 ),

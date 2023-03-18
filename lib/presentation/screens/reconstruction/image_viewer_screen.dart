@@ -24,11 +24,9 @@ class ImageViewerScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.headline4),
           actions: [
             TextButton(
-              // style: TextButton.styleFrom(
-              //   textStyle: const TextStyle(color: Colors.red,fontSize: 12),
-              // ),
+
               onPressed: () {
-                Navigator.of(context).push(
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => ImageGalleryScreen(
                       imageFiles: imageFiles,

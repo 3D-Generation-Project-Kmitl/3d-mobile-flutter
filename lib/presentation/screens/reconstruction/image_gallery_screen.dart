@@ -1,10 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:marketplace/presentation/screens/reconstruction/camera_screen.dart';
 import 'dart:io';
 
 import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
-import 'package:marketplace/presentation/screens/reconstruction/reconstruction_config_screen.dart';
 
 class ImageGalleryScreen extends StatelessWidget {
   final List<XFile> imageFiles;
@@ -25,23 +23,7 @@ class ImageGalleryScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4),
             leading: BackButton(
               onPressed: () => {
-                if (previousScreen == "iv")
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => CameraScreen(
-                          imageFiles: imageFiles,
-                          cameraParameterList: cameraParameterList),
-                    ),
-                  )
-                else if (previousScreen == "rc")
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ReconstructionConfigScreen(
-                        imageFiles: imageFiles,
-                        cameraParameterList: cameraParameterList,
-                      ),
-                    ),
-                  )
+                Navigator.of(context).pop(),
               },
             )),
         body: SafeArea(

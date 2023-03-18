@@ -14,15 +14,16 @@ import 'dart:io';
 
 const List<Widget> cameraMode = <Widget>[Text('Manual'), Text('Auto')];
 
+// ignore: must_be_immutable
 class CameraScreen extends StatefulWidget {
-  final List<XFile>? imageFiles;
-  final List<Map<String, dynamic>?>? cameraParameterList;
+  List<XFile>? imageFiles = [];
+  List<Map<String, dynamic>?>? cameraParameterList = [];
 
-  const CameraScreen({Key? key, this.imageFiles, this.cameraParameterList})
+  CameraScreen({Key? key, this.imageFiles, this.cameraParameterList})
       : super(key: key);
 
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  State<CameraScreen> createState() => _CameraScreenState();
 }
 
 class _CameraScreenState extends State<CameraScreen> {
@@ -30,10 +31,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
   MethodChannel channel =
       const MethodChannel('$arcoreMethodChannel/cameraParameter');
-  List<XFile>? imageFiles;
-  List<Map<String, dynamic>?>? cameraParameterList;
+
   late CameraController _cameraController;
-  Future<void>? _initializeControllerFuture;
 
   final List<bool> _selectCameraMode = <bool>[true, false];
   bool vertical = false;
@@ -45,27 +44,12 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   void initState() {
-    if (widget.imageFiles != null && widget.imageFiles!.isNotEmpty) {
-        imageFiles = widget.imageFiles;
-      } else {
-        imageFiles = [];
-      }
-      if (widget.cameraParameterList != null &&
-          widget.cameraParameterList!.isNotEmpty) {
-        cameraParameterList = widget.cameraParameterList;
-      } else {
-        cameraParameterList = [];
-      }
-    _checkARCoreSupport();
-
-    print('isARCoreSupported: $isARCoreSupported');
-    if (!isARCoreSupported) {
-      _initFlutterCamera();
-      cameraParameterList = null;
-      
-    } 
-
+    // _checkARCoreSupport();
+  
+    _initFlutterCamera();
+    
     super.initState();
+    widget.imageFiles ??= [];
   }
 
   void onPlatformViewCreated(int id) async {
@@ -74,23 +58,27 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
-  Future<void> _checkARCoreSupport() async {
-    try {
-      MethodChannel supportChannel = const MethodChannel(arcoreMethodChannel);
-      final String result =
-          await supportChannel.invokeMethod('isARCoreSupported');
-      print('checkARCoreSupport: $result');
-      setState(() {
-        if (result == 'support') {
-          isARCoreSupported = true;
-        } else {
-          isARCoreSupported = false;
-        }
-      });
-    } on PlatformException catch (e) {
-      print(e);
-    }
-  }
+  // Future<void> _checkARCoreSupport() async {
+  //   try {
+  //     MethodChannel supportChannel = const MethodChannel(arcoreMethodChannel);
+  //     final String result =
+  //         await supportChannel.invokeMethod('isARCoreSupported');
+
+  //     if (result == 'support') {
+  //       setState(() {
+  //         isARCoreSupported = true;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         isARCoreSupported = false;
+  //         widget.cameraParameterList = null;
+  //       });
+        
+  //     }
+  //   } on PlatformException catch (e) {
+  //     throw Exception();
+  //   }
+  // }
 
   Future<void> _initFlutterCamera() async {
     final cameras = await availableCameras();
@@ -98,8 +86,8 @@ class _CameraScreenState extends State<CameraScreen> {
     final camera = cameras.firstWhere(
         (camera) => camera.lensDirection == CameraLensDirection.back);
 
-    _cameraController =
-        CameraController(camera, ResolutionPreset.max, enableAudio: false);
+    _cameraController = CameraController(camera, ResolutionPreset.ultraHigh,
+        enableAudio: false);
     await _cameraController.initialize();
     await _cameraController.lockCaptureOrientation();
     setState(() => isLoading = false);
@@ -109,30 +97,24 @@ class _CameraScreenState extends State<CameraScreen> {
   void dispose() {
     _cameraController.dispose();
     timer?.cancel();
-    setState(() {
-      isLoading = true;
-    });
+
     super.dispose();
   }
 
   _renameImageFile(XFile imageXFile, String fileName) async {
     File imageFile = File(imageXFile.path);
-    print('Original path: ${imageFile.path}');
     String dir = path.dirname(imageFile.path);
     String newPath = path.join(dir, fileName);
-    print('NewPath: ${newPath}');
     imageFile = imageFile.renameSync(newPath);
-    return new XFile(imageFile.path);
+    return XFile(imageFile.path);
   }
 
   Future<XFile> takePicture() async {
     try {
       final path = await channel.invokeMethod<String>('takePicture');
-      print('path ' + path!!);
       if (path != null) return XFile(path);
       throw Exception('error taking picture');
     } catch (e) {
-      print('takePicture error: $e');
       throw Exception();
     }
   }
@@ -151,55 +133,48 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       final cameraParameter = await channel
           .invokeMethod<Map<dynamic, dynamic>>('getCameraParameter');
-      // final resultMap = Map<String, dynamic>.from(cameraParameterList!.cast<String, dynamic>());
       if (cameraParameter != null) {
-        print('cameraParameter: $cameraParameter');
-        print('cameraParameter Type: ${cameraParameter.runtimeType}');
-
         return cameraParameter;
       }
 
       throw Exception('error get camera parameter');
     } catch (e) {
-      print('getcameraParameterList error: $e');
       throw Exception();
     }
   }
 
   _manualTakePicture() async {
     String fileName =
-        "${(imageFiles!.length + 1).toString().padLeft(4, '0')}.jpg";
-
+        "${(widget.imageFiles!.length + 1).toString().padLeft(4, '0')}.jpg";
+    widget.imageFiles ??= [];
     if (isARCoreSupported) {
       XFile image = await _renameImageFile(await takePicture(), fileName);
-      imageFiles!.add(image);
+
+      widget.imageFiles!.add(image);
       Map<dynamic, dynamic> cameraParameter = await getCameraParameter();
-      cameraParameterList!.add({
+      widget.cameraParameterList ??= [];
+      widget.cameraParameterList!.add({
         'file_path': 'images/$fileName',
         'camera_parameter': cameraParameter
       });
-      print('cameraParameterList: $cameraParameterList');
     } else {
-      await _cameraController.initialize();
-      await _cameraController.lockCaptureOrientation();
-      XFile image = await _renameImageFile(
-          await _cameraController.takePicture(), fileName);
-      imageFiles!.add(image);
+
+      if (!_cameraController.value.isTakingPicture) {
+        XFile image = await _renameImageFile(
+            await _cameraController.takePicture(), fileName);
+        widget.imageFiles!.add(image);
+      }
     }
 
     setState(() {
-      imageFiles = imageFiles;
+      widget.imageFiles = widget.imageFiles;
     });
   }
 
   _autoTakePicture() async {
     if (isTaking == false) {
-      timer = Timer.periodic(
-          Duration(milliseconds: 1250), (Timer t) => {
-            if(!_cameraController.value.isTakingPicture){
-            _manualTakePicture()
-            }
-            });
+      timer = Timer.periodic(const Duration(milliseconds: 1250),
+          (Timer t) => {_manualTakePicture()});
     } else {
       timer?.cancel();
     }
@@ -215,7 +190,6 @@ class _CameraScreenState extends State<CameraScreen> {
       DeviceOrientation.portraitDown,
     ]);
     SizeConfig().init(context);
-    print('cameraParameterList: $cameraParameterList');
     if (isLoading) {
       return Container(
         color: Colors.white,
@@ -234,172 +208,174 @@ class _CameraScreenState extends State<CameraScreen> {
                   isARCoreSupported
                       ? AndroidView(
                           viewType: arcoreMethodChannel,
-                          creationParamsCodec: StandardMessageCodec(),
+                          creationParamsCodec: const StandardMessageCodec(),
                           onPlatformViewCreated: onPlatformViewCreated,
                         )
                       : CameraPreview(_cameraController),
-                  Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.clear,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.clear,
+                            size: 30,
+                            color: Colors.white,
                           ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 40,
-                                // width:80,
-                                padding: EdgeInsets.zero,
-                                decoration: BoxDecoration(
-                                  color: Color.fromARGB(122, 255, 255, 255),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(8.0)),
-                                ),
-                                child: ToggleButtons(
-                                  direction: vertical
-                                      ? Axis.vertical
-                                      : Axis.horizontal,
-                                  onPressed: (int index) {
-                                    setState(() {
-                                      // The button that is tapped is set to true, and the others to false.
-                                      for (int i = 0;
-                                          i < _selectCameraMode.length;
-                                          i++) {
-                                        _selectCameraMode[i] = i == index;
-                                      }
-                                      isTaking = false;
-                                    });
-                                  },
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8)),
-                                  color: Colors.black,
-                                  selectedColor: primaryColor,
-                                  renderBorder: false,
-                                  fillColor: Colors.white,
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2!
-                                      .copyWith(color: primaryColor),
-                                  constraints: const BoxConstraints(
-                                      minWidth: 75.0, minHeight: 40.0),
-                                  isSelected: _selectCameraMode,
-                                  children: cameraMode,
-                                ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 40,
+                              // width:80,
+                              padding: EdgeInsets.zero,
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(122, 255, 255, 255),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8.0)),
                               ),
-                              const SizedBox(
-                                height: 10,
+                              child: ToggleButtons(
+                                direction:
+                                    vertical ? Axis.vertical : Axis.horizontal,
+                                onPressed: (int index) {
+                                  setState(() {
+                                    // The button that is tapped is set to true, and the others to false.
+                                    for (int i = 0;
+                                        i < _selectCameraMode.length;
+                                        i++) {
+                                      _selectCameraMode[i] = i == index;
+                                    }
+                                    isTaking = false;
+                                  });
+                                },
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8)),
+                                color: Colors.black,
+                                selectedColor: primaryColor,
+                                renderBorder: false,
+                                fillColor: Colors.white,
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2!
+                                    .copyWith(color: primaryColor),
+                                constraints: const BoxConstraints(
+                                    minWidth: 75.0, minHeight: 40.0),
+                                isSelected: _selectCameraMode,
+                                children: cameraMode,
                               ),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Visibility(
-                                      maintainSize: true,
-                                      visible: imageFiles!.isNotEmpty,
-                                      maintainAnimation: true,
-                                      maintainState: true,
-                                      child: GestureDetector(
-                                        onTap: () => {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ImageViewerScreen(
-                                                cameraParameterList:
-                                                    cameraParameterList,
-                                                cameraParameter:
-                                                    cameraParameterList != null
-                                                        ? cameraParameterList!
-                                                            .last
-                                                        : null,
-                                                previewImage: imageFiles!.last,
-                                                imageFiles: imageFiles!,
-                                                previousScreen: 'c',
-                                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Visibility(
+                                    maintainSize: true,
+                                    visible: widget.imageFiles!.isNotEmpty,
+                                    maintainAnimation: true,
+                                    maintainState: true,
+                                    child: GestureDetector(
+                                      onTap: () => {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ImageViewerScreen(
+                                              cameraParameterList:
+                                                  widget.cameraParameterList,
+                                              cameraParameter:
+                                                  widget.cameraParameterList !=
+                                                          null
+                                                      ? widget
+                                                          .cameraParameterList!
+                                                          .last
+                                                      : null,
+                                              previewImage:
+                                                  widget.imageFiles!.last,
+                                              imageFiles: widget.imageFiles!,
+                                              previousScreen: 'c',
                                             ),
                                           ),
-                                          setState(() {
-                                            isTaking = !isTaking;
-                                          }),
-                                        },
-                                        child: FileImagePreviewButton(
-                                            imageFiles: imageFiles!),
-                                      ),
+                                        ),
+                                        setState(() {
+                                          isTaking = !isTaking;
+                                        }),
+                                      },
+                                      child: FileImagePreviewButton(
+                                          imageFiles: widget.imageFiles!),
                                     ),
-                                    Container(
-                                      height: 70.0,
-                                      width: 70.0,
-                                      child: FloatingActionButton(
-                                          heroTag: "takePictureButton",
-                                          backgroundColor: Color.fromARGB(
-                                              122, 255, 255, 255),
-                                          child: Icon(
-                                            isTaking && _selectCameraMode[1]
-                                                ? Icons.stop_rounded
-                                                : Icons.circle,
-                                            color: _selectCameraMode[0]
-                                                ? Colors.white
-                                                : Colors.red,
-                                            size: 70,
-                                          ),
-                                          onPressed: () => {
-                                                if (_selectCameraMode[0])
-                                                  {_manualTakePicture()}
-                                                else if (_selectCameraMode[1])
-                                                  {_autoTakePicture()}
-                                              }),
-                                    ),
-                                    Container(
-                                      height: 40.0,
-                                      width: 40.0,
-                                      child: FloatingActionButton(
-                                        heroTag: "nextButton",
-                                        backgroundColor: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    height: 70.0,
+                                    width: 70.0,
+                                    child: FloatingActionButton(
+                                        heroTag: "takePictureButton",
+                                        backgroundColor: const Color.fromARGB(
+                                            122, 255, 255, 255),
+                                        child: Icon(
+                                          isTaking && _selectCameraMode[1]
+                                              ? Icons.stop_rounded
+                                              : Icons.circle,
+                                          color: _selectCameraMode[0]
+                                              ? Colors.white
+                                              : Colors.red,
+                                          size: 70,
+                                        ),
                                         onPressed: () => {
-                                          if (imageFiles!.length < minImages)
-                                            {_showMinmumImagesModal(context)}
-                                          else
-                                            {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ReconstructionConfigScreen(
-                                                    imageFiles: imageFiles!,
-                                                    cameraParameterList:
-                                                        cameraParameterList,
-                                                  ),
+                                              if (_selectCameraMode[0])
+                                                {_manualTakePicture()}
+                                              else if (_selectCameraMode[1])
+                                                {_autoTakePicture()}
+                                            }),
+                                  ),
+                                  SizedBox(
+                                    height: 40.0,
+                                    width: 40.0,
+                                    child: FloatingActionButton(
+                                      heroTag: "nextButton",
+                                      backgroundColor: Colors.white,
+                                      onPressed: () => {
+                                        if (widget.imageFiles!.length <
+                                            minImages)
+                                          {_showMinimumImagesModal(context)}
+                                        else
+                                          {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ReconstructionConfigScreen(
+                                                  imageFiles:
+                                                      widget.imageFiles!,
+                                                  cameraParameterList: widget
+                                                      .cameraParameterList,
                                                 ),
                                               ),
-                                              setState(() {
-                                                isTaking = false;
-                                              }),
-                                            }
-                                        },
-                                        child: const Icon(
-                                          Icons.arrow_forward_ios,
-                                          color: Colors.black,
-                                        ),
+                                            ),
+                                            setState(() {
+                                              isTaking = false;
+                                            }),
+                                          }
+                                      },
+                                      child: const Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Colors.black,
                                       ),
                                     ),
-                                  ]),
-                            ],
-                          ),
+                                  ),
+                                ]),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ]),
               ),
@@ -407,7 +383,8 @@ class _CameraScreenState extends State<CameraScreen> {
                 flex: 6,
                 child: Container(
                     color: surfaceColor,
-                    child: ImageProgressIndicatior(imageFiles: imageFiles)),
+                    child:
+                        ImageProgressIndicatior(imageFiles: widget.imageFiles)),
               )
             ],
           ),
@@ -417,7 +394,7 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 }
 
-_showMinmumImagesModal(context) {
+_showMinimumImagesModal(context) {
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -425,14 +402,14 @@ _showMinmumImagesModal(context) {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           child: Container(
-            constraints: BoxConstraints(maxHeight: 150),
+            constraints: const BoxConstraints(maxHeight: 150),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Center(
                 child: RichText(
                   textAlign: TextAlign.justify,
                   text: TextSpan(
-                      text: "กรุณาถ่ายรูปขั้นต่ำอย่างน้อย 20 รูป",
+                      text: "กรุณาถ่ายรูปขั้นต่ำอย่างน้อย $minImages รูป",
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1!

@@ -147,7 +147,6 @@ class StoreModelScreen extends StatelessWidget {
               imageURL: model.picture,
             ):roundedImageCard(
               imageURL: model.picture,
-              describes: "กำลังสร้าง"
             ),
           );
         },
