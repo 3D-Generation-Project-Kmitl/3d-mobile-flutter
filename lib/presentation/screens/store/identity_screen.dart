@@ -137,7 +137,10 @@ class _IdentityScreenState extends State<IdentityScreen> {
                         photo: cardPicture,
                         onTap: () {
                           final picker = ImagePicker();
-                          picker.pickImage(source: ImageSource.camera).then(
+                          picker
+                              .pickImage(
+                                  source: ImageSource.camera, imageQuality: 50)
+                              .then(
                             (value) {
                               setState(() {
                                 cardPicture = value;
@@ -152,7 +155,10 @@ class _IdentityScreenState extends State<IdentityScreen> {
                         photo: cardFacePicture,
                         onTap: () {
                           final picker = ImagePicker();
-                          picker.pickImage(source: ImageSource.camera).then(
+                          picker
+                              .pickImage(
+                                  source: ImageSource.camera, imageQuality: 50)
+                              .then(
                             (value) {
                               setState(() {
                                 cardFacePicture = value;

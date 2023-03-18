@@ -11,6 +11,7 @@ import '../../../configs/size_config.dart';
 import 'package:babylonjs_viewer/babylonjs_viewer.dart';
 
 import '../../../data/models/models.dart';
+import '../../../utils/resizeImage.dart';
 import '../../helpers/helpers.dart';
 
 class StoreViewModelScreen extends StatefulWidget {
@@ -112,8 +113,9 @@ class _StoreViewModelScreenState extends State<StoreViewModelScreen> {
                       toggleLoading();
                       String? path = await NativeScreenshot.takeScreenshot();
                       if (path != null) {
+                        File resizedFile = await resizeImageFromPath(path);
                         setState(() {
-                          imgFile = File(path);
+                          imgFile = resizedFile;
                         });
                       }
                       toggleLoading();
