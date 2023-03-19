@@ -24,7 +24,8 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _CameraScreenState extends State<CameraScreen>
+    with WidgetsBindingObserver {
   late CameraController _cameraController;
 
   final List<bool> _selectCameraMode = <bool>[true, false];
@@ -38,15 +39,10 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   void initState() {
-    _initFlutterCamera();
-    reconstructionCubit = context.read<ReconstructionCubit>();
     super.initState();
-  }
-
-  void onPlatformViewCreated(int id) async {
-    setState(() {
-      isLoading = false;
-    });
+    _initFlutterCamera();
+    WidgetsBinding.instance.addObserver(this);
+    reconstructionCubit = context.read<ReconstructionCubit>();
   }
 
   Future<void> _initFlutterCamera() async {
@@ -57,18 +53,46 @@ class _CameraScreenState extends State<CameraScreen> {
 
     _cameraController = CameraController(camera, ResolutionPreset.ultraHigh,
         enableAudio: false);
-    await _cameraController.initialize();
-    await _cameraController.lockCaptureOrientation();
+    _cameraController.addListener(() {
+      if (mounted) setState(() {});
+      if (_cameraController.value.hasError) {
+      }
+    });
+
     try {
-      await _cameraController.setFlashMode(FlashMode.off);
+      await _cameraController.initialize();
     } catch (e) {
-      // ignore: avoid_print
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
     }
+    try {
+      await _cameraController.lockCaptureOrientation();
+      await _cameraController.setFlashMode(FlashMode.off);
+    } catch (e) {}
     setState(() => isLoading = false);
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final CameraController cameraController = _cameraController;
+
+    // App state changed before we got the chance to initialize.
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached||
+        state == AppLifecycleState.paused) {
+      _stopTakingPicture();
+    } else if (state == AppLifecycleState.resumed) {
+      _initFlutterCamera();
+    } 
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _cameraController.dispose();
     timer?.cancel();
 
