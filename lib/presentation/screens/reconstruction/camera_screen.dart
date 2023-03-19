@@ -106,9 +106,13 @@ class _CameraScreenState extends State<CameraScreen> {
           return Scaffold(
             body: SafeArea(
               child: Stack(
-                alignment: Alignment.center,
+                alignment: Alignment.topCenter,
                 children: [
-                  CameraPreview(_cameraController),
+                  SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: CameraPreview(_cameraController),
+                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

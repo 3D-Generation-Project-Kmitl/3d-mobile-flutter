@@ -9,7 +9,7 @@ class ImageProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 65,
       width: double.infinity,
       color: surfaceColor,
       child: Padding(
