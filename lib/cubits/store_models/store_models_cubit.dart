@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/utils/resizeImage.dart';
 import '../../data/models/models.dart';
 import '../../data/repositories/repository.dart';
 
@@ -24,7 +25,7 @@ class StoreModelsCubit extends Cubit<StoreModelsState> {
     }
   }
 
-  List<Model> getModelsByStatus(bool isCompleted) {
+  List<Model> getModelsByStatus(bool isCompleted, String status) {
     List<Model> models = [];
     if (state is StoreModelsLoaded) {
       models = (state as StoreModelsLoaded).models;
@@ -33,6 +34,7 @@ class StoreModelsCubit extends Cubit<StoreModelsState> {
       } else {
         models = models.where((element) => element.model == null).toList();
       }
+      models = models.where((element) => element.status == status).toList();
       return models;
     }
     return models;
@@ -62,10 +64,11 @@ class StoreModelsCubit extends Cubit<StoreModelsState> {
       if (state is StoreModelsLoaded) {
         final List<Model> models = (state as StoreModelsLoaded).models;
         emit(StoreModelsLoading());
+        File resizedFile = await resizeImageFromPath(file.path);
         final formData = FormData.fromMap({
           'type': 'CREATE',
-          'picture':
-              await MultipartFile.fromFile(file.path, filename: file.name),
+          'picture': await MultipartFile.fromFile(resizedFile.path,
+              filename: file.name),
         });
         final model = await modelRepository.createModel(formData);
         models.insert(0, model);
@@ -113,7 +116,6 @@ class StoreModelsCubit extends Cubit<StoreModelsState> {
   Future<void> deleteModel(int modelId) async {
     try {
       if (state is StoreModelsLoaded) {
-        print(modelId);
         final models = (state as StoreModelsLoaded).models;
         await modelRepository.deleteModel(modelId);
         models.removeWhere((element) => element.modelId == modelId);

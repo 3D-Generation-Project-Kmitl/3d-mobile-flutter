@@ -50,7 +50,7 @@ class StoreModelScreen extends StatelessWidget {
               )));
         } else if (state is StoreModelsLoaded) {
           return DefaultTabController(
-            length: 2,
+            length: 3,
             child: Scaffold(
               appBar: AppBar(
                 titleSpacing: 20,
@@ -65,6 +65,7 @@ class StoreModelScreen extends StatelessWidget {
                   tabs: const [
                     Tab(text: "สมบูรณ์"),
                     Tab(text: "กำลังสร้าง"),
+                    Tab(text: "ไม่สมบูรณ์")
                   ],
                 ),
               ),
@@ -74,8 +75,14 @@ class StoreModelScreen extends StatelessWidget {
                 child: SafeArea(
                   child: TabBarView(
                     children: [
-                      _modelList(context, isCompleted: true, width: width),
-                      _modelList(context, isCompleted: false, width: width),
+                      _modelList(context,
+                          isCompleted: true, status: "AVAILABLE", width: width),
+                      _modelList(context,
+                          isCompleted: false,
+                          status: "AVAILABLE",
+                          width: width),
+                      _modelList(context,
+                          isCompleted: false, status: "FAILED", width: width),
                     ],
                   ),
                 ),
@@ -116,9 +123,11 @@ class StoreModelScreen extends StatelessWidget {
   }
 
   Widget _modelList(BuildContext context,
-      {required bool isCompleted, required double width}) {
+      {required bool isCompleted,
+      required String status,
+      required double width}) {
     final models =
-        context.read<StoreModelsCubit>().getModelsByStatus(isCompleted);
+        context.read<StoreModelsCubit>().getModelsByStatus(isCompleted, status);
     return RefreshIndicator(
       onRefresh: () async {
         context.read<StoreModelsCubit>().getModelsStore();
@@ -142,7 +151,16 @@ class StoreModelScreen extends StatelessWidget {
                       arguments: model,
                     );
                   }
-                : null,
+                : () {
+                    if (model.status == "FAILED") {
+                      showConfirmDialog(context, title: "คุณต้องการลบหรือไม่",
+                          onConfirm: () {
+                        context
+                            .read<StoreModelsCubit>()
+                            .deleteModel(model.modelId);
+                      });
+                    }
+                  },
             child: isCompleted
                 ? roundedImageCard(
                     imageURL: model.picture,

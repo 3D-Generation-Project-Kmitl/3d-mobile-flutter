@@ -59,7 +59,11 @@ class _CameraScreenState extends State<CameraScreen> {
         enableAudio: false);
     await _cameraController.initialize();
     await _cameraController.lockCaptureOrientation();
-    await _cameraController.setFlashMode(FlashMode.off);
+    try {
+      await _cameraController.setFlashMode(FlashMode.off);
+    } catch (e) {
+      // ignore: avoid_print
+    }
     setState(() => isLoading = false);
   }
 

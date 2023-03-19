@@ -6,6 +6,7 @@ import '../../../data/models/models.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../../../routes/screens_routes.dart';
+import '../../widgets/widgets.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   final int orderId;
@@ -128,15 +129,9 @@ class OrderDetailScreen extends StatelessWidget {
                 maxWidth: 64,
                 maxHeight: 64,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image(
-                  image: orderProduct.product.model.picture != null
-                      ? NetworkImage(orderProduct.product.model.picture!)
-                      : const AssetImage('assets/images/placeholder3d.jpg')
-                          as ImageProvider,
-                  fit: BoxFit.cover,
-                ),
+              child: roundedImageCard(
+                imageURL: orderProduct.product.model.picture,
+                radius: 10,
               ),
             ),
             title: Text(orderProduct.product.name,
