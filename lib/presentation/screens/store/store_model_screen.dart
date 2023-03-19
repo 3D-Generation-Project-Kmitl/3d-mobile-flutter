@@ -143,11 +143,13 @@ class StoreModelScreen extends StatelessWidget {
                     );
                   }
                 : null,
-            child: isCompleted?roundedImageCard(
-              imageURL: model.picture,
-            ):roundedImageCard(
-              imageURL: model.picture,
-            ),
+            child: isCompleted
+                ? roundedImageCard(
+                    imageURL: model.picture,
+                  )
+                : roundedImageCard(
+                    imageURL: model.picture,
+                  ),
           );
         },
       ),
@@ -159,7 +161,7 @@ class StoreModelScreen extends StatelessWidget {
       height: getProportionateScreenHeight(50),
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushNamed(context, gen3DRoute);
+          Navigator.pushNamed(context, reconCameraRoute);
         },
         child: const Text(
           'สร้างโมเดล 3 มิติ',

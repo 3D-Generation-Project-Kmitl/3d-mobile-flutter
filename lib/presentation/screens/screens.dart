@@ -29,6 +29,9 @@ export 'customer/products_store_screen.dart';
 export 'customer/report_screen.dart';
 
 export 'reconstruction/camera_screen.dart';
+export 'reconstruction/image_viewer_screen.dart';
+export 'reconstruction/image_gallery_screen.dart';
+export 'reconstruction/reconstruction_config_screen.dart';
 
 export 'store/identity_screen.dart';
 export 'store/store_screen.dart';

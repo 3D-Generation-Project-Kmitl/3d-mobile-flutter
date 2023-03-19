@@ -12,7 +12,6 @@ const String profileRoute = "/profile";
 const String searchRoute = "/search";
 const String cartRoute = "/cart";
 const String productDetailRoute = "/product_detail";
-const String gen3DRoute = "/gen3D";
 const String customerModelRoute = "/customer_model";
 const String orderCompletedRoute = "/order_completed";
 const String myOrdersRoute = "/my_orders";
@@ -36,3 +35,8 @@ const String storeAddProductRoute = "/store_add_product";
 const String storeEditProductRoute = "/store_edit_product";
 const String storeWalletRoute = "/store_wallet";
 const String storeWithdrawRoute = "/store_withdraw";
+
+const String reconCameraRoute = "/recon_camera";
+const String reconImagePreviewRoute = "/recon_image_preview";
+const String reconGalleryRoute = "/recon_gallery";
+const String reconConfigRoute = "/recon_config";

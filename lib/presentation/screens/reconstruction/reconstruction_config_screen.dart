@@ -1,17 +1,11 @@
-import 'package:archive/archive_io.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:marketplace/constants/colors.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:marketplace/presentation/helpers/helpers.dart';
 import '../../../configs/size_config.dart';
-
+import '../../../constants/reconstruction.dart';
 import '../../../cubits/cubits.dart';
 import '../../../routes/screens_routes.dart';
 
-import 'image_gallery_screen.dart';
-
-import 'package:marketplace/data/repositories/gen3d_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const List<Widget> modelQuality = <Widget>[
@@ -20,13 +14,8 @@ const List<Widget> modelQuality = <Widget>[
   Text('Low')
 ];
 
-// ignore: must_be_immutable
 class ReconstructionConfigScreen extends StatefulWidget {
-  List<XFile> imageFiles;
-  List<Map<String, dynamic>?>? cameraParameterList;
-  ReconstructionConfigScreen(
-      {Key? key, required this.imageFiles, this.cameraParameterList})
-      : super(key: key);
+  const ReconstructionConfigScreen({Key? key}) : super(key: key);
 
   @override
   State<ReconstructionConfigScreen> createState() =>
@@ -45,7 +34,6 @@ class _ReconstructionConfigScreenState
     "googleARCore": false,
   };
   final List<bool> _selectModelQuality = <bool>[false, false, true];
-  final Gen3DModelRepository gen3dModelRepository = Gen3DModelRepository();
 
   bool vertical = false;
   @override
@@ -53,96 +41,19 @@ class _ReconstructionConfigScreenState
     super.initState();
   }
 
-  _sendRequestToGenerate3DModel() async {
-    String zipFilePath = await _zipFiles();
-    var response = await gen3dModelRepository.gen3DModel(
-        zipFilePath, reconstructionConfigs, widget.cameraParameterList);
-    return response;
-  }
-
-  _zipFiles() async {
-    Directory? appDocDirectory = await getApplicationDocumentsDirectory();
-    var encoder = ZipFileEncoder();
-
-    String zipFilePath =
-        '${appDocDirectory.path}/${reconstructionConfigs['userId']}_${reconstructionConfigs['modelId']}.zip';
-
-    encoder.create(zipFilePath);
-
-    for (var image in widget.imageFiles!) {
-      encoder.addFile(File(image.path));
-    }
-
-    encoder.close();
-
-    return zipFilePath;
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isSending) {
-      return Container(
-          color: Colors.white,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text('กำลังส่งข้อมูล',
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle1!
-                        .copyWith(color: secondaryColor)),
-              ],
-            ),
-          ));
-    } else {
-      return Scaffold(
+    return BlocBuilder<ReconstructionCubit, ReconstructionState>(
+      builder: (context, state) {
+        return Scaffold(
           appBar: AppBar(
-              title: Text("ตั้งค่าการสร้างโมเดล 3 มิติ",
-                  style: Theme.of(context).textTheme.headlineMedium),
-              leading: BackButton(
-                onPressed: () => {
-                  Navigator.pop(context),
-                },
-              )),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: getProportionateScreenHeight(50),
-              child: ElevatedButton(
-                onPressed: () {
-                  context
-                      .read<StoreModelsCubit>()
-                      .addReconstructionModel(widget.imageFiles[0])
-                      .then((model) => {
-                            if (model != null)
-                              {
-                                setState(() {
-                                  reconstructionConfigs['modelId'] =
-                                      model.modelId;
-                                  reconstructionConfigs['userId'] =
-                                      model.userId;
-                                }),
-                                _sendRequestToGenerate3DModel(),
-                                Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    storeModelRoute,
-                                    ModalRoute.withName(storeRoute)),
-                              },
-                          });
-                  setState(() {
-                    isSending = true;
-                  });
-                },
-                child: const Text(
-                  "สร้างโมเดล 3 มิติ",
-                ),
-              ),
-            ),
+            title: Text("ตั้งค่าการสร้างโมเดล 3 มิติ",
+                style: Theme.of(context).textTheme.headlineMedium),
           ),
           body: SafeArea(
             child: Padding(
@@ -156,19 +67,10 @@ class _ReconstructionConfigScreenState
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("รูปภาพ (${widget.imageFiles!.length})"),
+                          Text("รูปภาพ (${state.imageFiles.length})"),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ImageGalleryScreen(
-                                    imageFiles: widget.imageFiles,
-                                    cameraParameterList:
-                                        widget.cameraParameterList,
-                                    previousScreen: "rc",
-                                  ),
-                                ),
-                              );
+                              Navigator.pushNamed(context, reconGalleryRoute);
                             },
                             child: Text('รูปภาพทั้งหมด',
                                 style: Theme.of(context)
@@ -233,26 +135,93 @@ class _ReconstructionConfigScreenState
                       ),
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     const Text("ระบบ Google ARCore"),
-                  //     Switch(
-                  //       value: reconstructionConfigs["googleARCore"],
-                  //       onChanged: (value) {
-                  //         setState(() {
-                  //           reconstructionConfigs["googleARCore"] = value;
-                  //         });
-                  //       },
-                  //       activeTrackColor: primarySoftColor,
-                  //       activeColor: primaryColor,
-                  //     ),
-                  //   ],
-                  // )
                 ],
               ),
             ),
-          ));
-    }
+          ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SizedBox(
+              height: getProportionateScreenHeight(50),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (state.imageFiles.length < minImages) {
+                    showInfoDialog(
+                      context,
+                      title: "กรุณาถ่ายรูปขั้นต่ำอย่างน้อย $minImages รูป",
+                      delay: 3000,
+                    );
+                  } else {
+                    setState(() {
+                      isSending = true;
+                    });
+                    buildSending();
+                    context
+                        .read<StoreModelsCubit>()
+                        .addReconstructionModel(state.imageFiles[0])
+                        .then(
+                          (model) => {
+                            if (model != null)
+                              {
+                                setState(() {
+                                  reconstructionConfigs['modelId'] =
+                                      model.modelId;
+                                  reconstructionConfigs['userId'] =
+                                      model.userId;
+                                }),
+                                context
+                                    .read<ReconstructionCubit>()
+                                    .gen3DModel(reconstructionConfigs)
+                                    .then((value) => {
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              storeModelRoute,
+                                              ModalRoute.withName(storeRoute))
+                                        })
+                              },
+                          },
+                        );
+                  }
+                },
+                child: const Text(
+                  "สร้างโมเดล 3 มิติ",
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<dynamic> buildSending() {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: Container(
+                color: Colors.white,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text('กำลังส่งข้อมูล',
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle1!
+                              .copyWith(color: secondaryColor)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

@@ -3,13 +3,16 @@ import 'package:camera/camera.dart';
 import 'package:marketplace/constants/colors.dart';
 import 'package:marketplace/constants/reconstruction.dart';
 
-class ImageProgressIndicatior extends StatelessWidget {
+class ImageProgressIndicator extends StatelessWidget {
   final List<XFile>? imageFiles;
-  const ImageProgressIndicatior({super.key, required this.imageFiles});
+  const ImageProgressIndicator({super.key, required this.imageFiles});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
+    return Container(
+      height: 50,
+      width: double.infinity,
+      color: surfaceColor,
+      child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
