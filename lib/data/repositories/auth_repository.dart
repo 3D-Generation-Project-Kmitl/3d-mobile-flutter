@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:marketplace/data/models/models.dart';
 import 'package:marketplace/utils/dio_client.dart';
@@ -25,7 +27,7 @@ class AuthRepository {
       return user;
     } catch (e) {
       if (e is DioError) {
-        throw e.response!.data;
+        throw ErrorModel.fromJson(jsonDecode(e.response!.data));
       } else {
         throw e as Exception;
       }

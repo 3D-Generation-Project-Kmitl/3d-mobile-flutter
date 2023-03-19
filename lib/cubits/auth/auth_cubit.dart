@@ -1,7 +1,6 @@
+import 'package:marketplace/data/models/models.dart';
 import 'package:marketplace/data/repositories/auth_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../data/models/user_model.dart';
 
 part 'auth_state.dart';
 
@@ -16,7 +15,7 @@ class AuthCubit extends Cubit<AuthState> {
       final user = await authRepository.login(email, password);
       emit(LoginSuccessState(user));
     } catch (e) {
-      emit(LoginFailureState(e.toString()));
+      emit(LoginFailureState((e as ErrorModel).message));
     }
   }
 
