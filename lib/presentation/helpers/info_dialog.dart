@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 
 Future<void> showInfoDialog(BuildContext context,
     {String title = "", String message = "", int delay = 1000}) async {
+  Timer timer = Timer(Duration(milliseconds: delay), () {
+    Navigator.of(context).pop();
+  });
   await showDialog<void>(
     barrierColor: Colors.transparent,
     context: context,
     builder: (BuildContext context) {
-      Timer(Duration(milliseconds: delay), () {
-        Navigator.of(context).pop();
-      });
       return AlertDialog(
         backgroundColor: Colors.black.withOpacity(0.7),
         title: Center(
@@ -22,6 +22,10 @@ Future<void> showInfoDialog(BuildContext context,
         )),
         content: message != '' ? Text(message) : null,
       );
+    },
+  ).then(
+    (value) => {
+      timer.cancel(),
     },
   );
 }

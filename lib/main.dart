@@ -1,3 +1,4 @@
+import 'package:marketplace/presentation/screens/screens.dart';
 import 'package:marketplace/presentation/screens/user/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/configs/theme.dart';
@@ -61,6 +62,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<NotificationCubit>(
           create: (context) => NotificationCubit(),
+        ),
+        BlocProvider<ReconstructionCubit>(
+          create: (context) => ReconstructionCubit(),
         ),
       ],
       child: MaterialApp(

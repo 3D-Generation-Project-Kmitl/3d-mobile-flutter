@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/presentation/screens/screens.dart';
 import './screens_routes.dart';
@@ -56,8 +56,6 @@ class AppRouter {
         int productId = settings.arguments as int;
         return _route(
             ProductDetailScreen(productId: productId), productDetailRoute);
-      case gen3DRoute:
-        return _route(const CameraScreen(), gen3DRoute);
       case customerModelRoute:
         return _route(const CustomerModelScreen(), customerModelRoute);
       case settingRoute:
@@ -102,6 +100,21 @@ class AppRouter {
       case reportRoute:
         ProductDetail product = settings.arguments as ProductDetail;
         return _route(ReportScreen(product: product), reportRoute);
+      case reconCameraRoute:
+        return _route(const CameraScreen(), reconCameraRoute);
+      case reconImagePreviewRoute:
+        List<dynamic> args = settings.arguments as List<dynamic>;
+        //XFile previewImage = settings.arguments as XFile;
+        return _route(
+            ImageViewerScreen(
+              previewImage: args[0] as XFile,
+              isShowAll: args[1] as bool,
+            ),
+            reconImagePreviewRoute);
+      case reconGalleryRoute:
+        return _route(const ImageGalleryScreen(), reconGalleryRoute);
+      case reconConfigRoute:
+        return _route(const ReconstructionConfigScreen(), reconConfigRoute);
       default:
         return _errorRoute();
     }

@@ -1,65 +1,65 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:marketplace/presentation/screens/reconstruction/camera_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/cubits/cubits.dart';
 import 'dart:io';
 
-import 'package:marketplace/presentation/screens/reconstruction/image_viewer_screen.dart';
+import 'package:marketplace/routes/screens_routes.dart';
 
 class ImageGalleryScreen extends StatelessWidget {
-  final List<XFile> imageFiles;
-
-  const ImageGalleryScreen({super.key, required this.imageFiles});
+  const ImageGalleryScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            title: Text('${imageFiles.length.toString()} รูป',style: Theme.of(context).textTheme.headline4),
-            leading: BackButton(
-              onPressed: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CameraScreen(imageFiles: imageFiles),
-                  ),
-                )
-              },
-            )),
-        body: SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return GestureDetector(
-                      onTap: () => {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ImageViewerScreen(
-                                previewImage: imageFiles[index],
-                                imageFiles: imageFiles),
-                          ),
-                        )
-                      },
-
-                        child: FittedBox(
-                          fit:BoxFit.cover,
-                          clipBehavior: Clip.hardEdge,
-                          child:Image.file(File(imageFiles[index].path)) ,
-                        ),
-  
-                    );
+    return BlocBuilder<ReconstructionCubit, ReconstructionState>(
+      builder: (context, state) {
+        return Scaffold(
+            appBar: AppBar(
+                title: Text('${state.imageFiles.length.toString()} รูป',
+                    style: Theme.of(context).textTheme.headline4),
+                leading: BackButton(
+                  onPressed: () => {
+                    Navigator.of(context).pop(),
                   },
-                  childCount: imageFiles.length,
+                )),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 5, 10, 15),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 5,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return GestureDetector(
+                            onTap: () => {
+                              Navigator.pushNamed(
+                                  context, reconImagePreviewRoute,
+                                  arguments: [state.imageFiles[index], false])
+                            },
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.file(
+                                  File(state.imageFiles[index].path)),
+                            ),
+                          );
+                        },
+                        childCount: state.imageFiles.length,
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ));
+              ),
+            ));
+      },
+    );
   }
 }

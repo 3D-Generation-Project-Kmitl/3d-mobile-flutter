@@ -36,18 +36,18 @@ class MainActivity : FlutterFragmentActivity() {
             if (call.method.equals("isARCoreSupported")) {
                 isSupported = isARCoreSupportedAndUpToDate()
                 if (isSupported) {
-                    if (session == null) {
+//                    if (session == null) {
                         
-                            session = Session(this)
-                            if (!session!!.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
-                                session = null
-                                result.success("notSupport")
-                            } else {
-                                session = null
+//                            session = Session(this)
+//                            if (!session!!.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
+//                                session = null
+//                                result.success("notSupport")
+//                            } else {
+//                                session = null
                                 result.success("support")
-                            }
+//                            }
                         
-                    }
+//                    }
                 } else if (!isSupported && isInstallRequest) {
                     flutterResult = result
                 } else {
@@ -60,21 +60,22 @@ class MainActivity : FlutterFragmentActivity() {
     private fun isARCoreSupportedAndUpToDate(): Boolean {
         return when (ArCoreApk.getInstance().checkAvailability(this)!!) {
             ArCoreApk.Availability.SUPPORTED_INSTALLED -> true
-            ArCoreApk.Availability.SUPPORTED_APK_TOO_OLD, ArCoreApk.Availability.SUPPORTED_NOT_INSTALLED -> {
-                try {
-                    when (ArCoreApk.getInstance().requestInstall(this, !isInstallRequest)!!) {
-                        ArCoreApk.InstallStatus.INSTALL_REQUESTED -> {
-                            Log.d("ARCore:", "ARCore installation requested.")
-                            isInstallRequest = true
-                            false
-                        }
-                        ArCoreApk.InstallStatus.INSTALLED -> true
-                    }
-                } catch (e: UnavailableException) {
-                    Log.d("ARCore:", "ARCore not installed", e)
-                    false
-                }
-            }
+            ArCoreApk.Availability.SUPPORTED_APK_TOO_OLD, ArCoreApk.Availability.SUPPORTED_NOT_INSTALLED ->false
+//            ArCoreApk.Availability.SUPPORTED_APK_TOO_OLD, ArCoreApk.Availability.SUPPORTED_NOT_INSTALLED -> {
+                // try {
+                //     when (ArCoreApk.getInstance().requestInstall(this,false)!!) {
+                //         ArCoreApk.InstallStatus.INSTALL_REQUESTED -> {
+                //             Log.d("ARCore:", "ARCore installation requested.")
+                //             isInstallRequest = true
+                //             false
+                //         }
+                //         ArCoreApk.InstallStatus.INSTALLED -> true
+                //     }
+                // } catch (e: UnavailableException) {
+                //     Log.d("ARCore:", "ARCore not installed", e)
+                //     false
+                // }
+//            }
             ArCoreApk.Availability.UNSUPPORTED_DEVICE_NOT_CAPABLE -> {
                 Log.d("ARCore:", "UNSUPPORTED_DEVICE_NOT_CAPABLE")
                 false
