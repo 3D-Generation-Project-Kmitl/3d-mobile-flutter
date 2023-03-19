@@ -5,6 +5,7 @@ import 'package:currency_text_input_formatter/currency_text_input_formatter.dart
 import 'package:marketplace/routes/screens_routes.dart';
 
 import '../../../configs/size_config.dart';
+import '../../../constants/constants.dart';
 import '../../../data/models/models.dart';
 import '../../helpers/helpers.dart';
 import '../../../cubits/cubits.dart';
@@ -31,8 +32,8 @@ class _StoreAddProductScreenState extends State<StoreAddProductScreen> {
   void initState() {
     _nameController = TextEditingController();
     _priceController = TextEditingController();
-    _priceFormatter =
-        CurrencyTextInputFormatter(locale: 'th', symbol: '฿', decimalDigits: 0);
+    _priceFormatter = CurrencyTextInputFormatter(
+        locale: 'th', symbol: '฿', decimalDigits: 0, enableNegative: false);
     _descriptionController = TextEditingController();
     super.initState();
   }
@@ -71,6 +72,11 @@ class _StoreAddProductScreenState extends State<StoreAddProductScreen> {
                 buildNameFormField(),
                 SizedBox(height: SizeConfig.screenHeight * 0.02),
                 buildPriceFormField(),
+                SizedBox(height: SizeConfig.screenHeight * 0.01),
+                Text(
+                  " ราคาสินค้าขั้นต่ำ $minProductPrice บาท",
+                  style: Theme.of(context).textTheme.subtitle2,
+                ),
                 SizedBox(height: SizeConfig.screenHeight * 0.02),
                 buildCategoriesFormField(),
                 SizedBox(height: SizeConfig.screenHeight * 0.02),
@@ -136,7 +142,17 @@ class _StoreAddProductScreenState extends State<StoreAddProductScreen> {
     return TextFormField(
       controller: _priceController,
       inputFormatters: [_priceFormatter],
-      validator: productPriceValidator,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return "กรุณากรอกราคาสินค้า";
+        } else {
+          int amount = int.parse(value.replaceAll(RegExp(r'[^0-9]'), ''));
+          if (amount < minProductPrice) {
+            return "ราคาสินค้าต้องมากกว่า $minProductPrice บาท";
+          }
+        }
+        return null;
+      },
       keyboardType: TextInputType.number,
       style: Theme.of(context).textTheme.headline5,
       textAlignVertical: TextAlignVertical.bottom,

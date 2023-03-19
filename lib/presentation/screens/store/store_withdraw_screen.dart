@@ -20,8 +20,8 @@ class _StoreWithdrawScreenState extends State<StoreWithdrawScreen> {
 
   @override
   void initState() {
-    _priceFormatter =
-        CurrencyTextInputFormatter(locale: 'th', symbol: '฿', decimalDigits: 0);
+    _priceFormatter = CurrencyTextInputFormatter(
+        locale: 'th', symbol: '฿', decimalDigits: 0, enableNegative: false);
     super.initState();
   }
 

@@ -13,3 +13,5 @@ List<String> banks = <String>[
 ];
 
 List<String> modelFileExtensions = <String>["glb", "gltf"];
+
+int minProductPrice = 50;
