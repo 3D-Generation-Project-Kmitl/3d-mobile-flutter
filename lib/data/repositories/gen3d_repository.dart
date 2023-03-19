@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:marketplace/.env';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(
@@ -20,7 +21,7 @@ class Gen3DModelRepository {
       });
 
       final response = await Dio()
-          .post('http://ssh.opencloudai.com:443/gen3DModel', data: formData);
+          .post('$FLASK_URL/gen3DModel', data: formData);
 
       return response.data.toString();
     } on DioError catch (e) {
