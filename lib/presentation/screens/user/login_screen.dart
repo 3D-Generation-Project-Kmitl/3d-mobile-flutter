@@ -77,8 +77,10 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         } else if (state is LoginFailureState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("อีเมลหรือรหัสผ่านไม่ถูกต้อง"),
+            SnackBar(
+              content: Text(state.errorMessage == "UNAUTHORIZED"
+                  ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
+                  : state.errorMessage),
             ),
           );
         }

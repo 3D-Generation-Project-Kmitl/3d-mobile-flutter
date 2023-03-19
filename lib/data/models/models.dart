@@ -17,3 +17,4 @@ export './wallet_model.dart';
 export './following_model.dart';
 export './follower_model.dart';
 export './notification_model.dart';
+export './error_model.dart';
