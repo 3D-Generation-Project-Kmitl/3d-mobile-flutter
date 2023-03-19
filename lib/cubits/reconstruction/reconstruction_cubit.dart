@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:archive/archive_io.dart';
+import 'package:marketplace/constants/reconstruction.dart';
 import 'package:path/path.dart' as path;
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
@@ -45,9 +46,9 @@ class ReconstructionCubit extends Cubit<ReconstructionState> {
   }
 
   void takePicture(CameraController cameraController) async {
+    if (!cameraController.value.isTakingPicture) {
     String fileName =
         "${(state.imageFiles.length + 1).toString().padLeft(4, '0')}.jpg";
-    if (!cameraController.value.isTakingPicture) {
       XFile image =
           await renameImageFile(await cameraController.takePicture(), fileName);
       addImageFile(image);

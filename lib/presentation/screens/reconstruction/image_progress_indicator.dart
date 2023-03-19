@@ -36,7 +36,7 @@ class ImageProgressIndicator extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: goodImages,
+                  flex: goodImages-minImages,
                   child: Container(
                     alignment: Alignment.centerRight,
                     decoration: const BoxDecoration(
@@ -52,7 +52,7 @@ class ImageProgressIndicator extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: maxImages - goodImages - minImages,
+                  flex: maxImages-goodImages,
                   child: Container(
                     alignment: Alignment.centerRight,
                     decoration: const BoxDecoration(

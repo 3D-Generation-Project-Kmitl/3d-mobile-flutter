@@ -79,10 +79,32 @@ class _CameraScreenState extends State<CameraScreen> {
     reconstructionCubit.takePicture(_cameraController);
   }
 
+  _stopTakingPicture() {
+    timer?.cancel();
+    setState(() {
+      isTaking = false;
+    });
+  }
+
   _autoTakePicture() async {
     if (isTaking == false) {
-      timer = Timer.periodic(const Duration(milliseconds: 1250),
-          (Timer t) => {_manualTakePicture()});
+      ReconstructionState state;
+      timer = Timer.periodic(
+          const Duration(milliseconds: 1250),
+          (Timer t) => {
+                state = context.read<ReconstructionCubit>().state,
+                if (state.imageFiles.length < maxImages)
+                  {_manualTakePicture()}
+                else
+                  {
+                    _stopTakingPicture(),
+                    showInfoDialog(
+                      context,
+                      title: "ถ่ายรูปได้สูงสุด $maxImages รูป",
+                      delay: 3000,
+                    )
+                  }
+              });
     } else {
       timer?.cancel();
     }
@@ -98,6 +120,7 @@ class _CameraScreenState extends State<CameraScreen> {
       DeviceOrientation.portraitDown,
     ]);
     SizeConfig().init(context);
+
     if (isLoading) {
       return Container(
         color: Colors.white,
@@ -131,10 +154,7 @@ class _CameraScreenState extends State<CameraScreen> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            setState(() {
-                              isTaking = false;
-                            });
-                            timer?.cancel();
+                            _stopTakingPicture();
                             Navigator.pop(context);
                             reconstructionCubit.clear();
                           },
@@ -157,7 +177,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                 direction:
                                     vertical ? Axis.vertical : Axis.horizontal,
                                 onPressed: (int index) {
-                                  timer?.cancel();
+                                  _stopTakingPicture();
                                   setState(() {
                                     // The button that is tapped is set to true, and the others to false.
                                     for (int i = 0;
@@ -165,7 +185,6 @@ class _CameraScreenState extends State<CameraScreen> {
                                         i++) {
                                       _selectCameraMode[i] = i == index;
                                     }
-                                    isTaking = false;
                                   });
                                 },
                                 borderRadius:
@@ -203,12 +222,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                             state.imageFiles.last,
                                             true
                                           ]),
-                                      timer?.cancel(),
-                                      setState(
-                                        () {
-                                          isTaking = false;
-                                        },
-                                      ),
+                                      _stopTakingPicture(),
                                     },
                                     child: FileImagePreviewButton(
                                         imageFiles: state.imageFiles),
@@ -231,10 +245,24 @@ class _CameraScreenState extends State<CameraScreen> {
                                         size: 70,
                                       ),
                                       onPressed: () => {
-                                            if (_selectCameraMode[0])
-                                              {_manualTakePicture()}
-                                            else if (_selectCameraMode[1])
-                                              {_autoTakePicture()}
+                                            if (state.imageFiles.length <
+                                                maxImages)
+                                              {
+                                                if (_selectCameraMode[0])
+                                                  {_manualTakePicture()}
+                                                else if (_selectCameraMode[1])
+                                                  {_autoTakePicture()}
+                                              }
+                                            else
+                                              {
+                                                showInfoDialog(
+                                                  context,
+                                                  title:
+                                                      "ถ่ายรูปได้สูงสุด $maxImages รูป",
+                                                  delay: 3000,
+                                                ),
+                                                _stopTakingPicture(),
+                                              }
                                           }),
                                 ),
                                 SizedBox(
@@ -244,10 +272,7 @@ class _CameraScreenState extends State<CameraScreen> {
                                     heroTag: "nextButton",
                                     backgroundColor: Colors.white,
                                     onPressed: () => {
-                                      timer?.cancel(),
-                                      setState(() {
-                                        isTaking = false;
-                                      }),
+                                      _stopTakingPicture(),
                                       if (state.imageFiles.length < minImages)
                                         {
                                           showInfoDialog(
