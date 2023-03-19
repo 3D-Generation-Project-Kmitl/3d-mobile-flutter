@@ -1,2 +1,2 @@
-int connectTimeout = 5000;
-int receiveTimeout = 3000;
+int connectTimeout = 150000;
+int receiveTimeout = 300000;

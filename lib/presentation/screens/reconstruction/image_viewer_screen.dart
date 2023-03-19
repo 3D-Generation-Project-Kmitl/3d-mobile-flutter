@@ -27,7 +27,7 @@ class ImageViewerScreen extends StatelessWidget {
                   : [
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, reconGalleryRoute);
+                          Navigator.pushReplacementNamed(context, reconGalleryRoute);
                         },
                         child: Text('รูปภาพทั้งหมด',
                             style: Theme.of(context)

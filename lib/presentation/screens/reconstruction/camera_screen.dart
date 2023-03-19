@@ -59,6 +59,7 @@ class _CameraScreenState extends State<CameraScreen> {
         enableAudio: false);
     await _cameraController.initialize();
     await _cameraController.lockCaptureOrientation();
+    await _cameraController.setFlashMode(FlashMode.off);
     setState(() => isLoading = false);
   }
 
@@ -126,6 +127,10 @@ class _CameraScreenState extends State<CameraScreen> {
                             color: Colors.white,
                           ),
                           onPressed: () {
+                            setState(() {
+                              isTaking = false;
+                            });
+                            timer?.cancel();
                             Navigator.pop(context);
                             reconstructionCubit.clear();
                           },
