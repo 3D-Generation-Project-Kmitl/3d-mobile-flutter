@@ -4,7 +4,6 @@ import 'package:marketplace/constants/colors.dart';
 import 'dart:io';
 import '../../../configs/size_config.dart';
 import 'package:marketplace/presentation/screens/reconstruction/image_gallery_screen.dart';
-import 'package:marketplace/presentation/screens/reconstruction/camera_screen.dart';
 
 class ImageViewerScreen extends StatelessWidget {
   final XFile previewImage;
@@ -22,7 +21,7 @@ class ImageViewerScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(previewImage.name,
               style: Theme.of(context).textTheme.headline4),
-          actions: [
+          actions: previousScreen=='ig'?null:[
             TextButton(
 
               onPressed: () {
@@ -67,26 +66,7 @@ class ImageViewerScreen extends StatelessWidget {
 
                   }
                 }
-                if(previousScreen=='ig'){
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ImageGalleryScreen(
-                        imageFiles: imageFiles,
-                        cameraParameterList:cameraParameterList,
-                        previousScreen: "iv",
-                      ),
-                    ),
-                  );
-                }else if (previousScreen=='c'){
-                    Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => CameraScreen(
-                        imageFiles: imageFiles,
-                        cameraParameterList:cameraParameterList,
-                      )
-                    ),
-                  );
-                }
+                Navigator.pop(context);
 
               },
               child: const Text(
