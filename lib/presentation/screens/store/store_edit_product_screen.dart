@@ -9,6 +9,7 @@ import 'package:native_screenshot/native_screenshot.dart';
 
 import '../../../configs/size_config.dart';
 import '../../../data/models/models.dart';
+import '../../../utils/resizeImage.dart';
 import '../../helpers/helpers.dart';
 import '../../../cubits/cubits.dart';
 
@@ -232,8 +233,9 @@ class _StoreEditProductScreenState extends State<StoreEditProductScreen> {
                   onPressed: () async {
                     String? path = await NativeScreenshot.takeScreenshot();
                     if (path != null) {
+                      File resizedFile = await resizeImageFromPath(path);
                       setState(() {
-                        imgFile = File(path);
+                        imgFile = resizedFile;
                         imageDialog();
                       });
                     }
