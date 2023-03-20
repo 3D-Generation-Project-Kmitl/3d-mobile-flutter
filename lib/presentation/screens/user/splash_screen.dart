@@ -50,7 +50,25 @@ class SplashScreen extends StatelessWidget {
                         context, navigationRoute, (route) => false);
                   }
                 },
-                child: const CircularProgressIndicator()),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/logo.png",
+                      width: 160,
+                      height: 160,
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "Modello",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 54),
+                  ],
+                )),
           ),
         ));
   }
