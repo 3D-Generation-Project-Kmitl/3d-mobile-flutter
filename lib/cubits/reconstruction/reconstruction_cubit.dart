@@ -46,7 +46,7 @@ class ReconstructionCubit extends Cubit<ReconstructionState> {
   }
 
   void takePicture(CameraController cameraController) async {
-    if (!cameraController.value.isTakingPicture) {
+    if (!cameraController.value.isTakingPicture && cameraController.value.isInitialized) {
     String fileName =
         "${(state.imageFiles.length + 1).toString().padLeft(4, '0')}.jpg";
       XFile image =
