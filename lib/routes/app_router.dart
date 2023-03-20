@@ -33,7 +33,8 @@ class AppRouter {
       case homeRoute:
         return _route(const HomeScreen(), homeRoute);
       case searchRoute:
-        return _route(const SearchScreen(), searchRoute);
+        String? keyword = settings.arguments as String?;
+        return _route(SearchScreen(keyword: keyword ?? ''), searchRoute);
       case favoriteRoute:
         return _route(const FavoriteScreen(), favoriteRoute);
       case notificationRoute:

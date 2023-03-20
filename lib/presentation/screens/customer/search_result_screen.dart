@@ -115,7 +115,7 @@ class SearchResultScreen extends StatelessWidget {
     return TextField(
       readOnly: true,
       onTap: () {
-        Navigator.pushNamed(context, searchRoute);
+        Navigator.pushNamed(context, searchRoute, arguments: keyword);
       },
       decoration: InputDecoration(
         hintText: keyword,

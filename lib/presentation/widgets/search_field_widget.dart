@@ -4,11 +4,13 @@ import '../../constants/colors.dart';
 import '../../routes/screens_routes.dart';
 
 class SearchField extends StatelessWidget {
-  const SearchField({Key? key}) : super(key: key);
+  final String keyword;
+  const SearchField({Key? key, this.keyword = ''}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: TextEditingController(text: keyword),
       textInputAction: TextInputAction.search,
       onSubmitted: (value) {
         Navigator.pushNamed(context, searchResultRoute, arguments: value);

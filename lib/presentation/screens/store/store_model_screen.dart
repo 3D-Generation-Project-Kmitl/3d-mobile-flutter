@@ -33,61 +33,56 @@ class StoreModelScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     double width = SizeConfig.screenWidth;
-    return BlocBuilder<StoreModelsCubit, StoreModelsState>(
-      builder: (context, state) {
-        if (state is StoreModelsInitial) {
-          context.read<StoreModelsCubit>().getModelsStore();
-          return Scaffold(
-              appBar: AppBar(
-                titleSpacing: 20,
-                title: Text("โมเดล 3 มิติของฉัน",
-                    style: Theme.of(context).textTheme.headline2),
-              ),
-              resizeToAvoidBottomInset: false,
-              body: const SafeArea(
-                  child: Center(
-                child: CircularProgressIndicator(),
-              )));
-        } else if (state is StoreModelsLoaded) {
-          return DefaultTabController(
-            length: 3,
-            child: Scaffold(
-              appBar: AppBar(
-                titleSpacing: 20,
-                title: Text("โมเดล 3 มิติของฉัน",
-                    style: Theme.of(context).textTheme.headline2),
-                bottom: TabBar(
-                  unselectedLabelColor: Colors.grey,
-                  labelColor: Theme.of(context).primaryColor,
-                  indicatorColor: Theme.of(context).primaryColor,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  labelStyle: Theme.of(context).textTheme.bodyText1,
-                  tabs: const [
-                    Tab(text: "สมบูรณ์"),
-                    Tab(text: "กำลังสร้าง"),
-                    Tab(text: "ไม่สมบูรณ์")
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          titleSpacing: 20,
+          title: Text("โมเดล 3 มิติของฉัน",
+              style: Theme.of(context).textTheme.headline2),
+          bottom: TabBar(
+            unselectedLabelColor: Colors.grey,
+            labelColor: Theme.of(context).primaryColor,
+            indicatorColor: Theme.of(context).primaryColor,
+            indicatorSize: TabBarIndicatorSize.label,
+            labelStyle: Theme.of(context).textTheme.bodyText1,
+            tabs: const [
+              Tab(text: "สมบูรณ์"),
+              Tab(text: "กำลังสร้าง"),
+              Tab(text: "ไม่สมบูรณ์")
+            ],
+          ),
+        ),
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: BlocBuilder<StoreModelsCubit, StoreModelsState>(
+            builder: (context, state) {
+              if (state is StoreModelsInitial) {
+                context.read<StoreModelsCubit>().getModelsStore();
+                return buildTabBarView(
+                    child: const Center(child: CircularProgressIndicator()));
+              } else if (state is StoreModelsLoaded) {
+                return TabBarView(
+                  children: [
+                    _modelList(context,
+                        isCompleted: true, status: "AVAILABLE", width: width),
+                    _modelList(context,
+                        isCompleted: false, status: "AVAILABLE", width: width),
+                    _modelList(context,
+                        isCompleted: false, status: "FAILED", width: width),
                   ],
-                ),
-              ),
-              resizeToAvoidBottomInset: false,
-              body: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                child: SafeArea(
-                  child: TabBarView(
-                    children: [
-                      _modelList(context,
-                          isCompleted: true, status: "AVAILABLE", width: width),
-                      _modelList(context,
-                          isCompleted: false,
-                          status: "AVAILABLE",
-                          width: width),
-                      _modelList(context,
-                          isCompleted: false, status: "FAILED", width: width),
-                    ],
-                  ),
-                ),
-              ),
-              bottomNavigationBar: Padding(
+                );
+              } else {
+                return buildTabBarView(
+                    child: const Center(child: CircularProgressIndicator()));
+              }
+            },
+          ),
+        ),
+        bottomNavigationBar: BlocBuilder<StoreModelsCubit, StoreModelsState>(
+          builder: (context, state) {
+            if (state is StoreModelsLoaded) {
+              return Padding(
                 padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
                 child: Row(
                   children: [
@@ -102,23 +97,22 @@ class StoreModelScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-            ),
-          );
-        } else {
-          return Scaffold(
-              appBar: AppBar(
-                titleSpacing: 20,
-                title: Text("โมเดล 3 มิติของฉัน",
-                    style: Theme.of(context).textTheme.headline2),
-              ),
-              resizeToAvoidBottomInset: false,
-              body: const SafeArea(
-                  child: Center(
-                child: CircularProgressIndicator(),
-              )));
-        }
-      },
+              );
+            }
+            return const SizedBox();
+          },
+        ),
+      ),
+    );
+  }
+
+  TabBarView buildTabBarView({required Widget child}) {
+    return TabBarView(
+      children: [
+        Center(child: child),
+        Center(child: child),
+        Center(child: child),
+      ],
     );
   }
 
@@ -132,44 +126,47 @@ class StoreModelScreen extends StatelessWidget {
       onRefresh: () async {
         context.read<StoreModelsCubit>().getModelsStore();
       },
-      child: GridView.builder(
-        itemCount: models.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1,
-          crossAxisSpacing: 14,
-          mainAxisSpacing: 10,
-        ),
-        itemBuilder: (context, index) {
-          final model = models[index];
-          return GestureDetector(
-            onTap: model.model != null
-                ? () {
-                    Navigator.pushNamed(
-                      context,
-                      storeViewModelRoute,
-                      arguments: model,
-                    );
-                  }
-                : () {
-                    if (model.status == "FAILED") {
-                      showConfirmDialog(context, title: "คุณต้องการลบหรือไม่",
-                          onConfirm: () {
-                        context
-                            .read<StoreModelsCubit>()
-                            .deleteModel(model.modelId);
-                      });
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+        child: GridView.builder(
+          itemCount: models.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1,
+            crossAxisSpacing: 14,
+            mainAxisSpacing: 10,
+          ),
+          itemBuilder: (context, index) {
+            final model = models[index];
+            return GestureDetector(
+              onTap: model.model != null
+                  ? () {
+                      Navigator.pushNamed(
+                        context,
+                        storeViewModelRoute,
+                        arguments: model,
+                      );
                     }
-                  },
-            child: isCompleted
-                ? roundedImageCard(
-                    imageURL: model.picture,
-                  )
-                : roundedImageCard(
-                    imageURL: model.picture,
-                  ),
-          );
-        },
+                  : () {
+                      if (model.status == "FAILED") {
+                        showConfirmDialog(context, title: "คุณต้องการลบหรือไม่",
+                            onConfirm: () {
+                          context
+                              .read<StoreModelsCubit>()
+                              .deleteModel(model.modelId);
+                        });
+                      }
+                    },
+              child: isCompleted
+                  ? roundedImageCard(
+                      imageURL: model.picture,
+                    )
+                  : roundedImageCard(
+                      imageURL: model.picture,
+                    ),
+            );
+          },
+        ),
       ),
     );
   }

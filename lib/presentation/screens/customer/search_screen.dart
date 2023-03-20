@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../widgets/widgets.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  final String keyword;
+  const SearchScreen({Key? key, this.keyword = ''}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +12,9 @@ class SearchScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leadingWidth: 35,
-          title: const SizedBox(
+          title: SizedBox(
             height: 42,
-            child: SearchField(),
+            child: SearchField(keyword: keyword),
           ),
         ),
         body: const SafeArea(child: SingleChildScrollView()));
