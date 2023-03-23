@@ -44,7 +44,6 @@ class SearchProductsCubit extends Cubit<SearchProductsState> {
       products.sort(
           (a, b) => b.count!.orderProduct.compareTo(a.count!.orderProduct));
     }
-    print(products[0].count!.orderProduct);
     return products;
   }
 }
