@@ -18,4 +18,15 @@ class ProductsCubit extends Cubit<ProductsState> {
       emit(ProductsFailure(e.toString()));
     }
   }
+
+  List<String> getProductNames() {
+    List<String> productNames = [];
+    if (state is ProductsLoaded) {
+      final List<Product> products = (state as ProductsLoaded).products;
+      for (var product in products) {
+        productNames.add(product.name);
+      }
+    }
+    return productNames;
+  }
 }

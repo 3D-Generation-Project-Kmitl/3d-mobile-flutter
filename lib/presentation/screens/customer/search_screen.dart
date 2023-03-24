@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:marketplace/constants/constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../constants/colors.dart';
+import '../../../cubits/cubits.dart';
 import '../../../routes/screens_routes.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -15,10 +16,14 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late TextEditingController keywordController;
   late List<String> filteredKeywords;
+  late List<String> keywords;
 
   @override
   void initState() {
     keywordController = TextEditingController(text: widget.keyword);
+    final productNames = context.read<ProductsCubit>().getProductNames();
+    final categoryNames = context.read<CategoryCubit>().getCategoriesNames();
+    keywords = [...categoryNames, ...productNames];
     filteredKeywords =
         keywords.where((element) => element.contains(widget.keyword)).toList();
     super.initState();
