@@ -108,7 +108,7 @@ class _CameraScreenState extends State<CameraScreen>
     }
     try {
       await _cameraController?.setFlashMode(FlashMode.off);
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
   }
 
@@ -228,7 +228,7 @@ class _CameraScreenState extends State<CameraScreen>
           return Scaffold(
             body: SafeArea(
               child: Stack(
-                alignment: Alignment.topCenter,
+                alignment: Alignment.center,
                 children: [
                   RotatedBox(
                     quarterTurns: rotateClockwise90Degree,
@@ -415,6 +415,17 @@ class _CameraScreenState extends State<CameraScreen>
                         ),
                       ),
                     ],
+                  ),
+                  Container(
+                    width: 50.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 3.0,
+                          style: BorderStyle.solid),
+                    ),
                   ),
                 ],
               ),
