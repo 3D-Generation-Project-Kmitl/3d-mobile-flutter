@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:marketplace/data/models/models.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/presentation/screens/customer/ar_viewer_screen.dart';
 import 'package:marketplace/routes/screens_routes.dart';
 
 import '../../../configs/size_config.dart';
@@ -46,7 +46,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           } else if (state is ProductDetailLoading) {
             return Scaffold(
                 appBar: AppBar(),
-                body: const Center(child: CircularProgressIndicator()));
+                body: const SafeArea(
+                    child: Center(child: CircularProgressIndicator())));
           } else if (state is ProductDetailLoaded) {
             final product = state.productDetail;
             return Scaffold(
@@ -97,24 +98,59 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Positioned(
                             bottom: 10,
                             right: 10,
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  _toggleFullScreen();
-                                },
-                                padding: EdgeInsets.zero,
-                                iconSize: 27,
-                                icon: !isFullScreen
-                                    ? const Icon(Icons.fullscreen)
-                                    : const Icon(Icons.fullscreen_exit),
-                                color: Colors.white,
-                              ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ARViewerScreen(
+                                                    modelPath:
+                                                        product.model.model!,
+                                                  )));
+                                    },
+                                    child: Text(
+                                      "AR",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: SizeConfig.screenWidth * 0.023),
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      _toggleFullScreen();
+                                    },
+                                    padding: EdgeInsets.zero,
+                                    iconSize: 27,
+                                    icon: !isFullScreen
+                                        ? const Icon(Icons.fullscreen)
+                                        : const Icon(Icons.fullscreen_exit),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -308,7 +344,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   : null,
             );
           }
-          return const Center(child: CircularProgressIndicator());
+          return Scaffold(
+              appBar: AppBar(),
+              body: const SafeArea(
+                  child: Center(child: CircularProgressIndicator())));
         },
       ),
     );
