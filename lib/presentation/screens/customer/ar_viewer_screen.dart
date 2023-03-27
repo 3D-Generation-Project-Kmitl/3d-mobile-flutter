@@ -109,7 +109,7 @@ class _ARViewerScreenState extends State<ARViewerScreen> {
   }
 
   void updateScale(double newScale) {
-    if (newScale < 0.1 || newScale > 3.0) return;
+    if (newScale < 0.1 || newScale > 50.0) return;
     setState(() {
       scale = newScale;
       for (var node in nodes) {
