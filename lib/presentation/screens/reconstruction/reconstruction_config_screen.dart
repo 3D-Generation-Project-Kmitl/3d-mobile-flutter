@@ -29,7 +29,7 @@ class _ReconstructionConfigScreenState
   Map<String, dynamic> reconstructionConfigs = {
     "userId": -888,
     "modelId": -888,
-    "objectDetection": false,
+    "objectDetection": true,
     "quality": 'Low',
     "googleARCore": false,
   };
