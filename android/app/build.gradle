@@ -69,5 +69,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.ar:core:1.33.0'
+    // implementation 'com.google.ar:core:1.33.0'
 }

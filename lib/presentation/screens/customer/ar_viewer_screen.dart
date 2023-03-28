@@ -128,7 +128,9 @@ class _ARViewerScreenState extends State<ARViewerScreen> {
     this.arAnchorManager = arAnchorManager;
 
     this.arSessionManager!.onInitialize(
+          showFeaturePoints: false,
           showPlanes: true,
+          showWorldOrigin: true,
           handlePans: true,
           handleRotation: true,
         );
