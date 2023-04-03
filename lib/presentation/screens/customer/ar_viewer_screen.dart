@@ -130,7 +130,6 @@ class _ARViewerScreenState extends State<ARViewerScreen> {
     this.arSessionManager!.onInitialize(
           showFeaturePoints: false,
           showPlanes: true,
-          showWorldOrigin: true,
           handlePans: true,
           handleRotation: true,
         );
