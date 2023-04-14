@@ -1,6 +1,5 @@
 # 3d-mobile-flutter
 
-Abstract
 Nowadays, 3D models are widely used in various industries such as architecture, engineering,
 gaming, and film production. With the increasing demand for 3D models, 3D marketplaces have
 become popular platforms for buying and selling these models. However, creating a 3D model from
