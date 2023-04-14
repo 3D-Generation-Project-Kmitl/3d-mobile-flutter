@@ -304,8 +304,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    favoriteCubit.toggleFavorite(
-                                        productId: product.productId);
+                                    if (userCubit.state is UserLoaded) {
+                                      favoriteCubit.toggleFavorite(
+                                          productId: product.productId);
+                                    } else {
+                                      Navigator.pushNamed(context, loginRoute);
+                                    }
                                   },
                                   icon: isFavorite
                                       ? Icon(Icons.favorite,
@@ -322,14 +326,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 height: getProportionateScreenHeight(50),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    cartCubit
-                                        .addToCart(productId: product.productId)
-                                        .then((value) => showInfoDialog(
-                                              context,
-                                              title: value
-                                                  ? "เพิ่มสินค้าลงตะกร้าแล้ว"
-                                                  : "สินค้านี้อยู่ในตะกร้าแล้ว",
-                                            ));
+                                    if (userCubit.state is UserLoaded) {
+                                      cartCubit
+                                          .addToCart(
+                                              productId: product.productId)
+                                          .then((value) => showInfoDialog(
+                                                context,
+                                                title: value
+                                                    ? "เพิ่มสินค้าลงตะกร้าแล้ว"
+                                                    : "สินค้านี้อยู่ในตะกร้าแล้ว",
+                                              ));
+                                    } else {
+                                      Navigator.pushNamed(context, loginRoute);
+                                    }
                                   },
                                   child: const Text(
                                     "เพิ่มลงตะกร้า",

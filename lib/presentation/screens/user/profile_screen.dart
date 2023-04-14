@@ -24,38 +24,52 @@ class ProfileScreen extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           titleSpacing: 20,
-          leading: IconButton(
-            onPressed: () {
-              if (identityCubit.state is IdentityLoaded) {
-                final identity =
-                    (identityCubit.state as IdentityLoaded).identity;
-                if (identity != null) {
-                  if (identity.status == "APPROVED") {
-                    Navigator.pushNamed(context, storeRoute);
-                  } else {
-                    Navigator.pushNamed(context, identityRoute);
-                  }
-                } else {
-                  Navigator.pushNamed(context, identityRoute);
-                }
+          leading: BlocBuilder<UserCubit, UserState>(
+            builder: (context, state) {
+              if (state is UserLoaded) {
+                return IconButton(
+                  onPressed: () {
+                    if (identityCubit.state is IdentityLoaded) {
+                      final identity =
+                          (identityCubit.state as IdentityLoaded).identity;
+                      if (identity != null) {
+                        if (identity.status == "APPROVED") {
+                          Navigator.pushNamed(context, storeRoute);
+                        } else {
+                          Navigator.pushNamed(context, identityRoute);
+                        }
+                      } else {
+                        Navigator.pushNamed(context, identityRoute);
+                      }
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.storefront,
+                    size: 27,
+                  ),
+                );
               }
+              return const SizedBox();
             },
-            icon: const Icon(
-              Icons.storefront,
-              size: 27,
-            ),
           ),
           title: Text("โปรไฟล์", style: Theme.of(context).textTheme.headline2),
           actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, settingRoute);
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                if (state is UserLoaded) {
+                  return IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, settingRoute);
+                    },
+                    icon: Icon(
+                      Icons.settings_outlined,
+                      color: Theme.of(context).primaryColor,
+                      size: 27,
+                    ),
+                  );
+                }
+                return const SizedBox();
               },
-              icon: Icon(
-                Icons.settings_outlined,
-                color: Theme.of(context).primaryColor,
-                size: 27,
-              ),
             ),
             const CartButton(),
           ],

@@ -15,6 +15,7 @@ class ProductsStoreScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserCubit userCubit = context.read<UserCubit>();
     SizeConfig().init(context);
     return BlocProvider(
       create: (context) => ProductsStoreCubit(),
@@ -79,16 +80,21 @@ class ProductsStoreScreen extends StatelessWidget {
                                       ),
                                     ),
                                     onPressed: () {
-                                      if (context
-                                          .read<FollowCubit>()
-                                          .isFollowing(storeId)) {
-                                        context
+                                      if (userCubit.state is UserLoaded) {
+                                        if (context
                                             .read<FollowCubit>()
-                                            .unFollow(userId: storeId);
+                                            .isFollowing(storeId)) {
+                                          context
+                                              .read<FollowCubit>()
+                                              .unFollow(userId: storeId);
+                                        } else {
+                                          context
+                                              .read<FollowCubit>()
+                                              .follow(userId: storeId);
+                                        }
                                       } else {
-                                        context
-                                            .read<FollowCubit>()
-                                            .follow(userId: storeId);
+                                        Navigator.pushNamed(
+                                            context, loginRoute);
                                       }
                                     },
                                     child: Text(
