@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/cubits/cubits.dart';
@@ -47,8 +49,17 @@ class ImageGalleryScreen extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.cover,
                               clipBehavior: Clip.hardEdge,
-                              child: Image.file(
-                                  File(state.imageFiles[index].path)),
+                              child: Image.memory(state.imageMemoryFiles[index],
+                                  frameBuilder: ((context, child, frame,
+                                      wasSynchronouslyLoaded) {
+                                if (wasSynchronouslyLoaded) return child;
+                                return AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: frame != null
+                                      ? child
+                                      : null,
+                                );
+                              })),
                             ),
                           );
                         },
@@ -63,3 +74,84 @@ class ImageGalleryScreen extends StatelessWidget {
     );
   }
 }
+
+// class ImageGalleryScreen extends StatefulWidget {
+//   const ImageGalleryScreen({
+//     super.key,
+//   });
+//     @override
+//   State<ImageGalleryScreen> createState() =>  _ImageGalleryScreen();
+
+
+// }
+// class _ImageGalleryScreen extends State<ImageGalleryScreen>{
+
+//   bool isLoading=true;
+//   updateState() async{
+//     setState(() {
+//       isLoading=false;
+//     });
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<ReconstructionCubit, ReconstructionState>(
+//       builder: (context, state) {
+//         return Scaffold(
+//             appBar: AppBar(
+//                 title: Text('${state.imageFiles.length.toString()} รูป',
+//                     style: Theme.of(context).textTheme.headline4),
+//                 leading: BackButton(
+//                   onPressed: () => {
+//                     Navigator.of(context).pop(),
+//                   },
+//                 )),
+//             body: SafeArea(
+//               child: Padding(
+//                 padding: const EdgeInsets.fromLTRB(15, 5, 10, 15),
+//                 child: state.imageMemoryFiles.length>5?CustomScrollView(
+//                   slivers: [
+//                     SliverGrid(
+//                       gridDelegate:
+//                           const SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: 4,
+//                         childAspectRatio: 1,
+//                         crossAxisSpacing: 8,
+//                         mainAxisSpacing: 5,
+//                       ),
+//                       delegate: SliverChildBuilderDelegate(
+//                         (context, index) {
+//                           return GestureDetector(
+//                             onTap: () => {
+//                               Navigator.pushNamed(
+//                                   context, reconImagePreviewRoute,
+//                                   arguments: [state.imageFiles[index], false])
+//                             },
+//                             child: FittedBox(
+//                               fit: BoxFit.cover,
+//                               clipBehavior: Clip.hardEdge,
+//                               child: Image.memory(state.imageMemoryFiles[index],
+//                                   frameBuilder: ((context, child, frame,
+//                                       wasSynchronouslyLoaded) {
+//                                 if (wasSynchronouslyLoaded) return child;
+//                                 return AnimatedSwitcher(
+//                                   duration: const Duration(milliseconds: 200),
+//                                   child: frame != null
+//                                       ? child
+//                                       : null,
+//                                 );
+//                               })),
+//                             ),
+//                           );
+//                         },
+//                         childCount: state.imageFiles.length,
+//                       ),
+//                     )
+//                   ],
+//                 ):CircularProgressIndicator(
+//                                               strokeWidth: 2),
+//               ),
+//             ));
+//       },
+//     );
+//   }
+// }
