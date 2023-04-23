@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
-import 'package:marketplace/constants/reconstruction.dart';
 import 'package:path/path.dart' as path;
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
