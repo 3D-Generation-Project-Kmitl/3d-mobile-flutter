@@ -34,7 +34,10 @@ class _CameraScreenState extends State<CameraScreen>
   bool isLoading = true;
   late ReconstructionCubit reconstructionCubit;
   int rotateClockwise90Degree = 0;
-
+  bool showFocusCircle = false;
+  bool splashOnce = false;
+  double x = 0;
+  double y = 0;
   late int? id;
 
   @override
@@ -171,6 +174,15 @@ class _CameraScreenState extends State<CameraScreen>
   }
 
   _manualTakePicture() async {
+    setState(() {
+      splashOnce = true;
+      Future.delayed(const Duration(milliseconds: 200)).whenComplete(() {
+        setState(() {
+          splashOnce = false;
+        });
+      });
+    });
+
     reconstructionCubit.takePicture(_cameraController!);
   }
 
@@ -209,6 +221,31 @@ class _CameraScreenState extends State<CameraScreen>
     });
   }
 
+  void onViewFinderTap(TapDownDetails details, BoxConstraints constraints) {
+    // setState(() {
+    showFocusCircle = true;
+    x = details.localPosition.dx;
+    y = details.localPosition.dy;
+    // });
+
+    if (_cameraController == null) {
+      return;
+    }
+    final offset = Offset(
+      details.localPosition.dx / constraints.maxWidth,
+      details.localPosition.dy / constraints.maxHeight,
+    );
+    _cameraController!.setExposurePoint(offset);
+    _cameraController!.setFocusPoint(offset);
+    setState(() {
+      Future.delayed(const Duration(milliseconds: 1000)).whenComplete(() {
+        setState(() {
+          showFocusCircle = false;
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext buildContext) {
     SystemChrome.setPreferredOrientations([
@@ -235,9 +272,34 @@ class _CameraScreenState extends State<CameraScreen>
                     child: SizedBox(
                       height: double.infinity,
                       width: double.infinity,
-                      child: CameraPreview(_cameraController!),
+                      child: splashOnce
+                          ? Container(
+                              color: Colors.black,
+                            )
+                          : CameraPreview(
+                              _cameraController!
+                            ),
                     ),
                   ),
+                  Container(
+                    width: 50.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 2.0,
+                          style: BorderStyle.solid),
+                    ),
+                  ),
+                  LayoutBuilder(builder:
+                      (BuildContext context, BoxConstraints constraints) {
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTapDown: (details) =>
+                          onViewFinderTap(details, constraints),
+                    );
+                  }),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -254,8 +316,8 @@ class _CameraScreenState extends State<CameraScreen>
                           ),
                           onPressed: () {
                             _stopTakingPicture();
-                            Navigator.pop(context);
-                            reconstructionCubit.clear();
+                            _showConfirmCancelModal(context,rotateClockwise90Degree);
+
                           },
                         ),
                       ),
@@ -416,17 +478,28 @@ class _CameraScreenState extends State<CameraScreen>
                       ),
                     ],
                   ),
-                  Container(
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                          width: 3.0,
-                          style: BorderStyle.solid),
-                    ),
-                  ),
+                  if (showFocusCircle)
+                    Positioned(
+                        top: y - 20,
+                        left: x - 20,
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          child: Center(
+                            child: Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.0)),
+                            ),
+                          ),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border:
+                                  Border.all(color: Colors.white, width: 1.0)),
+                        )),
                 ],
               ),
             ),
@@ -472,3 +545,38 @@ Future<void> _showInfoDialog(BuildContext context,
     },
   );
 }
+
+_showConfirmCancelModal(context,int rotation){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RotatedBox(
+          quarterTurns: rotation,
+          child: AlertDialog(
+          title: const Text("คุณแน่ใจหรือไม่ว่าต้องการออกจากการถ่ายรูป"),
+          titleTextStyle: 
+            const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,fontSize: 20),
+            actionsOverflowButtonSpacing: 20,
+            actions: [
+              ElevatedButton(onPressed: (){
+              
+              ReconstructionCubit reconstructionCubit = context.read<ReconstructionCubit>();
+              reconstructionCubit.clear();
+              Navigator.pop(context);
+              Navigator.pop(context);
+              },
+              style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+               ), child: const Text("ออก",style: TextStyle(color: Colors.red ))),
+               const SizedBox(width: 10,),
+              ElevatedButton(onPressed: (){
+          Navigator.of(context).pop();
+              }, child: const Text("อยู่ต่อ")),
+            ],
+            content: const Text("การออกจากการถ่ายรูปจะทำให้รูปที่ถ่ายไว้หายไป",style: TextStyle(fontSize: 18),),
+        ),
+        );
+    });
+  }

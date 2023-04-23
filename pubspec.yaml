@@ -57,6 +57,8 @@ dependencies:
   currency_text_input_formatter: ^2.1.8
   flutter_native_image: ^0.0.6+1
   ar_flutter_plugin: ^0.7.3
+  photo_view:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

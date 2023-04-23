@@ -108,7 +108,7 @@ class AppRouter {
         //XFile previewImage = settings.arguments as XFile;
         return _route(
             ImageViewerScreen(
-              previewImage: args[0] as XFile,
+              previewImage: args[0] as XFile?,
               isShowAll: args[1] as bool,
             ),
             reconImagePreviewRoute);

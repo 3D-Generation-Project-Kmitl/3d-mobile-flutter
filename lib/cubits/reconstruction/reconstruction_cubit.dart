@@ -1,6 +1,6 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:archive/archive_io.dart';
-import 'package:marketplace/constants/reconstruction.dart';
 import 'package:path/path.dart' as path;
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
@@ -48,23 +48,30 @@ class ReconstructionCubit extends Cubit<ReconstructionState> {
   void takePicture(CameraController cameraController) async {
     if (!cameraController.value.isTakingPicture && cameraController.value.isInitialized) {
     String fileName =
-        "${(state.imageFiles.length + 1).toString().padLeft(4, '0')}.jpg";
+        "${(state.imageCount + 1).toString().padLeft(4, '0')}.jpg";
       XFile image =
           await renameImageFile(await cameraController.takePicture(), fileName);
-      addImageFile(image);
+      addImageFile(image,state.imageCount + 1);
     }
   }
 
-  void addImageFile(XFile imageFile) {
+  void addImageFile(XFile imageFile,int imageCount) {
     List<XFile> imageFiles = state.imageFiles;
-    emit(state.copyWith(imageFiles: [...imageFiles, imageFile]));
+    List<Uint8List> imageMemoryFiles = state.imageMemoryFiles;
+    Uint8List imageMemoryFile=File(imageFile.path).readAsBytesSync();
+    
+    emit(state.copyWith(imageFiles: [...imageFiles, imageFile],imageMemoryFiles:[...imageMemoryFiles,imageMemoryFile], imageCount: imageCount));
   }
 
   void removeImageFile(XFile imageFile) {
     List<XFile> imageFiles = state.imageFiles;
+    List<Uint8List> imageMemoryFiles = state.imageMemoryFiles;
+    Uint8List imageMemoryFile=File(imageFile.path).readAsBytesSync();
     emit(state.copyWith(
         imageFiles:
-            imageFiles.where((element) => element != imageFile).toList()));
+            imageFiles.where((element) => element != imageFile).toList(),
+          imageMemoryFiles:
+            imageMemoryFiles.where((element) => element != imageMemoryFile).toList(),));
   }
 
   Future<XFile> renameImageFile(XFile imageXFile, String fileName) async {

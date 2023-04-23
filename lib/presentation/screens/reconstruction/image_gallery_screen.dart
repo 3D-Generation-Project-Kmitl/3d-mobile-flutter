@@ -1,7 +1,8 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/cubits/cubits.dart';
-import 'dart:io';
 
 import 'package:marketplace/routes/screens_routes.dart';
 
@@ -47,8 +48,17 @@ class ImageGalleryScreen extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.cover,
                               clipBehavior: Clip.hardEdge,
-                              child: Image.file(
-                                  File(state.imageFiles[index].path)),
+                              child: Image.memory(state.imageMemoryFiles[index],
+                                  frameBuilder: ((context, child, frame,
+                                      wasSynchronouslyLoaded) {
+                                if (wasSynchronouslyLoaded) return child;
+                                return AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 200),
+                                  child: frame != null
+                                      ? child
+                                      : null,
+                                );
+                              })),
                             ),
                           );
                         },
