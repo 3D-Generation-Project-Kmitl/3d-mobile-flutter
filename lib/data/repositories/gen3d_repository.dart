@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:marketplace/.env';
+import 'package:marketplace/constants/api.dart';
 
 class Gen3DModelRepository {
   Future<String> gen3DModel(
@@ -20,8 +19,12 @@ class Gen3DModelRepository {
         'camera_parameter_list': null,
       });
 
-      final response = await Dio()
-          .post('$FLASK_URL/gen3DModel', data: formData);
+      final response = await Dio(
+        BaseOptions(
+          connectTimeout: connectTimeout,
+          receiveTimeout: receiveTimeout,
+        ),
+      ).post('$FLASK_URL/gen3DModel', data: formData);
 
       return response.data.toString();
     } on DioError catch (e) {
