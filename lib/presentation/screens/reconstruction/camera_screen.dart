@@ -316,8 +316,8 @@ class _CameraScreenState extends State<CameraScreen>
                           ),
                           onPressed: () {
                             _stopTakingPicture();
-                            Navigator.pop(context);
-                            reconstructionCubit.clear();
+                            _showConfirmCancelModal(context,rotateClockwise90Degree);
+
                           },
                         ),
                       ),
@@ -545,3 +545,38 @@ Future<void> _showInfoDialog(BuildContext context,
     },
   );
 }
+
+_showConfirmCancelModal(context,int rotation){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return RotatedBox(
+          quarterTurns: rotation,
+          child: AlertDialog(
+          title: const Text("คุณแน่ใจหรือไม่ว่าต้องการออกจากการถ่ายรูป"),
+          titleTextStyle: 
+            const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,fontSize: 20),
+            actionsOverflowButtonSpacing: 20,
+            actions: [
+              ElevatedButton(onPressed: (){
+              
+              ReconstructionCubit reconstructionCubit = context.read<ReconstructionCubit>();
+              reconstructionCubit.clear();
+              Navigator.pop(context);
+              Navigator.pop(context);
+              },
+              style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(Colors.white),
+               ), child: const Text("ออก",style: TextStyle(color: Colors.red ))),
+               const SizedBox(width: 10,),
+              ElevatedButton(onPressed: (){
+          Navigator.of(context).pop();
+              }, child: const Text("อยู่ต่อ")),
+            ],
+            content: const Text("การออกจากการถ่ายรูปจะทำให้รูปที่ถ่ายไว้หายไป",style: TextStyle(fontSize: 18),),
+        ),
+        );
+    });
+  }
