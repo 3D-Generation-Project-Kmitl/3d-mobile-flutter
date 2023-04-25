@@ -116,10 +116,7 @@ class _ImageViewerScreen extends State<ImageViewerScreen> {
                 height: getProportionateScreenHeight(50),
                 child: ElevatedButton(
                   onPressed: () {
-                    context
-                        .read<ReconstructionCubit>()
-                        .removeImageFile(widget.previewImage!);
-                    Navigator.pop(context);
+              _showConfirmCancelModal(context,widget.previewImage!);
                   },
                   child: const Text(
                     "ลบรูปภาพ",
@@ -131,3 +128,34 @@ class _ImageViewerScreen extends State<ImageViewerScreen> {
     );
   }
 }
+_showConfirmCancelModal(context,XFile previewImage){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+        title: const Text("คุณแน่ใจที่จะลบรูปภาพนี้หรือไม่"),
+        titleTextStyle: 
+          const TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,fontSize: 20),
+          actionsOverflowButtonSpacing: 20,
+          actions: [
+            ElevatedButton(onPressed: (){
+                  context
+                      .read<ReconstructionCubit>()
+                      .removeImageFile(previewImage);
+                  Navigator.pop(context);
+            Navigator.pop(context);
+            },
+            style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.white),
+             ), child: const Text("ลบ",style: TextStyle(color: Colors.red ))),
+             const SizedBox(width: 10,),
+            ElevatedButton(onPressed: (){
+        Navigator.of(context).pop();
+            }, child: const Text("เก็บไว้")),
+          ],
+          content: const Text("การลบรูปภาพจะไม่สามารถกู้คืนรูปภาพได้",style: TextStyle(fontSize: 18),),
+        );
+    });
+  }
