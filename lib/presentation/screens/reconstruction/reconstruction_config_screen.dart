@@ -28,7 +28,7 @@ class _ReconstructionConfigScreenState
 
   Map<String, dynamic> reconstructionConfigs = {
     "userId": 888,
-    "modelId": 892,
+    "modelId": 894,
     "objectDetection": true,
     "quality": 'Low',
     "googleARCore": false,
@@ -156,32 +156,20 @@ class _ReconstructionConfigScreenState
                       isSending = true;
                     });
                     buildSending();
-                    // context
-                    //     .read<StoreModelsCubit>()
-                    //     .addReconstructionModel(state.imageFiles[0])
-                    //     .then(
-                    //       (model) => {
-                    //         if (model != null)
-                    //           {
-                    //             setState(() {
-                    //               reconstructionConfigs['modelId'] =
-                    //                   model.modelId;
-                    //               reconstructionConfigs['userId'] =
-                    //                   model.userId;
-                    //             }),
-                    //             context
-                    //                 .read<ReconstructionCubit>()
-                    //                 .gen3DModel(reconstructionConfigs)
-                    //                 .then((value) => {
-                    //                       Navigator.pushNamedAndRemoveUntil(
-                    //                           context,
-                    //                           storeModelRoute,
-                    //                           ModalRoute.withName(storeRoute))
-                    //                     })
-                    //           },
-                    //       },
-                    //     );
-                                                    context
+                    context
+                        .read<StoreModelsCubit>()
+                        .addReconstructionModel(state.imageFiles[0])
+                        .then(
+                          (model) => {
+                            if (model != null)
+                              {
+                                setState(() {
+                                  reconstructionConfigs['modelId'] =
+                                      model.modelId;
+                                  reconstructionConfigs['userId'] =
+                                      model.userId;
+                                }),
+                                context
                                     .read<ReconstructionCubit>()
                                     .gen3DModel(reconstructionConfigs)
                                     .then((value) => {
@@ -189,7 +177,10 @@ class _ReconstructionConfigScreenState
                                               context,
                                               storeModelRoute,
                                               ModalRoute.withName(storeRoute))
-                                        });
+                                        })
+                              },
+                          },
+                        );
                               
                   }
                 },
