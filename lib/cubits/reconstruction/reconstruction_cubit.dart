@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'dart:ui';
 import 'package:archive/archive_io.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
@@ -45,33 +48,46 @@ class ReconstructionCubit extends Cubit<ReconstructionState> {
     emit(ReconstructionState());
   }
 
-  void takePicture(CameraController cameraController) async {
-    if (!cameraController.value.isTakingPicture && cameraController.value.isInitialized) {
+  void takePicture(CameraController cameraController,int rotation) async {
     String fileName =
         "${(state.imageCount + 1).toString().padLeft(4, '0')}.jpg";
       XFile image =
           await renameImageFile(await cameraController.takePicture(), fileName);
-      addImageFile(image,state.imageCount + 1);
-    }
-  }
+      addImageFile(image,state.imageCount + 1,rotation);
 
-  void addImageFile(XFile imageFile,int imageCount) {
+  }
+  void imageResultCallback(Image result){
+    print(result.width);
+    print(result.height);
+
+  }
+  void addImageFile(XFile imageFile,int imageCount,int rotation) {
     List<XFile> imageFiles = state.imageFiles;
     List<Uint8List> imageMemoryFiles = state.imageMemoryFiles;
-    Uint8List imageMemoryFile=File(imageFile.path).readAsBytesSync();
+    List<bool> imagesSize=state.imagesSize;
+    Uint8List imageMemoryFile=File(imageFile.path).readAsBytesSync();// Or any other way to get a File instance.
+    bool imageSize=rotation==0?true:false;
+
     
-    emit(state.copyWith(imageFiles: [...imageFiles, imageFile],imageMemoryFiles:[...imageMemoryFiles,imageMemoryFile], imageCount: imageCount));
+    emit(state.copyWith(imageFiles: [...imageFiles, imageFile]
+    ,imageMemoryFiles:[...imageMemoryFiles,imageMemoryFile]
+    , imageCount: imageCount
+    ,imagesSize:[...imagesSize,imageSize]));
   }
 
   void removeImageFile(XFile imageFile) {
     List<XFile> imageFiles = state.imageFiles;
     List<Uint8List> imageMemoryFiles = state.imageMemoryFiles;
-    Uint8List imageMemoryFile=File(imageFile.path).readAsBytesSync();
+    List<bool> imagesSize=state.imagesSize;
+    int removeIndex=imageFiles.indexOf(imageFile);
+    imageMemoryFiles.removeAt(removeIndex);
+    imagesSize.removeAt(removeIndex);
     emit(state.copyWith(
         imageFiles:
             imageFiles.where((element) => element != imageFile).toList(),
           imageMemoryFiles:
-            imageMemoryFiles.where((element) => element != imageMemoryFile).toList(),));
+            imageMemoryFiles,
+            imagesSize:imagesSize));
   }
 
   Future<XFile> renameImageFile(XFile imageXFile, String fileName) async {

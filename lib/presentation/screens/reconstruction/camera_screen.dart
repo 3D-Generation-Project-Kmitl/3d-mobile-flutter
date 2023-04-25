@@ -55,7 +55,7 @@ class _CameraScreenState extends State<CameraScreen>
       final camera = cameras.firstWhere(
           (camera) => camera.lensDirection == CameraLensDirection.back);
 
-      _cameraController = CameraController(camera, ResolutionPreset.ultraHigh,
+      _cameraController = CameraController(camera, ResolutionPreset.veryHigh,
           enableAudio: false);
 
       await _cameraController?.initialize().then((_) {
@@ -174,6 +174,14 @@ class _CameraScreenState extends State<CameraScreen>
   }
 
   _manualTakePicture() async {
+    if(_cameraController!.value.isTakingPicture || !_cameraController!.value.isInitialized) return;
+    ReconstructionState state = context.read<ReconstructionCubit>().state;
+    if(state.imageFiles.isEmpty){
+      double _minAvailableExposureOffset = await _cameraController!.getMinExposureOffset();
+      double _maxAvailableExposureOffset = await _cameraController!.getMaxExposureOffset();
+      double _currentExposureOffset = (_minAvailableExposureOffset+_maxAvailableExposureOffset)/2;
+      await _cameraController!.setExposureOffset(_currentExposureOffset);
+    }
     setState(() {
       splashOnce = true;
       Future.delayed(const Duration(milliseconds: 200)).whenComplete(() {
@@ -183,7 +191,7 @@ class _CameraScreenState extends State<CameraScreen>
       });
     });
 
-    reconstructionCubit.takePicture(_cameraController!);
+    reconstructionCubit.takePicture(_cameraController!,rotateClockwise90Degree);
   }
 
   _stopTakingPicture() {
@@ -235,7 +243,7 @@ class _CameraScreenState extends State<CameraScreen>
       details.localPosition.dx / constraints.maxWidth,
       details.localPosition.dy / constraints.maxHeight,
     );
-    _cameraController!.setExposurePoint(offset);
+    // _cameraController!.setExposurePoint(offset);
     _cameraController!.setFocusPoint(offset);
     setState(() {
       Future.delayed(const Duration(milliseconds: 1000)).whenComplete(() {

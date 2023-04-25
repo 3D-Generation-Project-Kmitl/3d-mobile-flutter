@@ -1,10 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/cubits/cubits.dart';
 
 import 'package:marketplace/routes/screens_routes.dart';
+
+import '../../../configs/size_config.dart';
 
 class ImageGalleryScreen extends StatelessWidget {
   const ImageGalleryScreen({
@@ -13,11 +13,15 @@ class ImageGalleryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    // int imageWidth=SizeConfig.screenWidth~/1;
+    // int imageHeight=;
+    // print('imageWidth: $imageWidth');
     return BlocBuilder<ReconstructionCubit, ReconstructionState>(
       builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-                title: Text('${state.imageFiles.length.toString()} รูป',
+                title: Text('${state.imageMemoryFiles.length.toString()} รูป',
                     style: Theme.of(context).textTheme.headline4),
                 leading: BackButton(
                   onPressed: () => {
@@ -49,20 +53,19 @@ class ImageGalleryScreen extends StatelessWidget {
                               fit: BoxFit.cover,
                               clipBehavior: Clip.hardEdge,
                               child: Image.memory(state.imageMemoryFiles[index],
-                                  frameBuilder: ((context, child, frame,
-                                      wasSynchronouslyLoaded) {
+                                  cacheWidth:state.imagesSize[index]? 90: 160,
+                                  cacheHeight: state.imagesSize[index]? 160: 90, frameBuilder: ((context,
+                                      child, frame, wasSynchronouslyLoaded) {
                                 if (wasSynchronouslyLoaded) return child;
                                 return AnimatedSwitcher(
                                   duration: const Duration(milliseconds: 200),
-                                  child: frame != null
-                                      ? child
-                                      : null,
+                                  child: frame != null ? child : null,
                                 );
                               })),
                             ),
                           );
                         },
-                        childCount: state.imageFiles.length,
+                        childCount: state.imageMemoryFiles.length,
                       ),
                     )
                   ],
