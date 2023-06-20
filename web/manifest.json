@@ -1,6 +1,6 @@
 {
-    "name": "ar_ecommerce_flutter",
-    "short_name": "ar_ecommerce_flutter",
+    "name": "marketplace",
+    "short_name": "marketplace",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

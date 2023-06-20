@@ -1,0 +1,364 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/presentation/screens/customer/ar_viewer_screen.dart';
+import 'package:marketplace/routes/screens_routes.dart';
+
+import '../../../configs/size_config.dart';
+import '../../../cubits/cubits.dart';
+import '../../helpers/helpers.dart';
+import '../../widgets/widgets.dart';
+import 'package:babylonjs_viewer/babylonjs_viewer.dart';
+import 'package:intl/intl.dart' as intl;
+
+class ProductDetailScreen extends StatefulWidget {
+  final int productId;
+  const ProductDetailScreen({
+    Key? key,
+    required this.productId,
+  }) : super(key: key);
+
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  bool isFullScreen = false;
+
+  void _toggleFullScreen() {
+    setState(() {
+      isFullScreen = !isFullScreen;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cartCubit = context.read<CartCubit>();
+    final favoriteCubit = context.read<FavoriteCubit>();
+    final UserCubit userCubit = context.read<UserCubit>();
+    SizeConfig().init(context);
+
+    return BlocProvider(
+      create: (context) => ProductDetailCubit(),
+      child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
+        builder: (context, state) {
+          if (state is ProductDetailInitial) {
+            context.read<ProductDetailCubit>().getProductById(widget.productId);
+          } else if (state is ProductDetailLoading) {
+            return Scaffold(
+                appBar: AppBar(),
+                body: const SafeArea(
+                    child: Center(child: CircularProgressIndicator())));
+          } else if (state is ProductDetailLoaded) {
+            final product = state.productDetail;
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: !isFullScreen
+                  ? AppBar(
+                      leadingWidth: 50,
+                      title: Text(
+                        product.name,
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                      actions: [
+                        IconButton(
+                          onPressed: () {
+                            if (userCubit.state is UserLoaded) {
+                              Navigator.pushNamed(context, reportRoute,
+                                  arguments: product);
+                            } else {
+                              Navigator.pushNamed(context, loginRoute);
+                            }
+                          },
+                          icon: Icon(
+                            Icons.report_outlined,
+                            color: Theme.of(context).primaryColor,
+                            size: 27,
+                          ),
+                        ),
+                        const CartButton(),
+                      ],
+                    )
+                  : null,
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: !isFullScreen
+                                ? SizeConfig.screenHeight * 0.45
+                                : SizeConfig.screenHeight,
+                            width: double.infinity,
+                            child: BabylonJSViewer(
+                              src: product.model.model!,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ARViewerScreen(
+                                                    modelPath:
+                                                        product.model.model!,
+                                                  )));
+                                    },
+                                    child: Text(
+                                      "AR",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: SizeConfig.screenWidth * 0.023),
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      _toggleFullScreen();
+                                    },
+                                    padding: EdgeInsets.zero,
+                                    iconSize: 27,
+                                    icon: !isFullScreen
+                                        ? const Icon(Icons.fullscreen)
+                                        : const Icon(Icons.fullscreen_exit),
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    !isFullScreen
+                        ? Expanded(
+                            flex: 4,
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.all(14.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      product.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline2
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.screenHeight * 0.005),
+                                    Text(
+                                      intl.NumberFormat.currency(
+                                        locale: 'th',
+                                        symbol: '฿',
+                                        decimalDigits: 0,
+                                      ).format(product.price),
+                                      style:
+                                          Theme.of(context).textTheme.headline1,
+                                    ),
+                                    const Divider(
+                                      color: Colors.black12,
+                                    ),
+                                    Row(
+                                      children: [
+                                        ImageCard(
+                                            radius: 25,
+                                            imageURL:
+                                                product.user.picture ?? ""),
+                                        SizedBox(
+                                            width:
+                                                SizeConfig.screenWidth * 0.023),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              product.user.name,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
+                                            ),
+                                            SizedBox(
+                                                height:
+                                                    SizeConfig.screenHeight *
+                                                        0.005),
+                                            Text(
+                                              "ผู้ติดตาม ${product.user.count?.followers ?? 0} คน",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle1,
+                                            ),
+                                          ],
+                                        ),
+                                        const Spacer(),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                                context, productsStoreRoute,
+                                                arguments: product.user.userId);
+                                          },
+                                          child: Text(
+                                            "ดูร้านค้า",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5!
+                                                .copyWith(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(
+                                      color: Colors.black12,
+                                    ),
+                                    Text(
+                                      "รายละเอียดสินค้า",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.screenHeight * 0.005),
+                                    Text(
+                                      product.details,
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1,
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            SizeConfig.screenHeight * 0.005),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "หมวดหมู่สินค้า: ",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                        Text(
+                                          " ${product.category.name}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
+              ),
+              bottomNavigationBar: !isFullScreen
+                  ? Container(
+                      padding: const EdgeInsets.all(14),
+                      child: SafeArea(
+                        child: Row(
+                          children: [
+                            BlocBuilder<FavoriteCubit, FavoriteState>(
+                                builder: (context, state) {
+                              bool isFavorite = favoriteCubit.isFavorite(
+                                  productId: product.productId);
+                              return Container(
+                                height: getProportionateScreenHeight(50),
+                                width: getProportionateScreenWidth(50),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.black12),
+                                ),
+                                child: IconButton(
+                                  onPressed: () {
+                                    if (userCubit.state is UserLoaded) {
+                                      favoriteCubit.toggleFavorite(
+                                          productId: product.productId);
+                                    } else {
+                                      Navigator.pushNamed(context, loginRoute);
+                                    }
+                                  },
+                                  icon: isFavorite
+                                      ? Icon(Icons.favorite,
+                                          color: Theme.of(context).primaryColor)
+                                      : const Icon(Icons.favorite_border),
+                                  splashColor: Colors.transparent,
+                                  splashRadius: 1,
+                                ),
+                              );
+                            }),
+                            const SizedBox(width: 20),
+                            Expanded(
+                              child: SizedBox(
+                                height: getProportionateScreenHeight(50),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    if (userCubit.state is UserLoaded) {
+                                      cartCubit
+                                          .addToCart(
+                                              productId: product.productId)
+                                          .then((value) => showInfoDialog(
+                                                context,
+                                                title: value
+                                                    ? "เพิ่มสินค้าลงตะกร้าแล้ว"
+                                                    : "สินค้านี้อยู่ในตะกร้าแล้ว",
+                                              ));
+                                    } else {
+                                      Navigator.pushNamed(context, loginRoute);
+                                    }
+                                  },
+                                  child: const Text(
+                                    "เพิ่มลงตะกร้า",
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : null,
+            );
+          }
+          return Scaffold(
+              appBar: AppBar(),
+              body: const SafeArea(
+                  child: Center(child: CircularProgressIndicator())));
+        },
+      ),
+    );
+  }
+}
